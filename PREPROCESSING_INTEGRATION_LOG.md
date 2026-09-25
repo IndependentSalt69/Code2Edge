@@ -8,18 +8,27 @@
 
 ---
 
-## 1. Executive Summary
+## 1. Executive Summary & Verification Status
 
 This log records the integration of Person A's feature extraction pipeline into the Person B on-device benchmark infrastructure on the physical **Arduino UNO Q (STM32U585)**.
 
-The preprocessing pipeline implements the exact mathematical sequence frozen in upstream reference [`reference/tiny-kws/src/common.py`](reference/tiny-kws/src/common.py):
-$$\text{Raw PCM (16 kHz, 1.0 s)} \xrightarrow{\text{STFT (Hann)}} |X(f)|^2 \xrightarrow{64\text{ Mel HTK}} \text{Mel Energy} \xrightarrow{\ln(x + 10^{-6})} \text{Log-Mel} \xrightarrow{\text{Normalize}} (1, 1, 64, 101)\text{ Features}$$
-
-All twiddle factors and Mel triangular filterbank matrices are stored in `const` Flash memory (`.rodata`). Zero heap allocations (`malloc`/`free`) occur in the execution path.
+### Master Verification Status Table
+| Subsystem / Gate | Status | Evidence Location | Notes |
+| :--- | :--- | :--- | :--- |
+| **Hardware Bringup (UNO Q / STM32U585)** | **VERIFIED** | [`contracts/target/target-profile.json`](contracts/target/target-profile.json) | Board detected on COM3, toolchain operational |
+| **RouterBridge RPC Smoke Test** | **VERIFIED** | [`tests/firmware/router_bridge_smoke/`](tests/firmware/router_bridge_smoke/) | `code2edge_ping() -> 42` over `/dev/ttyHS1` |
+| **DWT Benchmark Timing Infrastructure** | **VERIFIED** | [`evidence/benchmarks/benchmark_harness_physical_run.json`](evidence/benchmarks/benchmark_harness_physical_run.json) | 50 iterations, 990 cycles ($6.1875\text{ }\mu\text{s}$, $\sigma=0.00$) |
+| **Target Preprocessing Compilation** | **VERIFIED** | [`tests/firmware/benchmark_harness/`](tests/firmware/benchmark_harness/) | $70.40\text{ KB}$ Flash, $36.52\text{ KB}$ SRAM |
+| **Host Differential Parity (Stage-Wise)** | **SMOKE PASSED / CORPUS PENDING** | [`evidence/parity/host_parity_report.json`](evidence/parity/host_parity_report.json) | S0–S3 match `sample_0001` ground truth; full 500-sample corpus sweep pending |
+| **On-Device Differential Parity** | **NOT VERIFIED / PENDING** | [`contracts/target/device-parity-result.schema.json`](contracts/target/device-parity-result.schema.json) | Awaiting physical UART tensor extraction vs reference |
+| **DS-CNN Model Inference** | **NOT VERIFIED / PENDING** | [`contracts/target/target-profile.json`](contracts/target/target-profile.json) | Awaiting TFLite Micro / CMSIS-NN integration |
 
 ---
 
 ## 2. Frozen Reference & Contract Audit
+
+The preprocessing pipeline implements the exact mathematical sequence frozen in upstream reference [`reference/tiny-kws/src/common.py`](reference/tiny-kws/src/common.py):
+$$\text{Raw PCM (16 kHz, 1.0 s)} \xrightarrow{\text{STFT (Hann)}} |X(f)|^2 \xrightarrow{64\text{ Mel HTK}} \text{Mel Energy} \xrightarrow{\ln(x + 10^{-6})} \text{Log-Mel} \xrightarrow{\text{Normalize}} (1, 1, 64, 101)\text{ Features}$$
 
 | Parameter | Specification | Source in Repository |
 | :--- | :--- | :--- |
@@ -31,7 +40,7 @@ All twiddle factors and Mel triangular filterbank matrices are stored in `const`
 | **FFT Frequency Bins** | 201 positive frequency bins ($0\text{ Hz} \dots 8000\text{ Hz}$) | Real FFT $N/2 + 1$ |
 | **Mel Filterbank** | 64 triangular filters ($20.0\text{ Hz} \dots 7600.0\text{ Hz}$), HTK scale | [`reference/tiny-kws/src/common.py`](reference/tiny-kws/src/common.py) #L38–39 |
 | **Log Compression** | Natural log with additive $\epsilon = 10^{-6}$: $\ln(\text{energy} + 10^{-6})$ | [`reference/tiny-kws/src/common.py`](reference/tiny-kws/src/common.py) #L41, #L67 |
-| **Normalization** | Global mean: $-6.9023613929748535$, Global std: $4.81721305847168$ | [`checkpoints/best.pt`](checkpoints/best.pt) (`stats`) |
+| **Normalization** | Global mean: $-6.902360439300537$, Global std: $4.81721305847168$ | [`reference/normalization.json`](reference/normalization.json) |
 | **Output Tensor** | Shape: `(1, 1, 64, 101)` (6,464 `float32` elements, row-major `[mel * 101 + frame]`) | [`reference/tiny-kws/src/model.py`](reference/tiny-kws/src/model.py) |
 | **Test Audio Fixture** | [`reference/tiny-kws/app/examples/yes.wav`](reference/tiny-kws/app/examples/yes.wav) (16 kHz, 16-bit mono, 16,000 samples) | [`tests/firmware/benchmark_harness/fixtures/audio_fixture_yes.h`](tests/firmware/benchmark_harness/fixtures/audio_fixture_yes.h) |
 
@@ -102,13 +111,19 @@ Global variables use 65140 bytes (24%) of dynamic memory, leaving 197004 bytes f
 
 ---
 
-## 6. Unit Test & Verification Results
+## 6. Stage-Wise Host Parity Verification Results
 
-Pytest suite executed at [`tests/pipeline/test_preprocessing_parity.py`](tests/pipeline/test_preprocessing_parity.py):
-- `test_input_fixture_exists_and_valid`: **PASSED** (16,000 samples, 16-bit mono, 16 kHz).
-- `test_header_and_c_files_exist`: **PASSED** ([`feature_extraction.h`](src/pipeline/feature_extraction.h), [`feature_extraction.c`](src/pipeline/feature_extraction.c), [`audio_fixture_yes.h`](tests/firmware/benchmark_harness/fixtures/audio_fixture_yes.h)).
-- `test_preprocessing_output_shape_and_type`: **PASSED** (Output shape: `(64, 101)`, `float32`, no NaN/Inf).
-- `test_checksum_determinism`: **PASSED** (Deterministic checksum for `yes.wav`: `0xD7F1D853`).
+Executed [`tools/run_host_parity.py`](tools/run_host_parity.py) comparing the C pipeline against frozen ground truth artifacts in [`reference/artifacts/sample_0001/`](reference/artifacts/sample_0001/):
+
+| Stage | Name | Ground Truth Artifact | Max Abs Diff | Mean Abs Diff | Cosine Sim | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **S0** | Raw Audio Waveform | `post_input.npy` `(16000,)` | $0.000000$ | $0.000000$ | $1.00000000$ | **PASS** |
+| **S1** | Power Spectrum STFT | `post_power_spectrum.npy` `(1, 201, 101)` | $3.173828 \times 10^{-3}$ | $1.039262 \times 10^{-5}$ | $1.00000000$ | **PASS** |
+| **S1_mel** | Mel Filterbank Energy | `post_mel.npy` `(1, 64, 101)` | $5.126953 \times 10^{-3}$ | $1.020852 \times 10^{-4}$ | $1.00000000$ | **PASS** |
+| **S2** | Log-Mel Features | `post_log.npy` `(1, 1, 64, 101)` | $2.631187 \times 10^{-3}$ | $1.680750 \times 10^{-4}$ | $1.00000000$ | **PASS** |
+| **S3** | Normalized Log-Mel | `post_normalize.npy` `(1, 1, 64, 101)` | $5.459785 \times 10^{-4}$ | $3.489649 \times 10^{-5}$ | $1.00000000$ | **PASS** |
+
+Parity report saved to: [`evidence/parity/host_parity_report.json`](evidence/parity/host_parity_report.json).
 
 ---
 
@@ -121,8 +136,11 @@ Pytest suite executed at [`tests/pipeline/test_preprocessing_parity.py`](tests/p
 5. **[`tests/firmware/benchmark_harness/feature_extraction.c`](tests/firmware/benchmark_harness/feature_extraction.c)** — Local sketch source for self-contained Arduino CLI compilation.
 6. **[`tests/firmware/benchmark_harness/benchmark_harness.ino`](tests/firmware/benchmark_harness/benchmark_harness.ino)** — Embedded benchmark sketch with `mel_spectrogram` workload and B/R, M/P, D, K interactive commands.
 7. **[`tools/reference/generate_preprocessing_c.py`](tools/reference/generate_preprocessing_c.py)** — Automated table and test fixture generator from frozen reference.
-8. **[`tests/pipeline/test_preprocessing_parity.py`](tests/pipeline/test_preprocessing_parity.py)** — Pytest validation suite for shapes, data types, and deterministic checksums.
-9. **[`PREPROCESSING_INTEGRATION_LOG.md`](PREPROCESSING_INTEGRATION_LOG.md)** — This integration record.
+8. **[`tools/run_host_parity.py`](tools/run_host_parity.py)** — Stage-wise host parity comparison tool against frozen PyTorch reference artifacts.
+9. **[`tests/pipeline/test_preprocessing_parity.py`](tests/pipeline/test_preprocessing_parity.py)** — Pytest test suite asserting stage-wise parity against ground truth.
+10. **[`evidence/parity/host_parity_report.json`](evidence/parity/host_parity_report.json)** — Machine-readable host parity report.
+11. **[`contracts/target/target-profile.json`](contracts/target/target-profile.json)** — Hardware profile with verified physical toolchain & RouterBridge metadata.
+12. **[`PREPROCESSING_INTEGRATION_LOG.md`](PREPROCESSING_INTEGRATION_LOG.md)** — This comprehensive log.
 
 ---
 

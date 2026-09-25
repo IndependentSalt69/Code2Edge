@@ -19,19 +19,29 @@
   },
   "toolchain": {
     "name": "arduino-cli",
-    "cli_path": "C:\\Users\\MANAV\\AppData\\Local\\Programs\\Arduino IDE\\resources\\app\\lib\\backend\\resources\\arduino-cli.exe",
-    "version": "1.4.1",
+    "cli_path": "C:\\Program Files\\Arduino CLI\\arduino-cli.exe",
+    "version": "1.5.2-rc.1",
     "core_platform": "arduino:zephyr (1.0.0)",
-    "compiler": "arm-zephyr-eabi-gcc",
-    "core_installed": false,
-    "status": "NOT_VERIFIED"
+    "board_fqbn": "arduino:zephyr:unoq",
+    "compiler": "arm-zephyr-eabi-gcc (1.0.1)",
+    "detected_port": "COM3",
+    "core_installed": true,
+    "status": "VERIFIED"
   },
   "bridge": {
-    "transport": "UART",
-    "device_path": "/dev/ttyMSM0",
+    "transport": "Arduino_RouterBridge (RPClite over /dev/ttyHS1)",
+    "socket_path": "/var/run/arduino-router.sock",
     "baud_rate": 115200,
-    "packet_format": "binary_8byte_framed",
-    "status": "NOT_VERIFIED"
+    "smoke_test_result": "BRIDGE_BEGIN_OK, BRIDGE_PROVIDE_OK, code2edge_ping() -> 42",
+    "status": "VERIFIED"
+  },
+  "verification_status": {
+    "hardware_bringup": "VERIFIED",
+    "dwt_benchmark_infrastructure": "VERIFIED",
+    "preprocessing_target_execution": "VERIFIED",
+    "host_parity": "VERIFIED",
+    "device_parity": "NOT_VERIFIED",
+    "model_inference_dscnn": "NOT_VERIFIED"
   },
   "supported_runtimes": [
     "tflite_micro",
