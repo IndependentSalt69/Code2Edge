@@ -1,0 +1,239 @@
+{
+  "schema_version": "1.0.0",
+  "tool": "run_parity_test",
+  "source": "mock",
+  "run_id": "run-30027352",
+  "timestamp": "2026-09-25T21:36:09Z",
+  "status": "PASS",
+  "gate": "host",
+  "attempt": 2,
+  "corpus": {
+    "n_samples": 500,
+    "corpus_id": "kws-corpus-v1",
+    "sha256": "a3f1c8b2e9d04f7a6c5b3e2d1f8a9c0e4b7d6f3a2c1e0d9b8a7f6c5e4d3b2a10"
+  },
+  "tolerances": {
+    "resample": {
+      "max_abs_diff": 1e-05,
+      "mean_abs_diff": 1e-06
+    },
+    "pre_emphasis": {
+      "max_abs_diff": 1e-05,
+      "mean_abs_diff": 1e-06
+    },
+    "framing": {
+      "max_abs_diff": 1e-05,
+      "mean_abs_diff": 1e-06
+    },
+    "fft": {
+      "max_abs_diff": 0.0001,
+      "mean_abs_diff": 1e-05
+    },
+    "mel": {
+      "max_abs_diff": 0.0001,
+      "mean_abs_diff": 1e-05
+    },
+    "log": {
+      "max_abs_diff": 0.0001,
+      "mean_abs_diff": 1e-05
+    },
+    "normalize": {
+      "max_abs_diff": 0.0005,
+      "mean_abs_diff": 0.0001
+    },
+    "min_prediction_agreement": 0.95,
+    "max_accuracy_delta": 0.03
+  },
+  "stages": [
+    {
+      "name": "resample",
+      "order": 0,
+      "shape_ref": [
+        500,
+        16000
+      ],
+      "shape_impl": [
+        500,
+        16000
+      ],
+      "dtype_ref": "float32",
+      "dtype_impl": "float32",
+      "max_abs_diff": 0.0,
+      "mean_abs_diff": 0.0,
+      "cosine_similarity": 1.0,
+      "tolerance": {
+        "max_abs_diff": 1e-05,
+        "mean_abs_diff": 1e-06
+      },
+      "status": "PASS",
+      "worst_sample_id": null,
+      "worst_index": null
+    },
+    {
+      "name": "pre_emphasis",
+      "order": 1,
+      "shape_ref": [
+        500,
+        16000
+      ],
+      "shape_impl": [
+        500,
+        16000
+      ],
+      "dtype_ref": "float32",
+      "dtype_impl": "float32",
+      "max_abs_diff": 2.3e-07,
+      "mean_abs_diff": 4.1e-08,
+      "cosine_similarity": 0.9999998,
+      "tolerance": {
+        "max_abs_diff": 1e-05,
+        "mean_abs_diff": 1e-06
+      },
+      "status": "PASS",
+      "worst_sample_id": "sample_0042",
+      "worst_index": 1234
+    },
+    {
+      "name": "framing",
+      "order": 2,
+      "shape_ref": [
+        500,
+        49,
+        400
+      ],
+      "shape_impl": [
+        500,
+        49,
+        400
+      ],
+      "dtype_ref": "float32",
+      "dtype_impl": "float32",
+      "max_abs_diff": 8.1e-06,
+      "mean_abs_diff": 1.2e-07,
+      "cosine_similarity": 0.9999991,
+      "tolerance": {
+        "max_abs_diff": 1e-05,
+        "mean_abs_diff": 1e-06
+      },
+      "status": "PASS",
+      "worst_sample_id": "sample_0042",
+      "worst_index": 1234
+    },
+    {
+      "name": "fft",
+      "order": 3,
+      "shape_ref": [
+        500,
+        49,
+        201
+      ],
+      "shape_impl": [
+        500,
+        49,
+        201
+      ],
+      "dtype_ref": "float32",
+      "dtype_impl": "float32",
+      "max_abs_diff": 6.4e-05,
+      "mean_abs_diff": 9.3e-06,
+      "cosine_similarity": 0.9999921,
+      "tolerance": {
+        "max_abs_diff": 0.0001,
+        "mean_abs_diff": 1e-05
+      },
+      "status": "PASS",
+      "worst_sample_id": "sample_0042",
+      "worst_index": 1234
+    },
+    {
+      "name": "mel",
+      "order": 4,
+      "shape_ref": [
+        500,
+        49,
+        40
+      ],
+      "shape_impl": [
+        500,
+        49,
+        40
+      ],
+      "dtype_ref": "float32",
+      "dtype_impl": "float32",
+      "max_abs_diff": 7.2e-05,
+      "mean_abs_diff": 8.1e-06,
+      "cosine_similarity": 0.9999912,
+      "tolerance": {
+        "max_abs_diff": 0.0001,
+        "mean_abs_diff": 1e-05
+      },
+      "status": "PASS",
+      "worst_sample_id": "sample_0042",
+      "worst_index": 1234
+    },
+    {
+      "name": "log",
+      "order": 5,
+      "shape_ref": [
+        500,
+        49,
+        40
+      ],
+      "shape_impl": [
+        500,
+        49,
+        40
+      ],
+      "dtype_ref": "float32",
+      "dtype_impl": "float32",
+      "max_abs_diff": 9.1e-05,
+      "mean_abs_diff": 1.1e-05,
+      "cosine_similarity": 0.9999901,
+      "tolerance": {
+        "max_abs_diff": 0.0001,
+        "mean_abs_diff": 1e-05
+      },
+      "status": "PASS",
+      "worst_sample_id": "sample_0042",
+      "worst_index": 1234
+    },
+    {
+      "name": "normalize",
+      "order": 6,
+      "shape_ref": [
+        500,
+        49,
+        40
+      ],
+      "shape_impl": [
+        500,
+        49,
+        40
+      ],
+      "dtype_ref": "float32",
+      "dtype_impl": "float32",
+      "max_abs_diff": 0.00043,
+      "mean_abs_diff": 8.7e-05,
+      "cosine_similarity": 0.999988,
+      "tolerance": {
+        "max_abs_diff": 0.0005,
+        "mean_abs_diff": 0.0001
+      },
+      "status": "PASS",
+      "worst_sample_id": "sample_0042",
+      "worst_index": 1234
+    }
+  ],
+  "first_divergent_stage": null,
+  "end_to_end": {
+    "prediction_agreement": 0.978,
+    "accuracy_ref": 0.923,
+    "accuracy_impl": 0.921,
+    "accuracy_delta": -0.002
+  },
+  "diagnosis_hints": [],
+  "artifacts": {
+    "report_path": "workflow/runs/run-30027352/parity_host_attempt2.json",
+    "per_sample_csv": "workflow/runs/run-30027352/parity_host_attempt2_per_sample.csv"
+  }
+}

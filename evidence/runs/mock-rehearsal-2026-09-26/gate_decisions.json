@@ -1,0 +1,47 @@
+[
+  {
+    "schema_version": "1.0.0",
+    "tool": "gate_step",
+    "source": "real",
+    "run_id": "run-30027352",
+    "timestamp": "2026-09-25T21:36:09Z",
+    "decision": "repair",
+    "attempt": 1,
+    "max_attempts": 3,
+    "remaining": 2,
+    "focus_stage": "framing",
+    "repair_hint": "Wrong number of frames: impl produces 50 frames, ref produces 49. Likely cause: off-by-one in frame-count formula (floor vs ceil), or hop_length mismatch.",
+    "escalation_report_path": null,
+    "gate": "host"
+  },
+  {
+    "schema_version": "1.0.0",
+    "tool": "gate_step",
+    "source": "real",
+    "run_id": "run-30027352",
+    "timestamp": "2026-09-25T21:36:09Z",
+    "decision": "continue",
+    "attempt": 2,
+    "max_attempts": 3,
+    "remaining": 0,
+    "focus_stage": null,
+    "repair_hint": null,
+    "escalation_report_path": null,
+    "gate": "host"
+  },
+  {
+    "schema_version": "1.0.0",
+    "tool": "gate_step",
+    "source": "real",
+    "run_id": "run-30027352",
+    "timestamp": "2026-09-25T21:36:17Z",
+    "decision": "continue",
+    "attempt": 1,
+    "max_attempts": 3,
+    "remaining": 0,
+    "focus_stage": null,
+    "repair_hint": null,
+    "escalation_report_path": null,
+    "gate": "device"
+  }
+]

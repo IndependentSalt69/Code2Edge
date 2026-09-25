@@ -26,10 +26,14 @@ from mcp.server.fastmcp import FastMCP
 from mcp_server.tools import (
     benchmark_target,
     check_target,
+    gate_step,
+    get_run_status,
     inspect_pipeline,
     profile_model,
     quantize_model,
+    record_approval,
     run_parity_test,
+    start_run,
 )
 
 mcp = FastMCP(
@@ -102,6 +106,32 @@ async def quantize_model_tool(model_file: str, representative_data_dir: str,
                                     representative_data_dir=representative_data_dir,
                                     n_calibration_samples=n_calibration_samples,
                                     output_dir=output_dir)
+
+
+@mcp.tool()
+async def start_run_tool(requested_by: str = "") -> dict:
+    """Create a new Code2Edge deployment run and return its run_id."""
+    return await start_run.run(requested_by=requested_by)
+
+
+@mcp.tool()
+async def get_run_status_tool(run_id: str) -> dict:
+    """Read back a run's current stage, status and history."""
+    return await get_run_status.run(run_id=run_id)
+
+
+@mcp.tool()
+async def gate_step_tool(run_id: str, gate: str, parity_result: dict) -> dict:
+    """Evaluate a run_parity_test result: continue, repair (attempts < 3), or escalate."""
+    return await gate_step.run(run_id=run_id, gate=gate, parity_result=parity_result)
+
+
+@mcp.tool()
+async def record_approval_tool(run_id: str, checkpoint: str, approved: bool,
+                                approver: str = "", notes: str = "") -> dict:
+    """Record a human approval/rejection at a workflow checkpoint."""
+    return await record_approval.run(run_id=run_id, checkpoint=checkpoint,
+                                     approved=approved, approver=approver, notes=notes)
 
 
 # ── Entry point ───────────────────────────────────────────────────────────────
