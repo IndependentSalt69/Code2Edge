@@ -107,3 +107,93 @@ Run the full contracts validator independently:
 ```bash
 python contracts/validate.py
 ```
+
+---
+
+## Using the server from Bob
+
+### Registration
+
+The server is registered as **`code2edge`** in `.bob/mcp.json` at the project root.
+Bob reads this file automatically — no global config changes needed.
+
+> **`.bob/mcp.json` is gitignored** (the `.bob/` directory is in `.gitignore`).
+> It is force-added to git so teammates can share it.
+> If you clone the repo fresh, run `git checkout .bob/mcp.json` or copy it from the
+> `person-c/work` branch — it will not appear in `git status` automatically.
+
+### First-time setup for a new machine
+
+1. Open `.bob/mcp.json` and update two fields to match your local environment:
+
+   ```json
+   "command": "/path/to/your/python3",
+   "cwd": "/absolute/path/to/Code2Edge"
+   ```
+
+   On Windows with Miniconda this looks like:
+   ```json
+   "command": "C:\\Users\\YOU\\miniconda3\\python.exe",
+   "cwd": "C:\\Users\\YOU\\...\\Code2Edge"
+   ```
+
+2. Make sure the Python interpreter has the dependencies:
+   ```bash
+   pip install -r mcp_server/requirements.txt
+   ```
+
+3. In Bob → Settings → MCP, click the **restart** icon next to `code2edge`.
+   The status indicator should turn green.
+
+### Reload after config changes
+
+Any change to `.bob/mcp.json` (e.g. switching parity scenario) requires a server
+restart. In Bob → Settings → MCP → restart icon next to `code2edge`, **or** close
+and reopen the Bob window.
+
+### Smoke-testing all tools from Bob
+
+Once the server is connected (green), ask Bob (in Agent mode):
+
+```
+Call profile_model_tool with repo_path="." and model_file="reference/tiny-kws/requirements.txt"
+```
+
+Or ask it to run all tools in sequence:
+
+```
+Run the full Code2Edge analysis pipeline in mock mode:
+1. profile_model_tool(repo_path=".", model_file="model.tflite")
+2. inspect_pipeline_tool(repo_path=".", manifest_path="reference/tiny-kws/assets/metrics.json")
+3. check_target_tool(model_file="model.tflite", arena_kb=128)
+4. run_parity_test_tool(gate="host", attempt=1, corpus_dir="reference/corpus",
+   ref_pipeline_path="src/pipeline", impl_pipeline_path="src/parity",
+   run_id="demo-001")
+5. benchmark_target_tool(model_file="model.tflite", n_inferences=100)
+```
+
+### Live smoke-test results (2026-09-25, mock mode)
+
+All 6 tools were called through MCP and returned schema-valid responses:
+
+| Tool | Status | Key result |
+|------|--------|------------|
+| `profile_model_tool` | ✅ PASS | DS-CNN, 24 922 params, 5.7 M MACs, int8 |
+| `inspect_pipeline_tool` | ✅ PASS | 7 stages, KWS domain, all constants extracted |
+| `check_target_tool` | ✅ PASS | fits=true, headroom=650 KB SRAM (arena=128 KB) |
+| `run_parity_test_tool` (scenario=pass) | ✅ PASS | 7/7 stages PASS, pred_agreement=0.978 |
+| `run_parity_test_tool` (scenario=fail_mel_scale) | ✅ FAIL as expected | first_divergent=mel, max_abs_diff=1.843, HTK/Slaney hint |
+| `benchmark_target_tool` | ✅ PASS | 28.4 ms mean latency, 143 KB SRAM peak |
+
+### Switching parity scenarios
+
+Edit `CODE2EDGE_MOCK_PARITY_SCENARIO` in `.bob/mcp.json` and restart the server:
+
+| Value | What it simulates |
+|-------|-------------------|
+| `pass` | All 7 stages within tolerance — green run |
+| `fail_framing_shape` | Off-by-one frame count (49 vs 50); cascade FAIL from framing |
+| `fail_mel_scale` | HTK vs Slaney filterbank mismatch; FAIL only at mel+log+normalize |
+| `always_fail` | Framing shape bug that never resolves — tests escalation path |
+| `fail_then_pass` | Attempt 1 FAIL, attempt 2 PASS (same run_id) — simulates repair loop |
+
