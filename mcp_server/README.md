@@ -26,6 +26,15 @@ python -m mcp_server.server
 | `run_parity_test_tool` | Stage-wise differential parity: Python ref vs generated C++ |
 | `benchmark_target_tool` | On-device latency + memory measurement |
 | `quantize_model_tool` | Post-training int8 quantization (optional) |
+| `start_run_tool` | Create a new deployment run, return its `run_id` |
+| `get_run_status_tool` | Read back a run's current stage, status and history |
+| `gate_step_tool` | Evaluate a parity result: continue / repair (attempts &lt; 3) / escalate |
+| `record_approval_tool` | Record a human APPROVE/REJECT at a workflow checkpoint |
+
+`start_run_tool`, `get_run_status_tool`, `gate_step_tool` and `record_approval_tool` are
+local workflow logic (see `workflow/`) — no mock/real split, `source` is always `"real"`.
+The retry cap (3 attempts before escalation) is enforced in `workflow/gates.py`, not left
+to the calling agent.
 
 ---
 

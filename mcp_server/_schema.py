@@ -54,6 +54,8 @@ _TOOL_SCHEMA_FILES = {
     "record_approval":  "record_approval.schema.json",
     "benchmark_target": "benchmark_target.schema.json",
     "quantize_model":   "quantize_model.schema.json",
+    "start_run":        "start_run.schema.json",
+    "get_run_status":   "get_run_status.schema.json",
 }
 
 
