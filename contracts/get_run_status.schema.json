@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://code2edge/contracts/get_run_status.schema.json",
+  "title": "get_run_status — input and output schemas",
+  "description": "Reads back the current state of a Code2Edge deployment run: stage progress, decisions and history.",
+
+  "$defs": {
+    "Input": {
+      "type": "object",
+      "required": ["run_id"],
+      "properties": {
+        "run_id": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+
+    "StageState": {
+      "type": "object",
+      "required": ["name","status","entered_at","exited_at"],
+      "properties": {
+        "name":       { "type": "string" },
+        "status":     { "type": "string", "enum": ["pending","in_progress","passed","failed","skipped"] },
+        "entered_at": { "type": ["string","null"], "format": "date-time" },
+        "exited_at":  { "type": ["string","null"], "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+
+    "HistoryEvent": {
+      "type": "object",
+      "required": ["stage","event","timestamp"],
+      "properties": {
+        "stage":     { "type": "string" },
+        "event":     { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "detail":    { "type": ["string","null"] }
+      },
+      "additionalProperties": false
+    },
+
+    "Output": {
+      "type": "object",
+      "required": ["schema_version","tool","source","run_id","timestamp","status","current_stage","stages","history"],
+      "properties": {
+        "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "tool":           { "type": "string", "const": "get_run_status" },
+        "source":         { "type": "string", "enum": ["mock","real"] },
+        "run_id":         { "type": "string" },
+        "timestamp":      { "type": "string", "format": "date-time" },
+
+        "status":        { "type": "string", "enum": ["running","completed","failed","escalated","aborted"] },
+        "current_stage": { "type": "string" },
+        "stages":        { "type": "array", "items": { "$ref": "#/$defs/StageState" } },
+        "history":       { "type": "array", "items": { "$ref": "#/$defs/HistoryEvent" } }
+      },
+      "additionalProperties": false
+    }
+  }
+}

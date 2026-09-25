@@ -32,22 +32,26 @@ TOOL_SCHEMAS = {
     "benchmark_target": "benchmark_target.schema.json",
     "check_target":     "check_target.schema.json",
     "gate_step":        "gate_step.schema.json",
+    "get_run_status":   "get_run_status.schema.json",
     "inspect_pipeline": "inspect_pipeline.schema.json",
     "profile_model":    "profile_model.schema.json",
     "quantize_model":   "quantize_model.schema.json",
     "record_approval":  "record_approval.schema.json",
     "run_parity_test":  "run_parity_test.schema.json",
+    "start_run":        "start_run.schema.json",
 }
 
 EXAMPLE_FILES = {
     "benchmark_target": "benchmark_target.example.json",
     "check_target":     "check_target.example.json",
     "gate_step":        "gate_step.example.json",
+    "get_run_status":   "get_run_status.example.json",
     "inspect_pipeline": "inspect_pipeline.example.json",
     "profile_model":    "profile_model.example.json",
     "quantize_model":   "quantize_model.example.json",
     "record_approval":  "record_approval.example.json",
     "run_parity_test":  "run_parity_test.example.json",
+    "start_run":        "start_run.example.json",
 }
 
 
