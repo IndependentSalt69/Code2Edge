@@ -28,3 +28,8 @@ __pycache__/
 data/
 checkpoints/*.pt
 !checkpoints/.gitkeep
+
+# Generated parity tensor corpora
+reference/golden/
+reference/golden_smoke/
+reference/artifacts/test_cache_check/
