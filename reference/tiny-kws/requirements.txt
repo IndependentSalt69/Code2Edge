@@ -1,0 +1,8 @@
+# Exact versions used for development (Python 3.13, macOS / Colab)
+torch>=2.6
+torchaudio>=2.6
+numpy
+soundfile
+scikit-learn
+matplotlib
+tqdm

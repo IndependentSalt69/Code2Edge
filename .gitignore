@@ -16,10 +16,14 @@ out/
 Thumbs.db
 .vscode/
 .idea/
+.bob
 
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
 
-.bob
+# Data and models
+data/
+checkpoints/*.pt
+!checkpoints/.gitkeep
