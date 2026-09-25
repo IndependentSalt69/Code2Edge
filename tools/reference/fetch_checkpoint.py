@@ -11,7 +11,7 @@ import urllib.request
 from pathlib import Path
 
 HF_URL = "https://huggingface.co/priyadeepjaiswal9c/tiny-kws/resolve/main/best.pt"
-REPO_ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 DEFAULT_DEST = REPO_ROOT / "checkpoints" / "best.pt"
 
 

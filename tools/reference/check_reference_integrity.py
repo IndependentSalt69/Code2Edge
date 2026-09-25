@@ -9,7 +9,7 @@ import hashlib
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 REFERENCE_DIR = REPO_ROOT / "reference" / "tiny-kws"
 UPSTREAM_MD = REFERENCE_DIR / "UPSTREAM.md"
 
