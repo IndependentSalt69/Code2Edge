@@ -132,11 +132,20 @@ def test_stage_s3_normalized_features_parity(native_c_pipeline):
     assert result["cosine_similarity"] >= STAGE_TOLERANCES["S3_normalized_features"]["min_cosine"]
 
 
-def test_full_host_parity_report_generation():
+def test_full_host_parity_report_generation(tmp_path):
     """Execute end-to-end host parity verification and assert report emission."""
-    report = run_host_parity_suite(sample_dir=SMOKE_SAMPLE_DIR)
-    assert report["summary"]["overall_status"] == "PASS", f"Host parity report failed: {report}"
+    report_path = tmp_path / "host_parity_smoke_report.json"
+
+    report = run_host_parity_suite(
+        sample_dir=SMOKE_SAMPLE_DIR,
+        output_path=report_path,
+    )
+
+    assert report["summary"]["overall_status"] == "PASS", (
+        f"Host parity report failed: {report}"
+    )
     assert report["summary"]["passed_stages"] == 5
     assert report["summary"]["failed_stages"] == 0
     assert report["coverage"]["parity_status_smoke"] == "PASS"
     assert report["coverage"]["parity_status_full_corpus"] == "PENDING"
+    assert report_path.exists()
