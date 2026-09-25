@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TargetProfile",
+  "description": "Schema for check_target() output describing target hardware profile, limits, and toolchain readiness.",
+  "type": "object",
+  "required": [
+    "target_id",
+    "board_name",
+    "mcu",
+    "memory_limits",
+    "toolchain",
+    "bridge",
+    "supported_runtimes",
+    "restrictions"
+  ],
+  "properties": {
+    "target_id": {
+      "type": "string",
+      "example": "arduino_uno_q_stm32u585"
+    },
+    "board_name": {
+      "type": "string",
+      "example": "Arduino UNO Q"
+    },
+    "mcu": {
+      "type": "object",
+      "required": ["core", "part_number", "clock_hz", "flash_bytes", "sram_bytes"],
+      "properties": {
+        "core": { "type": "string", "example": "ARM Cortex-M33" },
+        "part_number": { "type": "string", "example": "STM32U585" },
+        "clock_hz": { "type": "integer", "example": 160000000 },
+        "fpu": { "type": "string", "example": "Single-precision FP32" },
+        "dsp_extensions": { "type": "boolean", "default": true },
+        "flash_bytes": { "type": "integer", "example": 2097152 },
+        "sram_bytes": { "type": "integer", "example": 804864 }
+      }
+    },
+    "memory_limits": {
+      "type": "object",
+      "required": ["flash_limit_bytes", "sram_limit_bytes", "max_tensor_arena_bytes"],
+      "properties": {
+        "flash_limit_bytes": { "type": "integer", "example": 2097152 },
+        "sram_limit_bytes": { "type": "integer", "example": 804864 },
+        "max_tensor_arena_bytes": { "type": "integer", "example": 524288 },
+        "max_feature_buffer_bytes": { "type": "integer", "example": 65536 }
+      }
+    },
+    "toolchain": {
+      "type": "object",
+      "required": ["name", "core_platform", "compiler", "status"],
+      "properties": {
+        "name": { "type": "string", "example": "arduino-cli" },
+        "core_platform": { "type": "string", "example": "arduino:zephyr (1.0.0)" },
+        "compiler": { "type": "string", "example": "arm-zephyr-eabi-gcc" },
+        "version": { "type": "string", "example": "1.4.1" },
+        "status": {
+          "type": "string",
+          "enum": ["VERIFIED", "NOT_VERIFIED", "BLOCKED", "UNKNOWN"]
+        }
+      }
+    },
+    "bridge": {
+      "type": "object",
+      "required": ["transport", "status"],
+      "properties": {
+        "transport": { "type": "string", "enum": ["UART", "OFFLINE_FIXTURE", "ADB_BRIDGE", "NONE"] },
+        "device_path": { "type": "string", "example": "/dev/ttyMSM0" },
+        "baud_rate": { "type": "integer", "example": 115200 },
+        "packet_format": { "type": "string", "example": "binary_8byte_framed" },
+        "status": {
+          "type": "string",
+          "enum": ["VERIFIED", "NOT_VERIFIED", "BLOCKED", "UNKNOWN"]
+        }
+      }
+    },
+    "supported_runtimes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "example": ["tflite_micro", "cmsis_nn_baremetal"]
+    },
+    "supported_operators": {
+      "type": "array",
+      "items": { "type": "string" },
+      "example": ["CONV_2D", "DEPTHWISE_CONV_2D", "AVERAGE_POOL_2D", "FULLY_CONNECTED", "RELU", "SOFTMAX"]
+    },
+    "restrictions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "example": [
+        "Zero dynamic memory allocation in inference loop",
+        "Static tensor arena and feature buffers only",
+        "All weights resident in Flash"
+      ]
+    }
+  }
+}

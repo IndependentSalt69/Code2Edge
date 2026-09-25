@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DeviceParityResult",
+  "description": "Schema for reporting on-device differential parity verification against Python reference tensors.",
+  "type": "object",
+  "required": [
+    "target_id",
+    "corpus_id",
+    "timestamp",
+    "overall_pass",
+    "total_samples_evaluated",
+    "samples_matched",
+    "prediction_agreement_rate",
+    "stage_results"
+  ],
+  "properties": {
+    "target_id": { "type": "string", "example": "arduino_uno_q_stm32u585" },
+    "corpus_id": { "type": "string", "example": "golden_smoke_v1" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "host_parity_precheck": {
+      "type": "boolean",
+      "description": "MUST be true. Device parity is only sanctioned if host parity has passed."
+    },
+    "overall_pass": { "type": "boolean" },
+    "total_samples_evaluated": { "type": "integer" },
+    "samples_matched": { "type": "integer" },
+    "samples_diverged": { "type": "integer" },
+    "prediction_agreement_rate": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "first_divergent_stage": {
+      "type": ["string", "null"],
+      "enum": ["S0", "S1", "S2", "S3", "S4a", "S4b", "S4c", "S4d", "S5", "S6", null]
+    },
+    "stage_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["stage_id", "stage_name", "passed"],
+        "properties": {
+          "stage_id": { "type": "string", "enum": ["S0", "S1", "S2", "S3", "S4a", "S4b", "S4c", "S4d", "S5", "S6"] },
+          "stage_name": { "type": "string" },
+          "max_abs_error": { "type": ["number", "null"] },
+          "relative_error": { "type": ["number", "null"] },
+          "cosine_similarity": { "type": ["number", "null"] },
+          "tolerance_threshold": { "type": "number" },
+          "passed": { "type": "boolean" }
+        }
+      }
+    },
+    "divergent_samples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sample_id": { "type": "string" },
+          "expected_class": { "type": "integer" },
+          "actual_class": { "type": "integer" },
+          "expected_label": { "type": "string" },
+          "actual_label": { "type": "string" },
+          "divergent_stage": { "type": "string" }
+        }
+      }
+    }
+  }
+}

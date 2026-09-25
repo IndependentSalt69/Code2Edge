@@ -1,0 +1,2 @@
+# Vendored reference workload - exclude from GitHub language stats and PR diffs
+reference/tiny-kws/** linguist-vendored -diff

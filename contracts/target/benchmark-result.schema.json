@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BenchmarkResult",
+  "description": "Schema for benchmark_target() machine-readable execution report. Strictly distinguishes ESTIMATED vs MEASURED data.",
+  "type": "object",
+  "required": [
+    "target_id",
+    "model_id",
+    "run_type",
+    "latency_ms",
+    "memory_bytes",
+    "execution_metadata"
+  ],
+  "properties": {
+    "target_id": { "type": "string", "example": "arduino_uno_q_stm32u585" },
+    "model_id": { "type": "string", "example": "tiny-kws-dscnn-int8" },
+    "run_type": {
+      "type": "string",
+      "enum": ["MEASURED", "ESTIMATED"],
+      "description": "MUST indicate whether values are measured on physical hardware or analytical estimates."
+    },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "latency_ms": {
+      "type": "object",
+      "required": ["inference_avg_ms"],
+      "properties": {
+        "inference_avg_ms": { "type": "number" },
+        "inference_min_ms": { "type": "number" },
+        "inference_max_ms": { "type": "number" },
+        "inference_std_ms": { "type": "number" },
+        "preprocessing_avg_ms": { "type": ["number", "null"] },
+        "end_to_end_avg_ms": { "type": ["number", "null"] },
+        "clock_cycles_inference": { "type": ["integer", "null"] }
+      }
+    },
+    "memory_bytes": {
+      "type": "object",
+      "required": ["flash_used_bytes", "sram_used_bytes", "tensor_arena_bytes"],
+      "properties": {
+        "flash_used_bytes": { "type": "integer" },
+        "flash_total_bytes": { "type": "integer", "default": 2097152 },
+        "flash_headroom_bytes": { "type": "integer" },
+        "sram_used_bytes": { "type": "integer" },
+        "sram_total_bytes": { "type": "integer", "default": 804864 },
+        "sram_headroom_bytes": { "type": "integer" },
+        "tensor_arena_bytes": { "type": "integer" },
+        "feature_buffer_bytes": { "type": "integer" },
+        "static_ram_bytes": { "type": ["integer", "null"] },
+        "stack_peak_bytes": { "type": ["integer", "null"] }
+      }
+    },
+    "execution_metadata": {
+      "type": "object",
+      "required": ["clock_mhz", "num_iterations", "runtime", "quantization"],
+      "properties": {
+        "clock_mhz": { "type": "number", "example": 160.0 },
+        "num_iterations": { "type": "integer", "example": 50 },
+        "runtime": { "type": "string", "example": "tflite_micro_cmsis_nn" },
+        "quantization": { "type": "string", "example": "int8" },
+        "toolchain_version": { "type": "string" }
+      }
+    },
+    "sample_prediction": {
+      "type": "object",
+      "properties": {
+        "test_fixture": { "type": "string" },
+        "predicted_class_index": { "type": "integer" },
+        "predicted_label": { "type": "string" },
+        "confidence": { "type": "number" }
+      }
+    }
+  }
+}
