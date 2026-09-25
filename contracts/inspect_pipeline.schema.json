@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://code2edge/contracts/inspect_pipeline.schema.json",
+  "title": "inspect_pipeline — input and output schemas",
+  "description": "Traces the Python preprocessing pipeline of a KWS/IMU repository and returns observed constants, stage order, and the reference tensor manifest produced by dump_reference.py.",
+
+  "$defs": {
+    "Input": {
+      "type": "object",
+      "required": ["repo_path", "manifest_path"],
+      "properties": {
+        "repo_path":     { "type": "string", "description": "Repository root path" },
+        "manifest_path": { "type": "string", "description": "Path to manifest.json produced by dump_reference.py" },
+        "corpus_dir":    { "type": "string", "description": "Optional: directory holding the .npy stage dumps" }
+      },
+      "additionalProperties": false
+    },
+
+    "StageDescriptor": {
+      "type": "object",
+      "required": ["name","order","input_shape","output_shape","dtype","constants"],
+      "properties": {
+        "name":         { "type": "string", "enum": ["resample","pre_emphasis","framing","fft","mel","log","normalize"] },
+        "order":        { "type": "integer", "minimum": 0 },
+        "input_shape":  { "type": "array", "items": { "type": ["integer","null"] } },
+        "output_shape": { "type": "array", "items": { "type": ["integer","null"] } },
+        "dtype":        { "type": "string" },
+        "constants":    {
+          "type": "object",
+          "description": "Key-value pairs of constants observed at runtime for this stage",
+          "additionalProperties": { "type": ["number","string","boolean","null"] }
+        },
+        "source_file":  { "type": "string", "description": "File where this stage is implemented" },
+        "function":     { "type": "string", "description": "Function or method name" }
+      },
+      "additionalProperties": false
+    },
+
+    "Output": {
+      "type": "object",
+      "required": ["schema_version","tool","source","run_id","timestamp","pipeline"],
+      "properties": {
+        "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "tool":           { "type": "string", "const": "inspect_pipeline" },
+        "source":         { "type": "string", "enum": ["mock","real"] },
+        "run_id":         { "type": "string" },
+        "timestamp":      { "type": "string", "format": "date-time" },
+        "pipeline": {
+          "type": "object",
+          "required": ["domain","n_stages","stages","global_constants","corpus"],
+          "properties": {
+            "domain":   { "type": "string", "enum": ["kws","imu","unknown"] },
+            "n_stages": { "type": "integer", "minimum": 1 },
+            "stages":   { "type": "array", "items": { "$ref": "#/$defs/StageDescriptor" } },
+            "global_constants": {
+              "type": "object",
+              "description": "Top-level constants shared across stages (sample_rate, n_mels, etc.)",
+              "additionalProperties": { "type": ["number","string","boolean","null"] }
+            },
+            "corpus": {
+              "type": "object",
+              "required": ["n_samples","corpus_id","sha256"],
+              "properties": {
+                "n_samples":  { "type": "integer", "minimum": 1 },
+                "corpus_id":  { "type": "string" },
+                "sha256":     { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+              },
+              "additionalProperties": false
+            },
+            "warnings": { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

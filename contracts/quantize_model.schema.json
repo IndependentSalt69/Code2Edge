@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://code2edge/contracts/quantize_model.schema.json",
+  "title": "quantize_model — input and output schemas (optional tool)",
+  "description": "Post-training quantizes a float32 model to int8 using a representative dataset. Optional — invoked if the model is not already quantized.",
+
+  "$defs": {
+    "Input": {
+      "type": "object",
+      "required": ["model_file", "representative_data_dir"],
+      "properties": {
+        "model_file":             { "type": "string", "description": "Path to the float32 SavedModel or .h5/.tflite file" },
+        "representative_data_dir":{ "type": "string", "description": "Directory of .npy or .wav samples for calibration" },
+        "n_calibration_samples":  { "type": "integer", "minimum": 1, "default": 100 },
+        "output_dir":             { "type": "string", "description": "Directory to write the quantized .tflite file" },
+        "target_dtype":           { "type": "string", "enum": ["int8","uint8"], "default": "int8" }
+      },
+      "additionalProperties": false
+    },
+
+    "Output": {
+      "type": "object",
+      "required": ["schema_version","tool","source","run_id","timestamp","quantization"],
+      "properties": {
+        "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "tool":           { "type": "string", "const": "quantize_model" },
+        "source":         { "type": "string", "enum": ["mock","real"] },
+        "run_id":         { "type": "string" },
+        "timestamp":      { "type": "string", "format": "date-time" },
+        "quantization": {
+          "type": "object",
+          "required": ["input_dtype","output_dtype","output_path","size_before_kb","size_after_kb","accuracy_before","accuracy_after","accuracy_delta"],
+          "properties": {
+            "input_dtype":    { "type": "string", "enum": ["float32","float16"] },
+            "output_dtype":   { "type": "string", "enum": ["int8","uint8"] },
+            "quant_scheme":   { "type": "string", "enum": ["per_tensor","per_channel"] },
+            "output_path":    { "type": "string", "description": "Path to the output .tflite file" },
+            "size_before_kb": { "type": "number", "minimum": 0 },
+            "size_after_kb":  { "type": "number", "minimum": 0 },
+            "accuracy_before":{ "type": "number", "minimum": 0, "maximum": 1 },
+            "accuracy_after": { "type": "number", "minimum": 0, "maximum": 1 },
+            "accuracy_delta": { "type": "number", "description": "accuracy_after - accuracy_before" },
+            "n_calibration_samples": { "type": "integer", "minimum": 1 },
+            "warnings":       { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
