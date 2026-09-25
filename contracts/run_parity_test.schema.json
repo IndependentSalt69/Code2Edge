@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://code2edge/contracts/run_parity_test.schema.json",
+  "title": "run_parity_test — input and output schemas",
+  "description": "Runs Python reference pipeline vs generated C++ pipeline on the same corpus. Returns per-stage divergence metrics structured for agent-driven repair decisions.",
+
+  "$defs": {
+    "Input": {
+      "type": "object",
+      "required": ["gate", "attempt", "corpus_dir", "ref_pipeline_path", "impl_pipeline_path"],
+      "properties": {
+        "gate":                 { "type": "string", "enum": ["host","device"], "description": "Which parity gate is being run" },
+        "attempt":              { "type": "integer", "minimum": 1, "maximum": 3 },
+        "corpus_dir":           { "type": "string", "description": "Directory of .wav files to run through both pipelines" },
+        "corpus_id":            { "type": "string", "description": "Stable identifier for this corpus version" },
+        "ref_pipeline_path":    { "type": "string", "description": "Path to the Python reference pipeline" },
+        "impl_pipeline_path":   { "type": "string", "description": "Path to the generated C++ binary or shared lib" },
+        "tolerances":           { "$ref": "#/$defs/Tolerances" }
+      },
+      "additionalProperties": false
+    },
+
+    "Tolerances": {
+      "type": "object",
+      "description": "Per-stage and end-to-end pass/fail thresholds",
+      "properties": {
+        "resample":    { "$ref": "#/$defs/StageTolerance" },
+        "pre_emphasis":{ "$ref": "#/$defs/StageTolerance" },
+        "framing":     { "$ref": "#/$defs/StageTolerance" },
+        "fft":         { "$ref": "#/$defs/StageTolerance" },
+        "mel":         { "$ref": "#/$defs/StageTolerance" },
+        "log":         { "$ref": "#/$defs/StageTolerance" },
+        "normalize":   { "$ref": "#/$defs/StageTolerance" },
+        "min_prediction_agreement": {
+          "type": "number", "minimum": 0, "maximum": 1,
+          "description": "Minimum fraction of samples where ref and impl agree on top-1 class; default 0.95"
+        },
+        "max_accuracy_delta": {
+          "type": "number", "minimum": 0, "maximum": 1,
+          "description": "Maximum allowed drop in accuracy from ref to impl; default 0.03"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "StageTolerance": {
+      "type": "object",
+      "required": ["max_abs_diff", "mean_abs_diff"],
+      "properties": {
+        "max_abs_diff":  { "type": "number", "minimum": 0, "description": "Hard limit on max absolute difference across all elements" },
+        "mean_abs_diff": { "type": "number", "minimum": 0, "description": "Hard limit on mean absolute difference" }
+      },
+      "additionalProperties": false
+    },
+
+    "StageResult": {
+      "type": "object",
+      "required": ["name","order","max_abs_diff","mean_abs_diff","cosine_similarity","tolerance","status"],
+      "properties": {
+        "name":              { "type": "string", "enum": ["resample","pre_emphasis","framing","fft","mel","log","normalize"] },
+        "order":             { "type": "integer", "minimum": 0 },
+        "shape_ref":         { "type": "array", "items": { "type": ["integer","null"] }, "description": "Output tensor shape from reference" },
+        "shape_impl":        { "type": "array", "items": { "type": ["integer","null"] }, "description": "Output tensor shape from implementation" },
+        "dtype_ref":         { "type": "string" },
+        "dtype_impl":        { "type": "string" },
+        "max_abs_diff":      { "type": "number", "minimum": 0 },
+        "mean_abs_diff":     { "type": "number", "minimum": 0 },
+        "cosine_similarity": { "type": ["number","null"], "minimum": -1, "maximum": 1 },
+        "tolerance":         { "$ref": "#/$defs/StageTolerance" },
+        "status":            { "type": "string", "enum": ["PASS","FAIL","SKIPPED"] },
+        "worst_sample_id":   { "type": ["string","null"], "description": "Corpus sample ID with worst divergence" },
+        "worst_index":       { "type": ["integer","null"], "description": "Flat tensor index of worst element in worst_sample_id" }
+      },
+      "additionalProperties": false
+    },
+
+    "DiagnosisHint": {
+      "type": "object",
+      "required": ["stage","hypothesis","evidence"],
+      "description": "Deterministic heuristic hint for the agent repair loop",
+      "properties": {
+        "stage":      { "type": "string", "enum": ["resample","pre_emphasis","framing","fft","mel","log","normalize","end_to_end"] },
+        "hypothesis": { "type": "string", "description": "Candidate root cause, e.g. 'wrong window size or hop length'" },
+        "evidence":   { "type": "string", "description": "Observable metric that triggered this hint, e.g. 'shape_ref=[1,49,40] shape_impl=[1,50,40]'" }
+      },
+      "additionalProperties": false
+    },
+
+    "Output": {
+      "type": "object",
+      "required": [
+        "schema_version","tool","source","run_id","timestamp",
+        "status","gate","attempt","corpus","tolerances",
+        "stages","first_divergent_stage","end_to_end","diagnosis_hints","artifacts"
+      ],
+      "properties": {
+        "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "tool":           { "type": "string", "const": "run_parity_test" },
+        "source":         { "type": "string", "enum": ["mock","real"] },
+        "run_id":         { "type": "string" },
+        "timestamp":      { "type": "string", "format": "date-time" },
+
+        "status":  { "type": "string", "enum": ["PASS","FAIL","ERROR"] },
+        "gate":    { "type": "string", "enum": ["host","device"] },
+        "attempt": { "type": "integer", "minimum": 1, "maximum": 3 },
+
+        "corpus": {
+          "type": "object",
+          "required": ["n_samples","corpus_id","sha256"],
+          "properties": {
+            "n_samples":  { "type": "integer", "minimum": 1 },
+            "corpus_id":  { "type": "string" },
+            "sha256":     { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+          },
+          "additionalProperties": false
+        },
+
+        "tolerances": { "$ref": "#/$defs/Tolerances" },
+
+        "stages": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 7,
+          "items": { "$ref": "#/$defs/StageResult" },
+          "description": "Ordered: resample(0) → pre_emphasis(1) → framing(2) → fft(3) → mel(4) → log(5) → normalize(6)"
+        },
+
+        "first_divergent_stage": {
+          "type": ["string","null"],
+          "description": "Name of the earliest stage with status=FAIL; null if all PASS"
+        },
+
+        "end_to_end": {
+          "type": "object",
+          "required": ["prediction_agreement","accuracy_ref","accuracy_impl","accuracy_delta"],
+          "properties": {
+            "prediction_agreement": {
+              "type": "number", "minimum": 0, "maximum": 1,
+              "description": "Fraction of samples where ref and impl agree on top-1 class"
+            },
+            "accuracy_ref":  { "type": "number", "minimum": 0, "maximum": 1 },
+            "accuracy_impl": { "type": "number", "minimum": 0, "maximum": 1 },
+            "accuracy_delta":{ "type": "number", "description": "accuracy_impl - accuracy_ref (negative = regression)" }
+          },
+          "additionalProperties": false
+        },
+
+        "diagnosis_hints": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/DiagnosisHint" },
+          "description": "Deterministic heuristic hints. Rules: shape mismatch at framing → window/hop/padding; constant offset after log → log epsilon or log base; constant scale after mel → filterbank normalization (slaney vs htk); fft ratio ≈ 2 → magnitude vs power spectrum; error growing with frame index → hop length or pre-emphasis state carry-over."
+        },
+
+        "artifacts": {
+          "type": "object",
+          "required": ["report_path","per_sample_csv"],
+          "properties": {
+            "report_path":    { "type": "string", "description": "Path to the full parity report JSON file" },
+            "per_sample_csv": { "type": "string", "description": "Path to CSV with per-sample per-stage metrics" }
+          },
+          "additionalProperties": false
+        },
+
+        "error_message": {
+          "type": "string",
+          "description": "Present only when status=ERROR; describes what went wrong"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
