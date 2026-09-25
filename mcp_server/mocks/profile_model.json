@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "tool": "profile_model",
+  "source": "mock",
+  "run_id": "__RUN_ID__",
+  "timestamp": "__TIMESTAMP__",
+  "model": {
+    "name": "ds_cnn_kws_int8",
+    "architecture": "DS-CNN",
+    "total_params": 24922,
+    "total_macs": 5740544,
+    "input_shape": [1, 49, 40, 1],
+    "output_classes": 12,
+    "dtype": "int8",
+    "quantized": true,
+    "quant_scheme": "per_tensor",
+    "layers": [
+      { "name": "conv2d",             "type": "CONV_2D",           "params": 320,   "macs": 614400,  "input_shape": [1,49,40,1],  "output_shape": [1,25,20,32] },
+      { "name": "depthwise_conv2d_0", "type": "DEPTHWISE_CONV_2D", "params": 288,   "macs": 144000,  "input_shape": [1,25,20,32], "output_shape": [1,25,20,32] },
+      { "name": "conv2d_1",           "type": "CONV_2D",           "params": 4128,  "macs": 2064000, "input_shape": [1,25,20,32], "output_shape": [1,25,20,64] },
+      { "name": "depthwise_conv2d_1", "type": "DEPTHWISE_CONV_2D", "params": 576,   "macs": 720000,  "input_shape": [1,25,20,64], "output_shape": [1,25,20,64] },
+      { "name": "conv2d_2",           "type": "CONV_2D",           "params": 8256,  "macs": 2064000, "input_shape": [1,25,20,64], "output_shape": [1,25,20,64] },
+      { "name": "avg_pool2d",         "type": "AVERAGE_POOL_2D",   "params": 0,     "macs": 40000,   "input_shape": [1,25,20,64], "output_shape": [1,1,1,64]   },
+      { "name": "reshape",            "type": "RESHAPE",           "params": 0,     "macs": 0,       "input_shape": [1,1,1,64],   "output_shape": [1,64]       },
+      { "name": "dense",              "type": "FULLY_CONNECTED",   "params": 11354, "macs": 11264,   "input_shape": [1,64],       "output_shape": [1,12]       },
+      { "name": "softmax",            "type": "SOFTMAX",           "params": 0,     "macs": 0,       "input_shape": [1,12],       "output_shape": [1,12]       }
+    ],
+    "unsupported_ops": [],
+    "warnings": []
+  }
+}

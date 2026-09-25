@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "tool": "quantize_model",
+  "source": "mock",
+  "run_id": "__RUN_ID__",
+  "timestamp": "__TIMESTAMP__",
+  "quantization": {
+    "input_dtype": "float32",
+    "output_dtype": "int8",
+    "quant_scheme": "per_tensor",
+    "output_path": "workflow/runs/__RUN_ID__/ds_cnn_kws_int8.tflite",
+    "size_before_kb": 121.4,
+    "size_after_kb": 32.4,
+    "accuracy_before": 0.923,
+    "accuracy_after": 0.917,
+    "accuracy_delta": -0.006,
+    "n_calibration_samples": 100,
+    "warnings": []
+  }
+}
