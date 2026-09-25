@@ -9,10 +9,24 @@
  * Purpose:
  * Standalone, zero-heap benchmark harness using Cortex-M33 DWT cycle counting (DWT_CYCCNT).
  * Measures per-iteration CPU cycles, min/max/average/stddev, and calculates execution time in microseconds.
+ *
+ * Workloads:
+ * 1. deterministic_kernel: Arithmetic timing validation
+ * 2. mel_spectrogram: Keyword Spotting Preprocessing (STFT -> Mel -> Log -> Normalize)
+ *
+ * Interactive Serial Commands (115200 baud):
+ * - 'B' / 'b' / 'R' / 'r' : Run deterministic validation AND mel_spectrogram benchmarks
+ * - 'M' / 'm' / 'P' / 'p' : Run mel_spectrogram benchmark only
+ * - 'D' / 'd'             : Parity dump (streams checksum, tensor shape, boundary values)
+ * - 'K' / 'k'             : Run deterministic validation benchmark only
  */
 
 #include <Arduino.h>
 #include <math.h>
+
+// Feature extraction and test fixture includes
+#include "feature_extraction.h"
+#include "fixtures/audio_fixture_yes.h"
 
 // ==============================================================================
 // 1. Hardware Architecture & DWT Cycle Counter Configuration
@@ -82,8 +96,9 @@ struct BenchmarkResult {
 // Static storage to guarantee ZERO heap allocation during measurement
 static uint32_t s_cycles_record[MAX_BENCHMARK_ITERATIONS];
 
-// Forward declaration of the deterministic validation kernel
-static void deterministic_kernel(void);
+// Output buffer for preprocessing features: (64 mels, 101 frames) = 6464 floats (25.25 KB)
+alignas(16) static float s_mel_features_out[PREPROC_OUTPUT_SIZE];
+
 static volatile uint32_t g_workload_checksum = 0;
 
 /**
@@ -193,7 +208,7 @@ static void benchmark_target(const char* name, void (*fn)(), size_t iterations =
     Serial.print(F(" StdDev Latency:     "));
     Serial.print(res.stddev_cycles, 2);
     Serial.println(F(" cycles"));
-    Serial.print(F(" Kernel Checksum:    0x"));
+    Serial.print(F(" Workload Checksum:  0x"));
     Serial.println(res.checksum, HEX);
     Serial.println(F("================================================================"));
 
@@ -226,13 +241,11 @@ static void benchmark_target(const char* name, void (*fn)(), size_t iterations =
 }
 
 // ==============================================================================
-// 3. Deterministic Validation Workload
+// 3. Workloads
 // ==============================================================================
 
 /**
- * A small deterministic CPU arithmetic kernel.
- * Mixes and hashes a 64-word array using 32-bit linear/nonlinear operations.
- * The result is written to volatile g_workload_checksum to prevent dead-code elimination.
+ * 1. Deterministic Validation Kernel (Infrastructure verification)
  */
 static void deterministic_kernel(void) {
     static uint32_t s_buffer[64];
@@ -249,6 +262,45 @@ static void deterministic_kernel(void) {
     }
 
     g_workload_checksum = acc;
+}
+
+/**
+ * 2. Keyword Spotting Preprocessing Kernel (mel_spectrogram)
+ * Executes full STFT -> Mel -> Log -> Normalize pipeline on g_audio_fixture_yes.
+ */
+static void mel_spectrogram_workload(void) {
+    feature_extraction_run(g_audio_fixture_yes, s_mel_features_out);
+    g_workload_checksum = feature_extraction_compute_checksum(s_mel_features_out, PREPROC_OUTPUT_SIZE);
+}
+
+/**
+ * Host/Device Parity Verification Hook:
+ * Dumps preprocessed features over UART for differential comparison against PyTorch golden tensors.
+ */
+static void dump_parity_features(void) {
+    Serial.println(F("CODE2EDGE_PARITY_DUMP_START"));
+    Serial.print(F("FIXTURE_LABEL="));
+    Serial.println(F(AUDIO_FIXTURE_LABEL));
+    Serial.print(F("FIXTURE_CHECKSUM=0x"));
+    Serial.println(g_workload_checksum, HEX);
+    Serial.println(F("TENSOR_SHAPE=[1,1,64,101]"));
+    
+    // Output sample points (first 5 and last 5 elements)
+    Serial.print(F("HEAD_VALUES=["));
+    for (int i = 0; i < 5; ++i) {
+        Serial.print(s_mel_features_out[i], 6);
+        if (i < 4) Serial.print(F(","));
+    }
+    Serial.println(F("]"));
+
+    Serial.print(F("TAIL_VALUES=["));
+    for (int i = PREPROC_OUTPUT_SIZE - 5; i < PREPROC_OUTPUT_SIZE; ++i) {
+        Serial.print(s_mel_features_out[i], 6);
+        if (i < PREPROC_OUTPUT_SIZE - 1) Serial.print(F(","));
+    }
+    Serial.println(F("]"));
+
+    Serial.println(F("CODE2EDGE_PARITY_DUMP_END"));
 }
 
 // ==============================================================================
@@ -272,20 +324,41 @@ void setup() {
         }
     }
     Serial.println(F("DWT cycle counter initialized successfully."));
-    Serial.println(F("Running baseline validation benchmark..."));
-    Serial.println();
+    
+    // Initialize feature extraction tables
+    feature_extraction_init();
 
-    // Execute standard 50-iteration benchmark
+    // 1. Run baseline timing infrastructure validation
+    Serial.println(F("\n[1/2] Running infrastructure validation benchmark..."));
     benchmark_target("deterministic_kernel", deterministic_kernel, 50, 5);
+
+    // 2. Run Keyword Spotting Preprocessing benchmark (mel_spectrogram)
+    Serial.println(F("\n[2/2] Running Keyword Spotting Preprocessing benchmark (mel_spectrogram)..."));
+    benchmark_target("mel_spectrogram", mel_spectrogram_workload, 10, 2);
+
+    // Print ready prompt
+    Serial.println(F("\nBenchmark completed."));
+    Serial.println(F("Interactive Commands:"));
+    Serial.println(F("  'B' / 'R' : Run all benchmarks (deterministic + mel_spectrogram)"));
+    Serial.println(F("  'M' / 'P' : Run mel_spectrogram benchmark only"));
+    Serial.println(F("  'D'       : Dump preprocessed features for host/device parity verification"));
+    Serial.println(F("  'K'       : Run deterministic_kernel benchmark only"));
 }
 
 void loop() {
-    // Interactive trigger: send 'B' or 'R' over serial to re-run benchmark
     if (Serial.available() > 0) {
         char ch = (char)Serial.read();
         if (ch == 'B' || ch == 'b' || ch == 'R' || ch == 'r') {
-            Serial.println();
-            Serial.println(F("Triggering re-run of benchmark harness..."));
+            Serial.println(F("\n--- Triggering All Benchmarks ---"));
+            benchmark_target("deterministic_kernel", deterministic_kernel, 50, 5);
+            benchmark_target("mel_spectrogram", mel_spectrogram_workload, 10, 2);
+        } else if (ch == 'M' || ch == 'm' || ch == 'P' || ch == 'p') {
+            Serial.println(F("\n--- Triggering mel_spectrogram Benchmark ---"));
+            benchmark_target("mel_spectrogram", mel_spectrogram_workload, 10, 2);
+        } else if (ch == 'D' || ch == 'd') {
+            dump_parity_features();
+        } else if (ch == 'K' || ch == 'k') {
+            Serial.println(F("\n--- Triggering deterministic_kernel Benchmark ---"));
             benchmark_target("deterministic_kernel", deterministic_kernel, 50, 5);
         }
     }
