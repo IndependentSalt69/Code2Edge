@@ -1,0 +1,12 @@
+{
+  "sample_count_checked": 10,
+  "deterministic_retrace": true,
+  "stages": [
+    "post_input",
+    "post_power_spectrum",
+    "post_mel",
+    "post_log",
+    "post_normalize"
+  ],
+  "result": "PASS"
+}
