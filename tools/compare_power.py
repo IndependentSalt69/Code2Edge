@@ -49,13 +49,30 @@ def main() -> None:
         else 1.0
     )
 
+    ref_norm = np.linalg.norm(a)
+
+    relative_l2 = (
+        float(np.linalg.norm(a - b) / ref_norm)
+        if ref_norm != 0.0
+        else 0.0
+    )
+
+    worst = np.unravel_index(
+        np.argmax(diff),
+        diff.shape,
+    )
+
     print("=== POWER SPECTRUM PARITY ===")
     print("reference shape:", reference.shape)
     print("cpp shape:      ", cpp.shape)
     print()
-    print("max_abs_diff:   ", float(diff.max()))
-    print("mean_abs_diff:  ", float(diff.mean()))
-    print("cosine:         ", cosine)
+    print("max_abs_diff:    ", float(diff.max()))
+    print("mean_abs_diff:   ", float(diff.mean()))
+    print("relative_l2:     ", relative_l2)
+    print("cosine:          ", cosine)
+    print("worst_index:     ", worst)
+    print("reference@worst: ", float(reference[worst]))
+    print("cpp@worst:       ", float(cpp[worst]))
     print()
     print("reference min:  ", float(reference.min()))
     print("reference max:  ", float(reference.max()))
