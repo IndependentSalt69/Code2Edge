@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "code2edge": {
+      "command": "C:\\Users\\shaik\\miniconda3\\python.exe",
+      "args": ["-m", "mcp_server.server"],
+      "cwd": "C:\\Users\\shaik\\OneDrive\\Desktop\\Study\\IBM Hackathon\\Code2Edge",
+      "env": {
+        "CODE2EDGE_PROFILE_MODEL_MODE": "mock",
+        "CODE2EDGE_INSPECT_PIPELINE_MODE": "mock",
+        "CODE2EDGE_CHECK_TARGET_MODE": "mock",
+        "CODE2EDGE_RUN_PARITY_TEST_MODE": "mock",
+        "CODE2EDGE_BENCHMARK_TARGET_MODE": "mock",
+        "CODE2EDGE_QUANTIZE_MODEL_MODE": "mock",
+        "CODE2EDGE_MOCK_PARITY_SCENARIO": "pass"
+      },
+      "alwaysAllow": [
+        "profile_model_tool",
+        "inspect_pipeline_tool",
+        "check_target_tool",
+        "run_parity_test_tool",
+        "benchmark_target_tool",
+        "quantize_model_tool"
+      ],
+      "disabled": false
+    }
+  }
+}
