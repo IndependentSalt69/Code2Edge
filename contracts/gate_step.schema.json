@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://code2edge/contracts/gate_step.schema.json",
+  "title": "gate_step — input and output schemas",
+  "description": "Evaluates a parity test result and decides whether to continue, request a repair attempt, or escalate to human debug. Implements the retry/escalate logic (cap at 3 attempts).",
+
+  "$defs": {
+    "Input": {
+      "type": "object",
+      "required": ["run_id", "gate", "parity_result"],
+      "properties": {
+        "run_id":        { "type": "string", "description": "run_id of the workflow run, not the parity test" },
+        "gate":          { "type": "string", "enum": ["host","device"] },
+        "parity_result": {
+          "type": "object",
+          "description": "The full run_parity_test Output object",
+          "required": ["status","gate","attempt","first_divergent_stage","end_to_end","diagnosis_hints"],
+          "properties": {
+            "status":                 { "type": "string", "enum": ["PASS","FAIL","ERROR"] },
+            "gate":                   { "type": "string", "enum": ["host","device"] },
+            "attempt":                { "type": "integer", "minimum": 1, "maximum": 3 },
+            "first_divergent_stage":  { "type": ["string","null"] },
+            "end_to_end": {
+              "type": "object",
+              "required": ["prediction_agreement","accuracy_delta"],
+              "properties": {
+                "prediction_agreement": { "type": "number" },
+                "accuracy_delta":       { "type": "number" }
+              }
+            },
+            "diagnosis_hints": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["stage","hypothesis","evidence"],
+                "properties": {
+                  "stage":      { "type": "string" },
+                  "hypothesis": { "type": "string" },
+                  "evidence":   { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "Output": {
+      "type": "object",
+      "required": ["schema_version","tool","source","run_id","timestamp","decision","attempt","max_attempts","remaining"],
+      "properties": {
+        "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "tool":           { "type": "string", "const": "gate_step" },
+        "source":         { "type": "string", "enum": ["mock","real"] },
+        "run_id":         { "type": "string" },
+        "timestamp":      { "type": "string", "format": "date-time" },
+
+        "decision": {
+          "type": "string",
+          "enum": ["continue","repair","escalate"],
+          "description": "continue: parity PASS, proceed to next workflow step. repair: parity FAIL and attempts remaining, agent should fix focus_stage. escalate: attempts exhausted or ERROR, halt and notify human."
+        },
+        "attempt":      { "type": "integer", "minimum": 1, "maximum": 3 },
+        "max_attempts": { "type": "integer", "const": 3 },
+        "remaining":    { "type": "integer", "minimum": 0, "maximum": 2, "description": "Repair attempts left after this one" },
+
+        "focus_stage": {
+          "type": ["string","null"],
+          "description": "Stage the agent should focus the repair on (first_divergent_stage from parity result); null when decision=continue"
+        },
+
+        "repair_hint": {
+          "type": ["string","null"],
+          "description": "Human-readable summary of the most actionable diagnosis_hint for the agent; null when decision=continue"
+        },
+
+        "escalation_report_path": {
+          "type": ["string","null"],
+          "description": "Path to the escalation report written when decision=escalate; null otherwise"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

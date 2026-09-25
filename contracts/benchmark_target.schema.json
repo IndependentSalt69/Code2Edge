@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://code2edge/contracts/benchmark_target.schema.json",
+  "title": "benchmark_target — input and output schemas",
+  "description": "Flashes a model to the STM32U585, runs N inferences, and reports latency, memory usage, and a predicted-vs-measured table.",
+
+  "$defs": {
+    "Input": {
+      "type": "object",
+      "required": ["model_file", "n_inferences"],
+      "properties": {
+        "model_file":    { "type": "string", "description": "Path to .tflite model file" },
+        "n_inferences":  { "type": "integer", "minimum": 1, "description": "Number of inference passes to measure" },
+        "target_id":     { "type": "string", "default": "STM32U585" },
+        "corpus_dir":    { "type": "string", "description": "Optional: path to input feature corpus" },
+        "warm_up_runs":  { "type": "integer", "minimum": 0, "default": 5 }
+      },
+      "additionalProperties": false
+    },
+
+    "PredVsMeasuredRow": {
+      "type": "object",
+      "required": ["metric","predicted","measured","delta_pct"],
+      "properties": {
+        "metric":    { "type": "string", "description": "e.g. latency_ms_mean, sram_peak_kb, flash_used_kb" },
+        "predicted": { "type": ["number","string"], "description": "Value predicted at design time" },
+        "measured":  { "type": ["number","string"], "description": "Value actually measured on device" },
+        "delta_pct": { "type": ["number","null"],   "description": "((measured-predicted)/predicted)*100; null if predicted is non-numeric" }
+      },
+      "additionalProperties": false
+    },
+
+    "Output": {
+      "type": "object",
+      "required": ["schema_version","tool","source","run_id","timestamp","benchmark"],
+      "properties": {
+        "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "tool":           { "type": "string", "const": "benchmark_target" },
+        "source":         { "type": "string", "enum": ["mock","real"] },
+        "run_id":         { "type": "string" },
+        "timestamp":      { "type": "string", "format": "date-time" },
+        "benchmark": {
+          "type": "object",
+          "required": ["target_id","n_inferences","latency_ms","sram_peak_kb","flash_used_kb","predictions","predicted_vs_measured"],
+          "properties": {
+            "target_id":    { "type": "string" },
+            "n_inferences": { "type": "integer", "minimum": 1 },
+            "latency_ms": {
+              "type": "object",
+              "required": ["mean","p50","p95","n"],
+              "properties": {
+                "mean": { "type": "number", "minimum": 0 },
+                "p50":  { "type": "number", "minimum": 0 },
+                "p95":  { "type": "number", "minimum": 0 },
+                "min":  { "type": "number", "minimum": 0 },
+                "max":  { "type": "number", "minimum": 0 },
+                "n":    { "type": "integer", "minimum": 1 }
+              },
+              "additionalProperties": false
+            },
+            "sram_peak_kb":  { "type": "number", "minimum": 0 },
+            "flash_used_kb": { "type": "number", "minimum": 0 },
+            "predictions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["sample_id","class_id","label","confidence"],
+                "properties": {
+                  "sample_id":  { "type": "string" },
+                  "class_id":   { "type": "integer" },
+                  "label":      { "type": "string" },
+                  "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+                },
+                "additionalProperties": false
+              }
+            },
+            "predicted_vs_measured": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/PredVsMeasuredRow" }
+            },
+            "warnings": { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

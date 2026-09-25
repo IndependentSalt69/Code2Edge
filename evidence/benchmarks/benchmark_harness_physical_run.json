@@ -1,0 +1,50 @@
+{
+  "$schema": "../../contracts/target/benchmark-result.schema.json",
+  "target_id": "arduino_uno_q_stm32u585",
+  "model_id": "deterministic_kernel_validation",
+  "run_type": "MEASURED",
+  "timestamp": "2026-09-26T02:58:36+05:30",
+  "description": "First verified physical execution of the measurement harness on Arduino UNO Q (STM32U585). Validates DWT cycle counter and reporting pipeline. NOT KWS/DS-CNN model latency.",
+  "latency_ms": {
+    "inference_avg_ms": 0.0061875,
+    "inference_min_ms": 0.0061875,
+    "inference_max_ms": 0.0061875,
+    "inference_std_ms": 0.0,
+    "preprocessing_avg_ms": null,
+    "end_to_end_avg_ms": null,
+    "clock_cycles_inference": 990
+  },
+  "memory_bytes": {
+    "flash_used_bytes": 30132,
+    "flash_total_bytes": 2097152,
+    "flash_headroom_bytes": 2067020,
+    "sram_used_bytes": 8264,
+    "sram_total_bytes": 804864,
+    "sram_headroom_bytes": 796600,
+    "tensor_arena_bytes": 0,
+    "feature_buffer_bytes": 0,
+    "static_ram_bytes": 8264,
+    "stack_peak_bytes": null
+  },
+  "compiler_summary_bytes": {
+    "program_storage_space_bytes": 87304,
+    "dynamic_memory_bytes": 35928
+  },
+  "linker_sections_bytes": {
+    ".text": 26664,
+    ".rodata": 968,
+    ".llext.rodata.noreloc": 2488,
+    ".data": 12,
+    ".bss": 8252
+  },
+  "execution_metadata": {
+    "clock_mhz": 160.0,
+    "num_iterations": 50,
+    "warmup_iterations": 5,
+    "runtime": "baremetal_cortex_m33_dwt",
+    "quantization": "none_arithmetic_validation",
+    "toolchain_version": "arduino-cli 1.4.1 (arduino:zephyr 1.0.0 / arm-zephyr-eabi 1.0.1)",
+    "checksum": "0xBBF4ED4A",
+    "verification_status": "PASSED"
+  }
+}

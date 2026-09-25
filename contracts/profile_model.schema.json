@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://code2edge/contracts/profile_model.schema.json",
+  "title": "profile_model — input and output schemas",
+  "description": "Analyses a model repository and returns architecture, layer summary, and quantization metadata.",
+
+  "$defs": {
+    "Input": {
+      "type": "object",
+      "required": ["repo_path", "model_file"],
+      "properties": {
+        "repo_path":   { "type": "string", "description": "Absolute or relative path to the model repository root" },
+        "model_file":  { "type": "string", "description": "Path to model weights/definition file relative to repo_path" },
+        "labels_file": { "type": "string", "description": "Optional path to labels.txt" },
+        "config_file": { "type": "string", "description": "Optional path to config.yaml / config.json" }
+      },
+      "additionalProperties": false
+    },
+
+    "Layer": {
+      "type": "object",
+      "required": ["name", "type", "params", "macs"],
+      "properties": {
+        "name":         { "type": "string" },
+        "type":         { "type": "string" },
+        "params":       { "type": "integer", "minimum": 0 },
+        "macs":         { "type": "integer", "minimum": 0 },
+        "input_shape":  { "type": "array", "items": { "type": ["integer","null"] } },
+        "output_shape": { "type": "array", "items": { "type": ["integer","null"] } }
+      },
+      "additionalProperties": false
+    },
+
+    "Output": {
+      "type": "object",
+      "required": ["schema_version","tool","source","run_id","timestamp","model"],
+      "properties": {
+        "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "tool":           { "type": "string", "const": "profile_model" },
+        "source":         { "type": "string", "enum": ["mock","real"] },
+        "run_id":         { "type": "string" },
+        "timestamp":      { "type": "string", "format": "date-time" },
+        "model": {
+          "type": "object",
+          "required": ["name","architecture","total_params","total_macs","input_shape","output_classes","dtype","quantized","layers"],
+          "properties": {
+            "name":           { "type": "string" },
+            "architecture":   { "type": "string", "description": "e.g. DS-CNN, MobileNet" },
+            "total_params":   { "type": "integer", "minimum": 0 },
+            "total_macs":     { "type": "integer", "minimum": 0 },
+            "input_shape":    { "type": "array", "items": { "type": ["integer","null"] } },
+            "output_classes": { "type": "integer", "minimum": 1 },
+            "dtype":          { "type": "string", "enum": ["float32","float16","int8","uint8","int16"] },
+            "quantized":      { "type": "boolean" },
+            "quant_scheme":   { "type": "string", "enum": ["per_tensor","per_channel","none"] },
+            "layers":         { "type": "array", "items": { "$ref": "#/$defs/Layer" } },
+            "unsupported_ops":{ "type": "array", "items": { "type": "string" } },
+            "warnings":       { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
