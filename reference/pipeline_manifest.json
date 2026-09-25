@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "reference": {
+    "code2edge_root": "repo-root",
+    "tiny_kws_source": "reference/tiny-kws"
+  },
+  "input": {
+    "sample_rate": 16000,
+    "clip_samples": 16000,
+    "channels": 1,
+    "dtype": "float32",
+    "file": "sine_440_1000.wav",
+    "sha256": "164e703097da7614a3446d86117419109644e36e55b960fcf4493dbc8d65bf22"
+  },
+  "frontend": {
+    "n_fft": 400,
+    "win_length": 400,
+    "hop_length": 160,
+    "n_mels": 64,
+    "f_min": 20.0,
+    "f_max": 7600.0,
+    "power": 2.0,
+    "center": true,
+    "pad_mode": "reflect",
+    "normalized": false,
+    "onesided": true,
+    "mel_scale": "htk",
+    "mel_norm": null,
+    "log_epsilon": 1e-06,
+    "expected_frames": 101
+  },
+  "normalization": {
+    "stats_file": "reference/tiny-kws/data/processed/stats.json"
+  },
+  "labels": [
+    "silence",
+    "unknown",
+    "yes",
+    "no",
+    "up",
+    "down",
+    "left",
+    "right",
+    "on",
+    "off",
+    "stop",
+    "go"
+  ],
+  "stages": {
+    "post_input": {
+      "file": "post_input.npy",
+      "shape": [
+        16000
+      ],
+      "dtype": "float32",
+      "min": -0.696075439453125,
+      "max": 0.696044921875,
+      "mean": -1.5205383533611894e-05,
+      "std": 0.3807888329029083,
+      "finite": true
+    },
+    "post_power_spectrum": {
+      "file": "post_power_spectrum.npy",
+      "shape": [
+        1,
+        201,
+        101
+      ],
+      "dtype": "float32",
+      "min": 2.0482933789844546e-14,
+      "max": 2500.03662109375,
+      "mean": 21.64666175842285,
+      "std": 186.97474670410156,
+      "finite": true
+    },
+    "post_mel": {
+      "file": "post_mel.npy",
+      "shape": [
+        1,
+        64,
+        101
+      ],
+      "dtype": "float32",
+      "min": 8.189961209215113e-11,
+      "max": 2128.78662109375,
+      "mean": 67.96603393554688,
+      "std": 299.3067321777344,
+      "finite": true
+    },
+    "post_log": {
+      "file": "post_log.npy",
+      "shape": [
+        1,
+        1,
+        64,
+        101
+      ],
+      "dtype": "float32",
+      "min": -13.815428733825684,
+      "max": 7.6633076667785645,
+      "mean": -11.041618347167969,
+      "std": 6.300736427307129,
+      "finite": true
+    },
+    "post_normalize": {
+      "file": "post_normalize.npy",
+      "shape": [
+        1,
+        1,
+        64,
+        101
+      ],
+      "dtype": "float32",
+      "min": -1.435076355934143,
+      "max": 3.0236711502075195,
+      "mean": -0.8592642545700073,
+      "std": 1.3079630136489868,
+      "finite": true
+    }
+  },
+  "artifacts": {
+    "window": {
+      "file": "window.npy",
+      "shape": [
+        400
+      ],
+      "dtype": "float32"
+    },
+    "mel_filterbank": {
+      "file": "mel_filterbank.npy",
+      "shape": [
+        201,
+        64
+      ],
+      "dtype": "float32"
+    }
+  }
+}
