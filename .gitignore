@@ -17,9 +17,11 @@ out/
 Thumbs.db
 .vscode/
 .idea/
-.bob
 
-# Python
+# Testing & Python Cache
+.pytest_cache/
+.coverage
+htmlcov/
 __pycache__/
 *.py[cod]
 *$py.class
