@@ -1,7 +1,7 @@
 # Code2Edge Integration Plan — tiny-kws Reference Workload
 
 **Reference workload:** `tiny-kws` ([priyadeepjaiswal9c/tiny-kws](https://github.com/priyadeepjaiswal9c/tiny-kws))  
-**Target MCU:** STM32U585 on Arduino UNO R4 / UNO Q  
+**Target MCU:** STM32U585 on Arduino UNO Q (Clarification: Arduino UNO R4 is NOT the target)  
 **Status:** In Progress (Phase 1 vendoring complete)
 
 ---

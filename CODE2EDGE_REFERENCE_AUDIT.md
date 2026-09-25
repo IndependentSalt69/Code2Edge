@@ -433,7 +433,7 @@ ROOT CAUSE HYPOTHESIS:
 
 ## 12. Hardware Readiness Analysis
 
-> **TARGET MCU CLARIFICATION:** The user specified "STM32U585 MCU on Arduino UNO Q." The Arduino UNO R4 WiFi uses a **Renesas RA4M1** (Arm Cortex-M4), not an STM32. The STM32U585 is an ST Microelectronics Cortex-M33 chip on the **B-U585I-IOT02A** discovery board. **The exact target board must be confirmed.**
+> **TARGET MCU RESOLUTION:** The target is confirmed as the **STM32U585 MCU subsystem** on the **Arduino UNO Q** (heterogeneous dual-core architecture pairing Qualcomm Dragonwing QRB2210 MPU with STM32U585 Cortex-M33 MCU). The Arduino UNO R4 (Renesas RA4M1) is **NOT** the target.
 
 ### 12.1 STM32U585 Key Specifications
 

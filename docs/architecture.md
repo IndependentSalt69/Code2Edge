@@ -2,46 +2,62 @@
 
 ## System Overview
 
-Code2Edge is structured into three primary operational layers:
+Code2Edge is structured into three primary operational tiers:
 1. **Reference Layer (`reference/tiny-kws/`):** Immutable, frozen upstream research workload implementing the gold-standard Python/PyTorch inference pipeline, weights, and feature extraction.
-2. **Verification & Parity Layer (`src/parity/`, `src/inference/`):** Stage-wise differential instrumentation that captures and compares tensors across both host and edge runtimes.
-3. **Edge Generation & Deployment Layer (`src/export/`, `deploy/`):** C code generator producing bare-metal C compatible with ARM Cortex-M33 (CMSIS-DSP and CMSIS-NN).
+2. **Verification & Parity Tier (`src/parity/`, `src/inference/`, `contracts/target/`):** Two-tier stage-wise differential instrumentation that captures and compares tensors across both host and edge silicon runtimes.
+3. **Edge Pipeline & Firmware Tier (`src/pipeline/`, `src/firmware/`, `tools/target/`):** Generated C code for audio feature extraction (CMSIS-DSP) and quantized DS-CNN execution (TFLM / CMSIS-NN) targeting the STM32U585 MCU.
 
-```
+```text
 +-----------------------------------------------------------------------------------+
 |                                  Code2Edge                                        |
 +-----------------------------------------------------------------------------------+
 |  [ Reference Workload ] (reference/tiny-kws/)                                     |
 |    - Pinned Commit: c097b35ae4b9cd585a544c74db16892ce674b186                      |
-|    - Pretrained Checkpoint: best.pt (119k params, DSCNN)                          |
+|    - Pretrained Checkpoint: checkpoints/best.pt (119k params, DSCNN)              |
 |    - Exact Pipeline: 16kHz Audio -> LogMel (64x101) -> Normalization -> DSCNN     |
 +-----------------------------------------------------------------------------------+
-                                         |
-                                         v
+                                         │
+                                         ▼
 +-----------------------------------------------------------------------------------+
 |  [ Host Inference & Stage Capture ] (src/inference/, src/parity/)                 |
 |    - S0: Raw PCM Audio (16,000 samples, float32)                                  |
-|    - S1: Mel Power Spectrogram (1, 64, 101)                                      |
+|    - S1: Mel Power Spectrogram (1, 64, 101)                                       |
 |    - S2: Log-Mel Spectrogram (1, 1, 64, 101)                                      |
 |    - S3: Normalized Log-Mel (1, 1, 64, 101)                                       |
 |    - S4a-d: DS-CNN Internal Tensors (Stem, DS-Blocks 0-3, GAP)                    |
 |    - S5: Classification Logits (1, 12)                                            |
 |    - S6: Final Class Prediction (int32)                                           |
 +-----------------------------------------------------------------------------------+
-                                         |
-                                         v
+                                         │
+                                         ▼
 +-----------------------------------------------------------------------------------+
-|  [ Differential Parity Gate ] (src/parity/gate.py)                                |
-|    - Tolerance Matrix (S0: exact, S1-S3: <=1e-4, S4a-d: <=1e-3, S5: <=0.01)       |
-|    - First-Divergent-Stage Diagnostics                                            |
+|  [ TIER 1: Host Differential Parity Gate ] (src/parity/gate.py)                   |
+|    - Mandatory Pre-Hardware Gate: Blocks MCU build if any stage exceeds tolerance |
+|    - Tolerance Matrix (S0: exact, S1-S3: <=1e-4, S4a-d: <=1e-3, S5: <=0.05)       |
 +-----------------------------------------------------------------------------------+
-                                         |
-                                         v
+                                         │ (PASS)
+                                         ▼
 +-----------------------------------------------------------------------------------+
-|  [ Edge Export & Firmware Target ] (src/export/, deploy/)                         |
-|    - CMSIS-DSP Feature Extraction (arm_rfft_fast_f32, Mel filterbank)             |
-|    - CMSIS-NN Quantized DS-CNN Inference (arm_depthwise_conv_s8, arm_convolve_s8) |
-|    - Target: STM32U585 (ARM Cortex-M33) on Arduino UNO R4 / UNO Q                 |
+|  [ Target Firmware & MCU Execution ] (src/firmware/, tools/target/)               |
+|    - Build System: arduino-cli (arduino:zephyr:unoq)                              |
+|    - Target: STM32U585 (ARM Cortex-M33 @ 160 MHz) on Arduino UNO Q               |
+|    - Hardware Note: Arduino UNO R4 (Renesas RA4M1) is NOT the target.            |
+|    - Runtime: TFLite Micro + CMSIS-NN kernels, static tensor arena                |
++-----------------------------------------------------------------------------------+
+                                         │
+                                         ▼
++-----------------------------------------------------------------------------------+
+|  [ TIER 2: On-Device Differential Parity Gate ] (tools/target/run_device_parity.py|
+|    - Compares physical silicon execution against host golden tensors              |
+|    - Verifies 100% classification agreement on test fixtures                      |
++-----------------------------------------------------------------------------------+
+                                         │ (PASS)
+                                         ▼
++-----------------------------------------------------------------------------------+
+|  [ Authoritative Benchmarking ] (tools/target/benchmark_target.py)                |
+|    - Hardware cycle measurement via DWT_CYCCNT -> Latency (ms)                    |
+|    - Flash & SRAM extraction from GCC linker map file                             |
+|    - Output strictly distinguishes ESTIMATED vs MEASURED numbers                  |
 +-----------------------------------------------------------------------------------+
 ```
 
@@ -51,23 +67,27 @@ Code2Edge is structured into three primary operational layers:
 - Contains the pinned upstream implementation: feature extraction parameters (`common.py`), network architecture (`model.py`), evaluation scripts (`evaluate.py`), and frozen metrics (`assets/metrics.json`).
 - Treated as strictly read-only and governed by upstream MIT license.
 
-### 2. Inference Runner (`src/inference/`)
+### 2. Host Inference Runner (`src/inference/`)
 - High-level Python API providing clean execution of the reference pipeline.
 - Registers non-invasive PyTorch forward hooks to capture intermediate activations without modifying upstream source files.
 
 ### 3. Differential Parity Engine (`src/parity/`)
-- Captures reference stage tensors into standardized `.npy` fixtures.
+- Captures reference stage tensors into standardized `.npy` fixtures under `reference/golden/`.
 - Compares host reference outputs against edge-generated outputs across all stages (S0 through S6).
 - Implements `ParityGate` to enforce numerical tolerance limits before MCU deployment is sanctioned.
 
-### 4. Edge Code Generator (`src/export/`)
+### 4. Edge Pipeline Generator (`src/pipeline/`)
 - Generates self-contained C code for the complete pipeline.
-- Maps feature extraction to CMSIS-DSP primitives.
-- Maps convolutions, batch normalization (folded), activations, and linear layers to CMSIS-NN kernels.
+- Maps feature extraction to CMSIS-DSP primitives (`arm_rfft_fast_f32`).
+- Maps quantized DS-CNN operators to TFLite Micro and CMSIS-NN kernels.
 
-### 5. Deployment & Tooling (`deploy/`, `tools/`)
-- `tools/fetch_checkpoint.py`: Validates and downloads `best.pt` from Hugging Face Hub.
-- `tools/check_reference_integrity.py`: Verifies SHA-256 hashes against `reference/tiny-kws/UPSTREAM.md`.
+### 5. Firmware & Hardware Target Tooling (`src/firmware/`, `tools/target/`)
+- `src/firmware/`: Arduino sketch / Zephyr RTOS C++ application for the STM32U585 on Arduino UNO Q.
+- `tools/target/`: Target profiling (`check_target`), build orchestration, bridge verification, and authoritative benchmarking (`benchmark_target`).
+
+### 6. Reference Tooling (`tools/reference/`)
+- `tools/reference/fetch_checkpoint.py`: Validates and downloads `best.pt` from Hugging Face Hub.
+- `tools/reference/check_reference_integrity.py`: Verifies SHA-256 hashes against `reference/tiny-kws/UPSTREAM.md`.
 
 ## Data Flow
 
