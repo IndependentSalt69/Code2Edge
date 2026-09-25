@@ -1,0 +1,210 @@
+{
+  "schema_version": "1.0.0",
+  "contract": "contracts/target/device-parity.json",
+  "gate": "host_differential_parity",
+  "timestamp_utc": "2026-09-25T23:28:14.615611+00:00",
+  "toolchain": {
+    "c_source": "src/pipeline/feature_extraction.c",
+    "c_header": "src/pipeline/feature_extraction.h",
+    "compiled_library": "build\\feature_extraction.dll"
+  },
+  "coverage": {
+    "mode": "smoke_sample",
+    "sample_count": 1,
+    "samples_evaluated": [
+      "sample_0001"
+    ],
+    "full_corpus_covered": false,
+    "corpus_manifest_total_samples": 500,
+    "parity_status_smoke": "PASS",
+    "parity_status_full_corpus": "PENDING"
+  },
+  "summary": {
+    "overall_status": "PASS",
+    "total_stages_evaluated": 5,
+    "passed_stages": 5,
+    "failed_stages": 0,
+    "worst_max_abs_diff": 0.0013589859008789062,
+    "worst_mean_abs_diff": 0.00013297438848588504,
+    "worst_cosine_similarity": 0.9999999996495391
+  },
+  "sample_reports": [
+    {
+      "sample_id": "sample_0001",
+      "sample_path": "D:\\Projects\\Code2Edge\\reference\\artifacts\\sample_0001",
+      "status": "PASS",
+      "output_checksum_fnv1a": "0xdb0d6e5f",
+      "first_divergent_stage": null,
+      "stages": [
+        {
+          "stage": "S0_raw_waveform",
+          "status": "PASS",
+          "description": "Raw 16kHz PCM audio waveform [-1.0, 1.0]",
+          "shape_ref": [
+            16000
+          ],
+          "shape_impl": [
+            16000
+          ],
+          "dtype_ref": "float32",
+          "dtype_impl": "float32",
+          "max_abs_diff": 0.0,
+          "mean_abs_diff": 0.0,
+          "relative_l2": 0.0,
+          "cosine_similarity": 0.9999999999999998,
+          "mismatch_count": 0,
+          "tolerance": {
+            "max_abs_diff": 1e-06,
+            "mean_abs_diff": 1e-07,
+            "min_cosine": 0.999999,
+            "description": "Raw 16kHz PCM audio waveform [-1.0, 1.0]"
+          },
+          "worst_index": [
+            0
+          ],
+          "ref_val_at_worst": 0.0,
+          "impl_val_at_worst": 0.0,
+          "first_divergent_index": null
+        },
+        {
+          "stage": "S1_power_spectrum",
+          "status": "PASS",
+          "description": "Periodic Hann STFT power spectrogram (201 bins x 101 frames)",
+          "shape_ref": [
+            1,
+            201,
+            101
+          ],
+          "shape_impl": [
+            201,
+            101
+          ],
+          "dtype_ref": "float32",
+          "dtype_impl": "float32",
+          "max_abs_diff": 0.000732421875,
+          "mean_abs_diff": 2.340225174608127e-06,
+          "relative_l2": 1.2539022712911854e-07,
+          "cosine_similarity": 0.9999999999999946,
+          "mismatch_count": 0,
+          "tolerance": {
+            "max_abs_diff": 0.01,
+            "mean_abs_diff": 0.0001,
+            "min_cosine": 0.999999,
+            "description": "Periodic Hann STFT power spectrogram (201 bins x 101 frames)"
+          },
+          "worst_index": [
+            11,
+            63
+          ],
+          "ref_val_at_worst": 2499.989990234375,
+          "impl_val_at_worst": 2499.99072265625,
+          "first_divergent_index": null
+        },
+        {
+          "stage": "S1_mel_energy",
+          "status": "PASS",
+          "description": "64-band HTK Mel filterbank dot-product energy representation",
+          "shape_ref": [
+            1,
+            64,
+            101
+          ],
+          "shape_impl": [
+            64,
+            101
+          ],
+          "dtype_ref": "float32",
+          "dtype_impl": "float32",
+          "max_abs_diff": 0.000732421875,
+          "mean_abs_diff": 5.439864513308466e-06,
+          "relative_l2": 1.0813519047024358e-07,
+          "cosine_similarity": 0.9999999999999954,
+          "mismatch_count": 0,
+          "tolerance": {
+            "max_abs_diff": 0.01,
+            "mean_abs_diff": 0.0002,
+            "min_cosine": 0.999999,
+            "description": "64-band HTK Mel filterbank dot-product energy representation"
+          },
+          "worst_index": [
+            11,
+            63
+          ],
+          "ref_val_at_worst": 2128.7470703125,
+          "impl_val_at_worst": 2128.747802734375,
+          "first_divergent_index": null
+        },
+        {
+          "stage": "S2_log_mel",
+          "status": "PASS",
+          "description": "Log compression with eps=1e-6",
+          "shape_ref": [
+            1,
+            1,
+            64,
+            101
+          ],
+          "shape_impl": [
+            64,
+            101
+          ],
+          "dtype_ref": "float32",
+          "dtype_impl": "float32",
+          "max_abs_diff": 0.0013589859008789062,
+          "mean_abs_diff": 0.00013297438848588504,
+          "relative_l2": 1.5702505542703802e-05,
+          "cosine_similarity": 0.999999999876811,
+          "mismatch_count": 0,
+          "tolerance": {
+            "max_abs_diff": 0.005,
+            "mean_abs_diff": 0.0005,
+            "min_cosine": 0.99999,
+            "description": "Log compression with eps=1e-6"
+          },
+          "worst_index": [
+            28,
+            60
+          ],
+          "ref_val_at_worst": -13.39354419708252,
+          "impl_val_at_worst": -13.39218521118164,
+          "first_divergent_index": null
+        },
+        {
+          "stage": "S3_normalized_features",
+          "status": "PASS",
+          "description": "Global mean/std normalized Log-Mel tensor",
+          "shape_ref": [
+            1,
+            1,
+            64,
+            101
+          ],
+          "shape_impl": [
+            64,
+            101
+          ],
+          "dtype_ref": "float32",
+          "dtype_impl": "float32",
+          "max_abs_diff": 0.00028228759765625,
+          "mean_abs_diff": 2.7626790025612654e-05,
+          "relative_l2": 2.6483064205398997e-05,
+          "cosine_similarity": 0.9999999996495391,
+          "mismatch_count": 0,
+          "tolerance": {
+            "max_abs_diff": 0.001,
+            "mean_abs_diff": 0.0001,
+            "min_cosine": 0.99999,
+            "description": "Global mean/std normalized Log-Mel tensor"
+          },
+          "worst_index": [
+            28,
+            60
+          ],
+          "ref_val_at_worst": -1.3474977016448975,
+          "impl_val_at_worst": -1.3472154140472412,
+          "first_divergent_index": null
+        }
+      ]
+    }
+  ]
+}

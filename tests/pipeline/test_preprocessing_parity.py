@@ -1,120 +1,142 @@
 """
-Unit tests for Code2Edge preprocessing pipeline and audio fixtures.
-Verifies input shape, output shape, data types, numerical parity against reference, and checksum calculation.
+Unit tests for Code2Edge Preprocessing Differential Parity against Frozen PyTorch Artifacts.
+Executes the actual compiled C pipeline (src/pipeline/feature_extraction.c) on host
+and validates stages S0 (Raw Input), S1 (Power Spectrum), S1_mel (Mel Energy), S2 (Log-Mel),
+and S3 (Normalized Features) against frozen reference artifacts.
 """
 
-import math
-import struct
-import wave
+from __future__ import annotations
+
+import json
+from pathlib import Path
 import numpy as np
 import pytest
-from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent.parent
-EXAMPLE_WAV = REPO_ROOT / "reference" / "tiny-kws" / "app" / "examples" / "yes.wav"
-FIXTURE_HEADER = REPO_ROOT / "tests" / "firmware" / "benchmark_harness" / "fixtures" / "audio_fixture_yes.h"
-FEATURE_EXTRACTION_C = REPO_ROOT / "src" / "pipeline" / "feature_extraction.c"
-FEATURE_EXTRACTION_H = REPO_ROOT / "src" / "pipeline" / "feature_extraction.h"
-
-SAMPLE_RATE = 16000
-CLIP_SAMPLES = 16000
-N_FFT = 400
-HOP_LENGTH = 160
-N_MELS = 64
-N_FRAMES = 101
-N_FFT_BINS = 201
-LOG_EPS = 1e-6
-NORM_MEAN = -6.9023613929748535
-NORM_STD = 4.81721305847168
+from tools.run_host_parity import (
+    NativeCPipeline,
+    compare_stage_tensors,
+    evaluate_sample_parity,
+    run_host_parity_suite,
+    STAGE_TOLERANCES,
+    REPO_ROOT,
+    SMOKE_SAMPLE_DIR,
+)
 
 
-def compute_fnv1a_checksum(float_array: np.ndarray) -> int:
-    """Compute 32-bit FNV-1a hash over float32 array."""
-    raw_bytes = float_array.astype(np.float32).tobytes()
-    hash_val = 2166136261
-    for b in raw_bytes:
-        hash_val ^= b
-        hash_val = (hash_val * 16777619) & 0xFFFFFFFF
-    return hash_val
+@pytest.fixture(scope="module")
+def native_c_pipeline():
+    """Provides a singleton compiled C pipeline instance."""
+    return NativeCPipeline()
 
 
-def run_reference_preprocessing(pcm_int16: np.ndarray) -> np.ndarray:
-    """Python implementation exactly mirroring src/pipeline/feature_extraction.c."""
-    wav = pcm_int16.astype(np.float32) / 32768.0
-    padded = np.pad(wav, (200, 200), mode="reflect")
-
-    # Periodic Hann window
-    n = np.arange(N_FFT)
-    window = (0.5 - 0.5 * np.cos(2 * np.pi * n / N_FFT)).astype(np.float32)
-
-    # Mel filterbank
-    m_min = 2595.0 * np.log10(1.0 + 20.0 / 700.0)
-    m_max = 2595.0 * np.log10(1.0 + 7600.0 / 700.0)
-    m_pts = np.linspace(m_min, m_max, N_MELS + 2)
-    f_pts = 700.0 * (10.0**(m_pts / 2595.0) - 1.0)
-    freq_bins = np.linspace(0, SAMPLE_RATE // 2, N_FFT_BINS)
-
-    fbanks = np.zeros((N_MELS, N_FFT_BINS), dtype=np.float32)
-    for i in range(N_MELS):
-        left, center, right = f_pts[i], f_pts[i + 1], f_pts[i + 2]
-        for k in range(N_FFT_BINS):
-            f = freq_bins[k]
-            if left <= f <= center and center > left:
-                fbanks[i, k] = (f - left) / (center - left)
-            elif center < f <= right and right > center:
-                fbanks[i, k] = (right - f) / (right - center)
-
-    spec = np.zeros((N_FRAMES, N_FFT_BINS), dtype=np.float32)
-    for t in range(N_FRAMES):
-        frame = padded[t * HOP_LENGTH : t * HOP_LENGTH + N_FFT] * window
-        fft_res = np.fft.rfft(frame, n=N_FFT)
-        spec[t] = np.abs(fft_res)**2
-
-    mel = np.dot(fbanks, spec.T)
-    log_mel = np.log(mel + LOG_EPS)
-    norm_mel = (log_mel - NORM_MEAN) / NORM_STD
-    return norm_mel.astype(np.float32)
+def test_frozen_reference_artifacts_exist():
+    """Verify that the immutable frozen reference artifacts exist on disk."""
+    assert SMOKE_SAMPLE_DIR.exists(), f"Missing sample artifact dir: {SMOKE_SAMPLE_DIR}"
+    assert (SMOKE_SAMPLE_DIR / "post_input.npy").exists(), "Missing S0 post_input.npy"
+    assert (SMOKE_SAMPLE_DIR / "post_power_spectrum.npy").exists(), "Missing S1 post_power_spectrum.npy"
+    assert (SMOKE_SAMPLE_DIR / "post_mel.npy").exists(), "Missing S1_mel post_mel.npy"
+    assert (SMOKE_SAMPLE_DIR / "post_log.npy").exists(), "Missing S2 post_log.npy"
+    assert (SMOKE_SAMPLE_DIR / "post_normalize.npy").exists(), "Missing S3 post_normalize.npy"
+    assert (SMOKE_SAMPLE_DIR / "window.npy").exists(), "Missing window.npy"
+    assert (SMOKE_SAMPLE_DIR / "mel_filterbank.npy").exists(), "Missing mel_filterbank.npy"
+    assert (REPO_ROOT / "reference" / "normalization.json").exists(), "Missing normalization.json"
 
 
-def test_input_fixture_exists_and_valid():
-    """Verify input WAV fixture exists and has exactly 16000 16-bit mono samples."""
-    assert EXAMPLE_WAV.exists(), f"Example WAV missing: {EXAMPLE_WAV}"
-    with wave.open(str(EXAMPLE_WAV), "rb") as f:
-        assert f.getnchannels() == 1, "Expected mono audio"
-        assert f.getsampwidth() == 2, "Expected 16-bit PCM"
-        assert f.getframerate() == 16000, "Expected 16 kHz sample rate"
-        assert f.getnframes() == 16000, "Expected exactly 1.0s (16000 samples)"
+def test_stage_s0_raw_waveform_parity(native_c_pipeline):
+    """Verify Stage S0 (Raw audio waveform) matches ground truth."""
+    ref_input = np.load(SMOKE_SAMPLE_DIR / "post_input.npy")
+    assert ref_input.shape == (16000,), f"Expected shape (16000,), got {ref_input.shape}"
+    assert ref_input.dtype == np.float32, f"Expected float32, got {ref_input.dtype}"
+    assert np.isfinite(ref_input).all(), "Found non-finite values in S0 input"
+
+    stages = native_c_pipeline.run_stages(ref_input)
+    result = compare_stage_tensors(
+        "S0_raw_waveform",
+        ref_input,
+        stages["S0_raw_waveform"],
+        STAGE_TOLERANCES["S0_raw_waveform"],
+    )
+    assert result["status"] == "PASS", f"Stage S0 failed parity: {result}"
+    assert result["max_abs_diff"] <= STAGE_TOLERANCES["S0_raw_waveform"]["max_abs_diff"]
 
 
-def test_header_and_c_files_exist():
-    """Verify generated C pipeline files exist."""
-    assert FEATURE_EXTRACTION_H.exists(), f"Missing {FEATURE_EXTRACTION_H}"
-    assert FEATURE_EXTRACTION_C.exists(), f"Missing {FEATURE_EXTRACTION_C}"
-    assert FIXTURE_HEADER.exists(), f"Missing {FIXTURE_HEADER}"
+def test_stage_s1_power_spectrum_parity(native_c_pipeline):
+    """Verify Stage S1 (Power Spectrum STFT) matches ground truth within tolerance."""
+    ref_input = np.load(SMOKE_SAMPLE_DIR / "post_input.npy")
+    ref_power = np.load(SMOKE_SAMPLE_DIR / "post_power_spectrum.npy")
+
+    stages = native_c_pipeline.run_stages(ref_input)
+    result = compare_stage_tensors(
+        "S1_power_spectrum",
+        ref_power,
+        stages["S1_power_spectrum"],
+        STAGE_TOLERANCES["S1_power_spectrum"],
+    )
+
+    assert result["status"] == "PASS", f"Stage S1 failed parity: {result}"
+    assert result["max_abs_diff"] <= STAGE_TOLERANCES["S1_power_spectrum"]["max_abs_diff"]
+    assert result["cosine_similarity"] >= STAGE_TOLERANCES["S1_power_spectrum"]["min_cosine"]
 
 
-def test_preprocessing_output_shape_and_type():
-    """Verify preprocessing produces (64, 101) float32 tensor."""
-    with wave.open(str(EXAMPLE_WAV), "rb") as f:
-        pcm = np.frombuffer(f.readframes(16000), dtype=np.int16)
+def test_stage_s1_mel_energy_parity(native_c_pipeline):
+    """Verify Stage S1_mel (Mel Energy representation) matches ground truth within tolerance."""
+    ref_input = np.load(SMOKE_SAMPLE_DIR / "post_input.npy")
+    ref_mel = np.load(SMOKE_SAMPLE_DIR / "post_mel.npy")
 
-    feats = run_reference_preprocessing(pcm)
-    assert feats.shape == (64, 101), f"Expected shape (64, 101), got {feats.shape}"
-    assert feats.dtype == np.float32, f"Expected float32, got {feats.dtype}"
-    assert not np.isnan(feats).any(), "Found NaN in preprocessed features"
-    assert not np.isinf(feats).any(), "Found Inf in preprocessed features"
+    stages = native_c_pipeline.run_stages(ref_input)
+    result = compare_stage_tensors(
+        "S1_mel_energy",
+        ref_mel,
+        stages["S1_mel_energy"],
+        STAGE_TOLERANCES["S1_mel_energy"],
+    )
+
+    assert result["status"] == "PASS", f"Stage S1_mel failed parity: {result}"
+    assert result["max_abs_diff"] <= STAGE_TOLERANCES["S1_mel_energy"]["max_abs_diff"]
+    assert result["cosine_similarity"] >= STAGE_TOLERANCES["S1_mel_energy"]["min_cosine"]
 
 
-def test_checksum_determinism():
-    """Verify checksum is non-zero and perfectly deterministic."""
-    with wave.open(str(EXAMPLE_WAV), "rb") as f:
-        pcm = np.frombuffer(f.readframes(16000), dtype=np.int16)
+def test_stage_s2_log_mel_parity(native_c_pipeline):
+    """Verify Stage S2 (Log-Mel features) matches ground truth within tolerance."""
+    ref_input = np.load(SMOKE_SAMPLE_DIR / "post_input.npy")
+    ref_log = np.load(SMOKE_SAMPLE_DIR / "post_log.npy")
 
-    feats1 = run_reference_preprocessing(pcm)
-    feats2 = run_reference_preprocessing(pcm)
-    c1 = compute_fnv1a_checksum(feats1)
-    c2 = compute_fnv1a_checksum(feats2)
+    stages = native_c_pipeline.run_stages(ref_input)
+    result = compare_stage_tensors(
+        "S2_log_mel",
+        ref_log,
+        stages["S2_log_mel"],
+        STAGE_TOLERANCES["S2_log_mel"],
+    )
 
-    assert c1 == c2, "Checksum must be deterministic across identical runs"
-    assert c1 != 0, "Checksum must not be zero"
-    print(f"\nDeterministic Checksum for 'yes.wav' features: 0x{c1:08X} ({c1})")
+    assert result["status"] == "PASS", f"Stage S2 failed parity: {result}"
+    assert result["max_abs_diff"] <= STAGE_TOLERANCES["S2_log_mel"]["max_abs_diff"]
+    assert result["cosine_similarity"] >= STAGE_TOLERANCES["S2_log_mel"]["min_cosine"]
+
+
+def test_stage_s3_normalized_features_parity(native_c_pipeline):
+    """Verify Stage S3 (Normalized features) matches ground truth within tolerance."""
+    ref_input = np.load(SMOKE_SAMPLE_DIR / "post_input.npy")
+    ref_norm = np.load(SMOKE_SAMPLE_DIR / "post_normalize.npy")
+
+    stages = native_c_pipeline.run_stages(ref_input)
+    result = compare_stage_tensors(
+        "S3_normalized_features",
+        ref_norm,
+        stages["S3_normalized_features"],
+        STAGE_TOLERANCES["S3_normalized_features"],
+    )
+
+    assert result["status"] == "PASS", f"Stage S3 failed parity: {result}"
+    assert result["max_abs_diff"] <= STAGE_TOLERANCES["S3_normalized_features"]["max_abs_diff"]
+    assert result["cosine_similarity"] >= STAGE_TOLERANCES["S3_normalized_features"]["min_cosine"]
+
+
+def test_full_host_parity_report_generation():
+    """Execute end-to-end host parity verification and assert report emission."""
+    report = run_host_parity_suite(sample_dir=SMOKE_SAMPLE_DIR)
+    assert report["summary"]["overall_status"] == "PASS", f"Host parity report failed: {report}"
+    assert report["summary"]["passed_stages"] == 5
+    assert report["summary"]["failed_stages"] == 0
+    assert report["coverage"]["parity_status_smoke"] == "PASS"
+    assert report["coverage"]["parity_status_full_corpus"] == "PENDING"
