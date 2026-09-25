@@ -284,6 +284,7 @@ static void dump_parity_features(void) {
     Serial.print(F("FIXTURE_CHECKSUM=0x"));
     Serial.println(g_workload_checksum, HEX);
     Serial.println(F("TENSOR_SHAPE=[1,1,64,101]"));
+    Serial.println(F("TENSOR_SIZE=6464"));
     
     // Output sample points (first 5 and last 5 elements)
     Serial.print(F("HEAD_VALUES=["));
@@ -299,6 +300,23 @@ static void dump_parity_features(void) {
         if (i < PREPROC_OUTPUT_SIZE - 1) Serial.print(F(","));
     }
     Serial.println(F("]"));
+
+    // Full tensor dump in IEEE-754 hex format for lossless numerical parity verification
+    Serial.println(F("CODE2EDGE_PARITY_TENSOR_HEX_START"));
+    const uint32_t *u32_view = (const uint32_t*)s_mel_features_out;
+    for (size_t i = 0; i < PREPROC_OUTPUT_SIZE; ++i) {
+        uint32_t v = u32_view[i];
+        for (int b = 28; b >= 0; b -= 4) {
+            uint8_t nibble = (uint8_t)((v >> b) & 0x0F);
+            Serial.print(nibble < 10 ? (char)('0' + nibble) : (char)('A' + nibble - 10));
+        }
+        if ((i + 1) % 16 == 0 || i == PREPROC_OUTPUT_SIZE - 1) {
+            Serial.println();
+        } else {
+            Serial.print(' ');
+        }
+    }
+    Serial.println(F("CODE2EDGE_PARITY_TENSOR_HEX_END"));
 
     Serial.println(F("CODE2EDGE_PARITY_DUMP_END"));
 }

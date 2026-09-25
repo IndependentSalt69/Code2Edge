@@ -35,6 +35,29 @@ extern "C" {
 void feature_extraction_init(void);
 
 /**
+ * Execute STFT -> Mel -> Log -> Normalize on a single frame of 400 windowed samples.
+ */
+void feature_extraction_compute_frame(const float *frame_windowed, float *power_spec_out, float *mel_energies_out);
+
+/**
+ * Execute full preprocessing directly on normalized float32 audio samples in [-1.0, 1.0].
+ */
+void feature_extraction_run_f32(const float *audio_pcm_f32_16k, float *mel_features_out);
+
+/**
+ * Stage-by-stage execution on float32 audio for differential parity verification.
+ * Any unused output buffer pointer can be NULL.
+ */
+void feature_extraction_stages_f32(
+    const float *audio_pcm_f32_16k,
+    float *s0_input_out,
+    float *s1_power_out,
+    float *s1_mel_out,
+    float *s2_log_out,
+    float *s3_norm_out
+);
+
+/**
  * Execute STFT -> Mel -> Log -> Normalize on 16 kHz 16-bit mono PCM audio.
  *
  * @param audio_pcm_16k Pointer to 16,000 int16_t PCM audio samples (1.0 sec @ 16 kHz)

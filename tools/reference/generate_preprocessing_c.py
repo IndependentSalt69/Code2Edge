@@ -41,48 +41,45 @@ def generate_tables():
     cos_table = np.cos(2 * np.pi * n / N_FFT).astype(np.float32)
     sin_table = np.sin(2 * np.pi * n / N_FFT).astype(np.float32)
 
-    # 3. Mel Filterbank (HTK scale)
-    m_min = 2595.0 * np.log10(1.0 + F_MIN / 700.0)
-    m_max = 2595.0 * np.log10(1.0 + F_MAX / 700.0)
-    m_pts = np.linspace(m_min, m_max, N_MELS + 2)
-    f_pts = 700.0 * (10.0**(m_pts / 2595.0) - 1.0)
-    freq_bins = np.linspace(0, SAMPLE_RATE // 2, N_FFT_BINS)
+    # 3. Mel Filterbank: load from frozen reference artifact if available, or compute
+    mel_fb_path = REPO_ROOT / "reference" / "artifacts" / "mel_filterbank.npy"
+    if mel_fb_path.exists():
+        mel_fb = np.load(str(mel_fb_path)) # shape (201, 64)
+    else:
+        m_min = 2595.0 * np.log10(1.0 + F_MIN / 700.0)
+        m_max = 2595.0 * np.log10(1.0 + F_MAX / 700.0)
+        m_pts = np.linspace(m_min, m_max, N_MELS + 2)
+        f_pts = 700.0 * (10.0**(m_pts / 2595.0) - 1.0)
+        freq_bins = np.linspace(0, SAMPLE_RATE // 2, N_FFT_BINS)
+        mel_fb = np.zeros((N_FFT_BINS, N_MELS), dtype=np.float32)
+        for i in range(N_MELS):
+            left, center, right = f_pts[i], f_pts[i + 1], f_pts[i + 2]
+            for k in range(N_FFT_BINS):
+                f = freq_bins[k]
+                if left <= f <= center and center > left:
+                    mel_fb[k, i] = (f - left) / (center - left)
+                elif center < f <= right and right > center:
+                    mel_fb[k, i] = (right - f) / (right - center)
 
     mel_bands = []
     flat_weights = []
 
-    for i in range(N_MELS):
-        left, center, right = f_pts[i], f_pts[i + 1], f_pts[i + 2]
-        weights = []
-        start_k = None
-        end_k = None
-        for k in range(N_FFT_BINS):
-            f = freq_bins[k]
-            w = 0.0
-            if left <= f <= center and center > left:
-                w = (f - left) / (center - left)
-            elif center < f <= right and right > center:
-                w = (right - f) / (right - center)
-            if w > 0.0:
-                if start_k is None:
-                    start_k = k
-                end_k = k
-                weights.append(float(w))
-
-        if start_k is None:
-            start_k = 0
-            num_bins = 0
-            offset = len(flat_weights)
+    for m in range(N_MELS):
+        col = mel_fb[:, m]
+        non_zeros = np.where(col > 0)[0]
+        if len(non_zeros) == 0:
+            mel_bands.append({"start_bin": 0, "num_bins": 0, "weight_offset": len(flat_weights)})
         else:
-            num_bins = len(weights)
+            start_k = int(non_zeros[0])
+            num_bins = int(non_zeros[-1] - start_k + 1)
             offset = len(flat_weights)
+            weights = [float(w) for w in col[start_k:start_k + num_bins]]
             flat_weights.extend(weights)
-
-        mel_bands.append({
-            "start_bin": start_k,
-            "num_bins": num_bins,
-            "weight_offset": offset
-        })
+            mel_bands.append({
+                "start_bin": start_k,
+                "num_bins": num_bins,
+                "weight_offset": offset
+            })
 
     return hann, cos_table, sin_table, mel_bands, flat_weights
 
@@ -90,6 +87,7 @@ def generate_tables():
 def write_header_and_c():
     PIPELINE_DIR.mkdir(parents=True, exist_ok=True)
     FIXTURES_DIR.mkdir(parents=True, exist_ok=True)
+    BENCHMARK_DIR = REPO_ROOT / "tests" / "firmware" / "benchmark_harness"
 
     hann, cos_table, sin_table, mel_bands, flat_weights = generate_tables()
 
@@ -131,6 +129,29 @@ extern "C" {{
 void feature_extraction_init(void);
 
 /**
+ * Execute STFT -> Mel -> Log -> Normalize on a single frame of 400 windowed samples.
+ */
+void feature_extraction_compute_frame(const float *frame_windowed, float *power_spec_out, float *mel_energies_out);
+
+/**
+ * Execute full preprocessing directly on normalized float32 audio samples in [-1.0, 1.0].
+ */
+void feature_extraction_run_f32(const float *audio_pcm_f32_16k, float *mel_features_out);
+
+/**
+ * Stage-by-stage execution on float32 audio for differential parity verification.
+ * Any unused output buffer pointer can be NULL.
+ */
+void feature_extraction_stages_f32(
+    const float *audio_pcm_f32_16k,
+    float *s0_input_out,
+    float *s1_power_out,
+    float *s1_mel_out,
+    float *s2_log_out,
+    float *s3_norm_out
+);
+
+/**
  * Execute STFT -> Mel -> Log -> Normalize on 16 kHz 16-bit mono PCM audio.
  *
  * @param audio_pcm_16k Pointer to 16,000 int16_t PCM audio samples (1.0 sec @ 16 kHz)
@@ -152,6 +173,8 @@ uint32_t feature_extraction_compute_checksum(const float *features, size_t count
 """
 
     with open(PIPELINE_DIR / "feature_extraction.h", "w", encoding="utf-8") as f:
+        f.write(header_content)
+    with open(BENCHMARK_DIR / "feature_extraction.h", "w", encoding="utf-8") as f:
         f.write(header_content)
 
     # 2. C Source File
@@ -213,7 +236,7 @@ void feature_extraction_init(void) {
     // All tables statically allocated in .rodata
 }
 
-static inline int16_t get_padded_sample(const int16_t *audio, int idx) {
+static inline int16_t get_padded_sample_i16(const int16_t *audio, int idx) {
     if (idx < 0) {
         idx = -idx;
     } else if (idx >= AUDIO_CLIP_SAMPLES) {
@@ -222,42 +245,116 @@ static inline int16_t get_padded_sample(const int16_t *audio, int idx) {
     return audio[idx];
 }
 
-void feature_extraction_run(const int16_t *audio_pcm_16k, float *mel_features_out) {
+static inline float get_padded_sample_f32(const float *audio, int idx) {
+    if (idx < 0) {
+        idx = -idx;
+    } else if (idx >= AUDIO_CLIP_SAMPLES) {
+        idx = 2 * (AUDIO_CLIP_SAMPLES - 1) - idx;
+    }
+    return audio[idx];
+}
+
+void feature_extraction_compute_frame(const float *frame_windowed, float *power_spec_out, float *mel_energies_out) {
+    // 1. Real Discrete Fourier Transform (Power Spectrum) using 64-bit accumulators
+    for (int k = 0; k < PREPROC_N_FFT_BINS; ++k) {
+        double re_acc = 0.0;
+        double im_acc = 0.0;
+        for (int n = 0; n < PREPROC_N_FFT; ++n) {
+            int twiddle_idx = (k * n) % PREPROC_N_FFT;
+            double val = (double)frame_windowed[n];
+            re_acc += val * (double)g_cos_400[twiddle_idx];
+            im_acc -= val * (double)g_sin_400[twiddle_idx];
+        }
+        power_spec_out[k] = (float)(re_acc * re_acc + im_acc * im_acc);
+    }
+
+    // 2. Mel Filterbank Energy Accumulation
+    for (int m = 0; m < PREPROC_N_MELS; ++m) {
+        const MelBandInfo *band = &g_mel_bands[m];
+        double mel_acc = 0.0;
+        for (int b = 0; b < band->num_bins; ++b) {
+            int bin_k = band->start_bin + b;
+            mel_acc += (double)power_spec_out[bin_k] * (double)g_mel_weights[band->weight_offset + b];
+        }
+        mel_energies_out[m] = (float)mel_acc;
+    }
+}
+
+void feature_extraction_stages_f32(
+    const float *audio_pcm_f32_16k,
+    float *s0_input_out,
+    float *s1_power_out,
+    float *s1_mel_out,
+    float *s2_log_out,
+    float *s3_norm_out
+) {
+    if (s0_input_out) {
+        memcpy(s0_input_out, audio_pcm_f32_16k, AUDIO_CLIP_SAMPLES * sizeof(float));
+    }
+
     static float frame_windowed[PREPROC_N_FFT];
     static float power_spec[PREPROC_N_FFT_BINS];
+    static float mel_energies[PREPROC_N_MELS];
 
     for (int t = 0; t < PREPROC_N_FRAMES; ++t) {
         // 1. Frame Windowing with Reflect Padding
         int frame_start = t * PREPROC_HOP_LENGTH - (PREPROC_N_FFT / 2);
         for (int n = 0; n < PREPROC_N_FFT; ++n) {
-            int16_t raw_pcm = get_padded_sample(audio_pcm_16k, frame_start + n);
+            float sample_f = get_padded_sample_f32(audio_pcm_f32_16k, frame_start + n);
+            frame_windowed[n] = sample_f * g_hann_window[n];
+        }
+
+        // 2. Compute Power Spectrum and Mel Energies
+        feature_extraction_compute_frame(frame_windowed, power_spec, mel_energies);
+
+        if (s1_power_out) {
+            for (int k = 0; k < PREPROC_N_FFT_BINS; ++k) {
+                s1_power_out[k * PREPROC_N_FRAMES + t] = power_spec[k];
+            }
+        }
+
+        for (int m = 0; m < PREPROC_N_MELS; ++m) {
+            if (s1_mel_out) {
+                s1_mel_out[m * PREPROC_N_FRAMES + t] = mel_energies[m];
+            }
+
+            float log_val = logf(mel_energies[m] + LOG_EPS);
+            if (s2_log_out) {
+                s2_log_out[m * PREPROC_N_FRAMES + t] = log_val;
+            }
+
+            float norm_val = (log_val - NORM_MEAN) / NORM_STD;
+            if (s3_norm_out) {
+                s3_norm_out[m * PREPROC_N_FRAMES + t] = norm_val;
+            }
+        }
+    }
+}
+
+void feature_extraction_run_f32(const float *audio_pcm_f32_16k, float *mel_features_out) {
+    feature_extraction_stages_f32(audio_pcm_f32_16k, NULL, NULL, NULL, NULL, mel_features_out);
+}
+
+void feature_extraction_run(const int16_t *audio_pcm_16k, float *mel_features_out) {
+    static float frame_windowed[PREPROC_N_FFT];
+    static float power_spec[PREPROC_N_FFT_BINS];
+    static float mel_energies[PREPROC_N_MELS];
+
+    for (int t = 0; t < PREPROC_N_FRAMES; ++t) {
+        // 1. Frame Windowing with Reflect Padding
+        int frame_start = t * PREPROC_HOP_LENGTH - (PREPROC_N_FFT / 2);
+        for (int n = 0; n < PREPROC_N_FFT; ++n) {
+            int16_t raw_pcm = get_padded_sample_i16(audio_pcm_16k, frame_start + n);
             float sample_f = ((float)raw_pcm) / 32768.0f;
             frame_windowed[n] = sample_f * g_hann_window[n];
         }
 
-        // 2. Real Discrete Fourier Transform (Power Spectrum)
-        for (int k = 0; k < PREPROC_N_FFT_BINS; ++k) {
-            float re = 0.0f;
-            float im = 0.0f;
-            for (int n = 0; n < PREPROC_N_FFT; ++n) {
-                int twiddle_idx = (k * n) % PREPROC_N_FFT;
-                float val = frame_windowed[n];
-                re += val * g_cos_400[twiddle_idx];
-                im -= val * g_sin_400[twiddle_idx];
-            }
-            power_spec[k] = re * re + im * im;
-        }
+        // 2. Compute Power Spectrum and Mel Energies
+        feature_extraction_compute_frame(frame_windowed, power_spec, mel_energies);
 
-        // 3. Mel Filterbank Multiplication + Log Compression + Normalization
+        // 3. Log Compression + Normalization
         for (int m = 0; m < PREPROC_N_MELS; ++m) {
-            const MelBandInfo *band = &g_mel_bands[m];
-            float mel_energy = 0.0f;
-            for (int b = 0; b < band->num_bins; ++b) {
-                int bin_k = band->start_bin + b;
-                mel_energy += power_spec[bin_k] * g_mel_weights[band->weight_offset + b];
-            }
-
-            float log_val = logf(mel_energy + LOG_EPS);
+            float log_val = logf(mel_energies[m] + LOG_EPS);
             float norm_val = (log_val - NORM_MEAN) / NORM_STD;
 
             // Store in row-major layout: (64 mels, 101 frames) -> [m * 101 + t]
@@ -279,8 +376,11 @@ uint32_t feature_extraction_compute_checksum(const float *features, size_t count
 }
 ''')
 
+    code_str = "\n".join(c_content)
     with open(PIPELINE_DIR / "feature_extraction.c", "w", encoding="utf-8") as f:
-        f.write("\n".join(c_content))
+        f.write(code_str)
+    with open(BENCHMARK_DIR / "feature_extraction.c", "w", encoding="utf-8") as f:
+        f.write(code_str)
 
 
 def write_audio_fixture():
