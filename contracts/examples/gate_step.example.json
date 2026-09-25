@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0.0",
+  "tool": "gate_step",
+  "source": "mock",
+  "run_id": "run-001",
+  "timestamp": "2026-09-26T04:01:00Z",
+  "decision": "repair",
+  "attempt": 1,
+  "max_attempts": 3,
+  "remaining": 2,
+  "focus_stage": "framing",
+  "repair_hint": "impl produces 50 frames vs ref 49 (shape_ref=[500,49,400] vs shape_impl=[500,50,400]). Check frame-count formula: n_frames = 1 + (signal_length - window_length) // hop_length. Verify hop_length=320 and no extra padding.",
+  "escalation_report_path": null
+}

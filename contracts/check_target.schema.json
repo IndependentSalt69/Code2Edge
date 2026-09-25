@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://code2edge/contracts/check_target.schema.json",
+  "title": "check_target — input and output schemas",
+  "description": "Reports whether a model fits within the STM32U585 memory budget (786 KB SRAM, 2 MB flash) and flags unsupported TFLite ops.",
+
+  "$defs": {
+    "Input": {
+      "type": "object",
+      "required": ["model_file", "arena_kb"],
+      "properties": {
+        "model_file":  { "type": "string", "description": "Path to .tflite model file" },
+        "arena_kb":    { "type": "number", "minimum": 0, "description": "Requested tensor arena size in KB" },
+        "target_id":   { "type": "string", "description": "Target identifier, e.g. STM32U585", "default": "STM32U585" },
+        "sram_budget_kb":  { "type": "number", "default": 786 },
+        "flash_budget_kb": { "type": "number", "default": 2048 }
+      },
+      "additionalProperties": false
+    },
+
+    "Output": {
+      "type": "object",
+      "required": ["schema_version","tool","source","run_id","timestamp","target"],
+      "properties": {
+        "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "tool":           { "type": "string", "const": "check_target" },
+        "source":         { "type": "string", "enum": ["mock","real"] },
+        "run_id":         { "type": "string" },
+        "timestamp":      { "type": "string", "format": "date-time" },
+        "target": {
+          "type": "object",
+          "required": ["target_id","sram_budget_kb","flash_budget_kb","arena_kb","model_flash_kb","feature_buffer_kb","fits","headroom_kb","unsupported_ops","warnings"],
+          "properties": {
+            "target_id":         { "type": "string" },
+            "sram_budget_kb":    { "type": "number", "description": "Total SRAM budget (786 for STM32U585)" },
+            "flash_budget_kb":   { "type": "number", "description": "Total flash budget (2048 for STM32U585)" },
+            "arena_kb":          { "type": "number", "minimum": 0, "description": "Tensor arena requested/allocated" },
+            "model_flash_kb":    { "type": "number", "minimum": 0, "description": "Model binary size in flash" },
+            "feature_buffer_kb": { "type": "number", "minimum": 0, "description": "MFCC feature buffer in SRAM" },
+            "total_sram_kb":     { "type": "number", "minimum": 0, "description": "Total estimated SRAM usage" },
+            "fits":              { "type": "boolean", "description": "true if both SRAM and flash constraints are satisfied" },
+            "headroom_kb":       { "type": "number", "description": "Remaining SRAM headroom (can be negative if over budget)" },
+            "unsupported_ops":   {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "TFLite op names not supported on this target"
+            },
+            "warnings": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

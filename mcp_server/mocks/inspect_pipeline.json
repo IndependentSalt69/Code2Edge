@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "tool": "inspect_pipeline",
+  "source": "mock",
+  "run_id": "__RUN_ID__",
+  "timestamp": "__TIMESTAMP__",
+  "pipeline": {
+    "domain": "kws",
+    "n_stages": 7,
+    "stages": [
+      { "name": "resample",     "order": 0, "input_shape": [null],      "output_shape": [16000],   "dtype": "float32", "constants": { "src_rate": 44100, "dst_rate": 16000 },                                              "source_file": "audio_utils.py", "function": "resample_audio"       },
+      { "name": "pre_emphasis", "order": 1, "input_shape": [16000],     "output_shape": [16000],   "dtype": "float32", "constants": { "coeff": 0.97 },                                                                    "source_file": "audio_utils.py", "function": "pre_emphasis"          },
+      { "name": "framing",      "order": 2, "input_shape": [16000],     "output_shape": [49, 400], "dtype": "float32", "constants": { "window_length": 400, "hop_length": 320, "n_frames": 49 },                          "source_file": "features.py",    "function": "frame_signal"          },
+      { "name": "fft",          "order": 3, "input_shape": [49, 400],   "output_shape": [49, 201], "dtype": "float32", "constants": { "n_fft": 512, "convention": "magnitude" },                                          "source_file": "features.py",    "function": "compute_fft"           },
+      { "name": "mel",          "order": 4, "input_shape": [49, 201],   "output_shape": [49, 40],  "dtype": "float32", "constants": { "n_mels": 40, "fmin": 20.0, "fmax": 4000.0, "normalization": "slaney" },            "source_file": "features.py",    "function": "apply_mel_filterbank"  },
+      { "name": "log",          "order": 5, "input_shape": [49, 40],    "output_shape": [49, 40],  "dtype": "float32", "constants": { "epsilon": 1e-6, "base": "natural" },                                               "source_file": "features.py",    "function": "log_compress"          },
+      { "name": "normalize",    "order": 6, "input_shape": [49, 40],    "output_shape": [49, 40],  "dtype": "float32", "constants": { "mean": -4.2, "std": 2.1 },                                                         "source_file": "features.py",    "function": "normalize_features"    }
+    ],
+    "global_constants": {
+      "sample_rate": 16000,
+      "window_length": 400,
+      "hop_length": 320,
+      "n_fft": 512,
+      "n_mels": 40,
+      "n_frames": 49,
+      "pre_emphasis_coeff": 0.97,
+      "norm_mean": -4.2,
+      "norm_std": 2.1
+    },
+    "corpus": {
+      "n_samples": 500,
+      "corpus_id": "kws-corpus-v1",
+      "sha256": "a3f1c8b2e9d04f7a6c5b3e2d1f8a9c0e4b7d6f3a2c1e0d9b8a7f6c5e4d3b2a10"
+    },
+    "warnings": []
+  }
+}

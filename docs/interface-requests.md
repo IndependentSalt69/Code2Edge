@@ -59,4 +59,15 @@ To guarantee seamless integration between host differential parity and microcont
 ### 3.4 Hardware Constraints Imposed by Person B (Person B → Person A)
 1. **Flash Ceiling:** Total firmware image (Application + Preprocessing + Weights + TFLM) must not exceed 1,500 KB (leaving 548 KB safety margin on STM32U585).
 2. **SRAM Ceiling:** Static BSS + Tensor Arena + Feature Scratch must not exceed 400 KB (leaving 386 KB safety margin on STM32U585).
-3. **Execution Time Target:** Real-time budget is 1,000 ms; target inference latency is $\le 100\text{ ms}$ at 160 MHz.
+3. **Execution Time Target:** Real-time budget is 1,000 ms; target inference latency is ≤ 100 ms at 160 MHz.
+
+---
+
+## 4. Person C → Team Requests
+
+Person C uses this section to request changes in read-only territory. Do NOT make direct edits to those paths — resolve here and flag in chat.
+
+| Date | From | To | Request | Status |
+|------|------|----|---------|--------|
+| 2026-09-26 | C | Team | **Folder layout resolved:** `AGENTS.md` initially said code goes in `src/`, team context assumed `pipeline/` and `firmware/` as top-level. Confirmed by `main` commits: A = `reference/` + `src/pipeline/`; B = `src/firmware/` + `tools/target/`; shared = `tests/`, `deploy/` (deploy branch). ✅ Resolved — matches proposed layout. | **Resolved** |
+| 2026-09-26 | C | Owner of `.gitignore` | **`.bob` is gitignored:** The `.gitignore` has a bare `.bob` rule, so new shared Bob config files (`.bob/mcp.json`, `.bob/custom_modes.yaml`) will not be tracked. C will use `git add -f` for those two paths only. Preferred fix: change rule to `.bob/*` with explicit exceptions, or remove the `.bob` ignore entirely. | **Open** |

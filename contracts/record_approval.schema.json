@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://code2edge/contracts/record_approval.schema.json",
+  "title": "record_approval — input and output schemas",
+  "description": "Records a human approval checkpoint in the workflow. Used at the Edge Readiness Report gate before code generation begins.",
+
+  "$defs": {
+    "Input": {
+      "type": "object",
+      "required": ["run_id", "checkpoint", "approved"],
+      "properties": {
+        "run_id":     { "type": "string" },
+        "checkpoint": {
+          "type": "string",
+          "enum": ["edge_readiness","post_host_parity","post_device_parity","pre_submission"],
+          "description": "Named checkpoint in the workflow"
+        },
+        "approved":  { "type": "boolean" },
+        "approver":  { "type": "string", "description": "Name or identifier of the human approver" },
+        "notes":     { "type": "string", "description": "Optional free-text notes from the approver" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+
+    "Output": {
+      "type": "object",
+      "required": ["schema_version","tool","source","run_id","timestamp","checkpoint","approved","workflow_action"],
+      "properties": {
+        "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "tool":           { "type": "string", "const": "record_approval" },
+        "source":         { "type": "string", "enum": ["mock","real"] },
+        "run_id":         { "type": "string" },
+        "timestamp":      { "type": "string", "format": "date-time" },
+        "checkpoint":     { "type": "string", "enum": ["edge_readiness","post_host_parity","post_device_parity","pre_submission"] },
+        "approved":       { "type": "boolean" },
+        "approver":       { "type": ["string","null"] },
+        "notes":          { "type": ["string","null"] },
+        "workflow_action":{
+          "type": "string",
+          "enum": ["proceed","abort"],
+          "description": "proceed if approved=true, abort if approved=false"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
