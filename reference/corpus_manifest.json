@@ -1,0 +1,4043 @@
+{
+  "schema_version": 1,
+  "dataset": {
+    "name": "Google Speech Commands v0.02",
+    "split": "official test set",
+    "root": "reference/tiny-kws/data/test_set"
+  },
+  "selection": {
+    "count": 500,
+    "seed": 42,
+    "strategy": "deterministic_stratified",
+    "quotas": {
+      "silence": 42,
+      "unknown": 42,
+      "yes": 42,
+      "no": 42,
+      "up": 42,
+      "down": 42,
+      "left": 42,
+      "right": 42,
+      "on": 41,
+      "off": 41,
+      "stop": 41,
+      "go": 41
+    }
+  },
+  "class_counts": {
+    "silence": 42,
+    "unknown": 42,
+    "yes": 42,
+    "no": 42,
+    "up": 42,
+    "down": 42,
+    "left": 42,
+    "right": 42,
+    "on": 41,
+    "off": 41,
+    "stop": 41,
+    "go": 41
+  },
+  "samples": [
+    {
+      "id": "sample_0001",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/1041.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ecca9429480c1053c7016593902250335edd4ce35aea2b7a2e24a7423086f264"
+    },
+    {
+      "id": "sample_0002",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/1099.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "b1205b9caf604c78400141d0a83a918ae30fb7b192ac79c1fa9f79e7d0d92f87"
+    },
+    {
+      "id": "sample_0003",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/1114.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "71b2f7349d3a268ddb195f2269acff78c3d8b827ada7ce45c19abdbab9c3f1dd"
+    },
+    {
+      "id": "sample_0004",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/1421.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d4cd55a554be54e9f642c3992aac4c47c176c95318392d617e719306b82f1d80"
+    },
+    {
+      "id": "sample_0005",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/1477.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "0b2a5c9bf13142d2649df91b8f6324b5733b9b9011f5a65e57c7e2dacd9c5da9"
+    },
+    {
+      "id": "sample_0006",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/1520.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "fa46e4e51aa5ede009919d8e9d7c7f560dbfad7e55506cc33d1ca2c62308df54"
+    },
+    {
+      "id": "sample_0007",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/1695.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "3d3b9057ba00cd49a64de2e7a543504f122d0b5155df8ced212eaeb352898da7"
+    },
+    {
+      "id": "sample_0008",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/1849.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7ad220eee65f2fee27e6db5294390c739622603d9f774dd92c3d91d8fe2e03c7"
+    },
+    {
+      "id": "sample_0009",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/1894.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7ae23ac69309549f5a3a7a6852979ff8ddcae685a96419aef8158114f69664ce"
+    },
+    {
+      "id": "sample_0010",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/1941.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "80bf0f8ba1ae9baf98164a312f9a1de29336548b9102c0e13a25b4e07fb1b331"
+    },
+    {
+      "id": "sample_0011",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/1953.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "2e5309c12cf51768b45afbf3a51ee81a8d6ba7ee8a66b2024ad9891cb05b4e65"
+    },
+    {
+      "id": "sample_0012",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/2197.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d98dcef4bb10556866d872f63e14bb83fa4f9a854fc4fe5c278a1868cc2d83ae"
+    },
+    {
+      "id": "sample_0013",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/2262.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ded7eb902c99b78d2dc0280c18f09ba526edfedef2d49f800bfb6481712aecc4"
+    },
+    {
+      "id": "sample_0014",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/2291.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "64af3f78603a5dbc6eb8f36db86dafc6f0f7dd200a8ac82ff774c2b1dd904de0"
+    },
+    {
+      "id": "sample_0015",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/2467.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "1c749cc4ca4d1e3e6e4b3ac96a9c58a814b483e7de16eca11917752b6fb6a097"
+    },
+    {
+      "id": "sample_0016",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/2523.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "fd53fa867191edd155f2184e6b2e1359f5d20dab6dc74702f22046680e081e13"
+    },
+    {
+      "id": "sample_0017",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/2575.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "6a1cf5e03571e18223a46db319630c8cd5e7c481ebe6ba8ecd4f0818c344505f"
+    },
+    {
+      "id": "sample_0018",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/2609.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "76989c53c8529b3154d3e4f16ef49899cedb47e9b48e9b31f4224ee23178703a"
+    },
+    {
+      "id": "sample_0019",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/2744.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7045e56646cd3d50976c9043c31cd627cfd69e506320a965c12cd6700727e59c"
+    },
+    {
+      "id": "sample_0020",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/2752.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ab08ca4cb76bba42055d2bc17ca9dde209413b1cd49cace27bea0cbe3662d596"
+    },
+    {
+      "id": "sample_0021",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/2905.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "db1c032f29d0f41bb7e0e2924b5cccaf6f4767ab08d4b94c2d937284d7d6857e"
+    },
+    {
+      "id": "sample_0022",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/2941.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a133f42a3c9e6e991249de88051be08bf89b8c45ba49bf44fc3834ac12ab3a53"
+    },
+    {
+      "id": "sample_0023",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/3.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "eeba11539f8420a5945f50670866bc67077ba3a9af5c0951eb60584cc6a2e532"
+    },
+    {
+      "id": "sample_0024",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/3084.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ce8294a3cd9938e75993fee7d3f9086be843d4fc88e3bd7d844e409b5c93c0d1"
+    },
+    {
+      "id": "sample_0025",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/3391.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "620fefd1f4afab7aaab1c4bdafceeb7cc8072c424579c498e954366cbe777e6a"
+    },
+    {
+      "id": "sample_0026",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/3420.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c2c766b5e534a534c1129138a7b01780b8fd04d742e9aa8b9a5409456fd4cef6"
+    },
+    {
+      "id": "sample_0027",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/3469.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "124cc3a85e1f75b38ba547d9366c803ec5a5fb246726adf20520d7241c018dd0"
+    },
+    {
+      "id": "sample_0028",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/3571.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "128ae3740d6c7101df5f591b600c453c26f6d28587528813a62b01d0cad2d744"
+    },
+    {
+      "id": "sample_0029",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/3595.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "39bbff369c34988b16b0bb73cda11f3f56328c77c43a67e8e811bf8a0ae2206b"
+    },
+    {
+      "id": "sample_0030",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/3665.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ddfd4dbd5e8ac8cad6d56ea15f9fcc9e1286989a6af2d7ac7ecbb013a650ff44"
+    },
+    {
+      "id": "sample_0031",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/3831.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7eb5d7583a3a6992de3bb290640eee74347f1d6aec8e68e4ed68eb20bbb681f3"
+    },
+    {
+      "id": "sample_0032",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/3853.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "17f0bc07e48f34287d64597e859be968af780b36f83c79d3587445915fa361f9"
+    },
+    {
+      "id": "sample_0033",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/3858.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "750a28a98e8eed170ce9195430f170912913ada5141eb77d72066cef2d0a9ef2"
+    },
+    {
+      "id": "sample_0034",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/3879.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "0d7ec0d214f88ddbb26994b2949cead8c05e51efb74942c74e8d2c8a90d13fab"
+    },
+    {
+      "id": "sample_0035",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/4149.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "881a8c46839bb3e7394f0a0e9bfb7d1448f27eaf5f878ea42498fb3d6f064cbf"
+    },
+    {
+      "id": "sample_0036",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/4197.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "355f42203e22f2f919b4058c650cdf23d7b23b21d3dc4469c6a2ec3a61a69849"
+    },
+    {
+      "id": "sample_0037",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/4498.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "85e8117eb32c53e5185f971c0222ae183704271562b92bfc960a1c1c22e43a4c"
+    },
+    {
+      "id": "sample_0038",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/4537.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "bff26f783d6a0156e3baad0028a6d6ad2b8185b689851b59071e014d78d7724d"
+    },
+    {
+      "id": "sample_0039",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/579.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e407202f90050a6dbf6741465e7b53bd6ffa4baccd0969c0feddbd17f00ac395"
+    },
+    {
+      "id": "sample_0040",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/58.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "b2d457bc8061db9fd588a271989ec4a33fc56445aa5d39862461e953f709f653"
+    },
+    {
+      "id": "sample_0041",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/89.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "b805ab92a16d3563768cf2aeb7d21320d95c9fb50628587df8e89a429de930d4"
+    },
+    {
+      "id": "sample_0042",
+      "relative_path": "reference/tiny-kws/data/test_set/_silence_/906.wav",
+      "label": "silence",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "45e3473c848251a8d286227782fd381005002019907b8f8f44452e3a6eea3de2"
+    },
+    {
+      "id": "sample_0043",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/bird_b97c9f77_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f6203ac76be503a51a99fb0721dd135a0e0c6fc8011036b896515c3945d693e3"
+    },
+    {
+      "id": "sample_0044",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/cat_8fe67225_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e66322faca871bd424c4de1fd5c14de81f443c9b0d40449092c8fe0d39460a1e"
+    },
+    {
+      "id": "sample_0045",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/eight_4fd1443e_nohash_2.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "da031733880e3d060ffa5e90c4cbcf5cc510f36172e0427315f6add46e96097c"
+    },
+    {
+      "id": "sample_0046",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/eight_7257420c_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9a003d219fe56c11ae080499d6d7c91aefaa17a2d60458dca046db2d140cd08d"
+    },
+    {
+      "id": "sample_0047",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/eight_893705bb_nohash_9.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9f0f556b74b669669b654014811f9f91298d33e46612232556be2a2061017c8e"
+    },
+    {
+      "id": "sample_0048",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/eight_bb05582b_nohash_3.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "5c3ca97198728abdb1a5512a2db4597e300771ddc9c743466d7a3538a4ad41ff"
+    },
+    {
+      "id": "sample_0049",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/eight_c0e0f834_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "dc61b7830ff3268c5d80f67560da124c24e4d2ca1a586df35a98036d091341ae"
+    },
+    {
+      "id": "sample_0050",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/eight_fb7eb481_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "bc98f1cc8350e709698ce157f14e7cee38cd90140cfe0de796241e34539924d2"
+    },
+    {
+      "id": "sample_0051",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/five_2aa787cf_nohash_1.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f5e6eb5d976b6460278b12b881f79799042a4de96b104c90511a6de1144d1241"
+    },
+    {
+      "id": "sample_0052",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/five_7dc95912_nohash_1.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "403a9cd3703b0c67f33083dd981f2d4e0ea8ac02a3658cc7db3ea6f81657e6c5"
+    },
+    {
+      "id": "sample_0053",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/five_a6f2fd71_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e343bfe9c7e1a1a475294ce219db1c62af62a4332d4d279bbca5afef5524f8b7"
+    },
+    {
+      "id": "sample_0054",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/forward_f9643d42_nohash_2.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "12ff2392939f80c2f61c09e96ddef9dd200eb1b9850cafe653221aaf55507cda"
+    },
+    {
+      "id": "sample_0055",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/four_8ec6dab6_nohash_1.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f17f83c4b6ce560e643ba437a426401812c8142fe1ac60071f3b6af333b95446"
+    },
+    {
+      "id": "sample_0056",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/four_b49caed3_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "181ae22149225a33301688ac71f827e551a83d7c57b72c646d623c8e8d0cb189"
+    },
+    {
+      "id": "sample_0057",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/happy_1fe4c891_nohash_1.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "4706bf5f06b617c495ed6fd25ef75a01ae47ccf6e69f65126a0a60500c28e935"
+    },
+    {
+      "id": "sample_0058",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/happy_4fd1443e_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "4f5d22f06474a52f31694eb0383566a29c7436e56bff129d23eb6b0ecfe388aa"
+    },
+    {
+      "id": "sample_0059",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/happy_6b889021_nohash_2.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7867fd66ec7946caaa3823ca1424d446b948fa5c87d96e1bb39f11b7b626a004"
+    },
+    {
+      "id": "sample_0060",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/happy_e49428d9_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "977a31efef0043c24fc52dd8c25e518df4b6b11f7605154ca1884fcf5471ab59"
+    },
+    {
+      "id": "sample_0061",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/happy_f17d21b5_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "5f1918961c0cb829f195f5b32fd447cefe5a7e2882894558a6cb4cf41e23be1e"
+    },
+    {
+      "id": "sample_0062",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/marvin_587f3271_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "731485c6dc36f02d4130b707a333db945b864a50e2022d96d324702e406c5a28"
+    },
+    {
+      "id": "sample_0063",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/nine_3df9a3d4_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "5b0d6e55c9c0f10761614cb7c786fb64f0e559e1a9b6ccd2832214628e0d9521"
+    },
+    {
+      "id": "sample_0064",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/nine_4fd1443e_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "faa4357246d0c37c9c9594e259be13328be3754fef6f7cf078d9f7c850072c59"
+    },
+    {
+      "id": "sample_0065",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/one_2796ac50_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d1a973b3bb300440379ad3daa2dc49f62a7fdc0a7d51b43d203b3ef32023efe7"
+    },
+    {
+      "id": "sample_0066",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/one_42beb5eb_nohash_1.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "1868502972ac6ec1c42e56a0c193b7ad7677719bcfb0a75ee3ad9f89de1fd32e"
+    },
+    {
+      "id": "sample_0067",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/one_b97c9f77_nohash_3.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "36002af5a81bf2c1f7a1ce9bf9fe5a2ba0823d33a34e2d057512c16569da4c01"
+    },
+    {
+      "id": "sample_0068",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/seven_5f814c23_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c59cadc45363951f8b8f851d703a9ad62be5d2bbea3dd40f158ed7343375fa5c"
+    },
+    {
+      "id": "sample_0069",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/seven_91b03183_nohash_3.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f3c725122d46482ceabf4244344b95ab9d99b0f9502f01df717e23ad162953c2"
+    },
+    {
+      "id": "sample_0070",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/seven_9b3ea809_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f53e4d5831f3c173ec4f197df38f84b180f65a2697f28c217e68da1151f89fd8"
+    },
+    {
+      "id": "sample_0071",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/seven_b83c1acf_nohash_3.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "0149e52dd9d16480fc86825beb686a940856e132ad895236e2223813c0aeddf6"
+    },
+    {
+      "id": "sample_0072",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/seven_cd85758f_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "4ca0f270eb55eb2fdbb9bfa6ab01dcaad8e98caad008daeaa597a2df75da2811"
+    },
+    {
+      "id": "sample_0073",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/sheila_af130f12_nohash_3.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "aebdfdb7ac7825c2621a31b1ef25ca06eb67a459fef535f6e469981ef551a357"
+    },
+    {
+      "id": "sample_0074",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/sheila_cfde27ba_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "6332d7297f3e414824cfda0b984f29474643d35339f2e123b099fb6aa253611c"
+    },
+    {
+      "id": "sample_0075",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/six_d5b963aa_nohash_3.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ffc741fde1b470f21b2b034e960b8d2efaffaa48ddc1b1a4cafeb3e6055fef1b"
+    },
+    {
+      "id": "sample_0076",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/three_87070229_nohash_1.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "4cc8465edd661ec6fdf300a3269c8dfb05f29ea4cd50d439279c9a0c5da288a7"
+    },
+    {
+      "id": "sample_0077",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/three_8c0e5970_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "654fa9c20bfb024d62a1cb0027bfbb3dd640524b42e2114bada8921d99411548"
+    },
+    {
+      "id": "sample_0078",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/tree_0c40e715_nohash_2.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "3a74a18debaf51910233c137c9c3a92d60ca8d1b4389f04be0e7d26dfa838b56"
+    },
+    {
+      "id": "sample_0079",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/two_d5ca80c6_nohash_3.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f3c4b05283aad97d81e2f71f7170a55b214454aedc583b54bcba6d1659543e78"
+    },
+    {
+      "id": "sample_0080",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/visual_ca4d5368_nohash_5.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e3f44c88a289b83fc6cbd41683c44ef8c482b39eeb664c70caa9c276dc47899e"
+    },
+    {
+      "id": "sample_0081",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/wow_a2473d62_nohash_1.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "1df569b3dbd51c5d96bd059013578c364ffd35931e1952e6a4057880a86160ed"
+    },
+    {
+      "id": "sample_0082",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/zero_af7a8296_nohash_0.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "3e22663ce7b2e855b800ddc861ecd7985658d5d85ae004eca0ccfe1dd2e25de3"
+    },
+    {
+      "id": "sample_0083",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/zero_c22d3f18_nohash_2.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "6fbd4ca6c563e50badabd86acb89de8fec256c735a1b84b2f950bfee9cf5083a"
+    },
+    {
+      "id": "sample_0084",
+      "relative_path": "reference/tiny-kws/data/test_set/_unknown_/zero_d0faf7e4_nohash_4.wav.wav",
+      "label": "unknown",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7d3c0b9739bddcd3ebfa8283a037765e1302b94bba842f19528474070309bedd"
+    },
+    {
+      "id": "sample_0085",
+      "relative_path": "reference/tiny-kws/data/test_set/down/022cd682_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c96897347fbb87c8246bb2fefb438f14dffad3ddca2c1228db4d531f5bf19d8f"
+    },
+    {
+      "id": "sample_0086",
+      "relative_path": "reference/tiny-kws/data/test_set/down/0c40e715_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7de857a33d535fdf49eb257aab656dcfdd44d9a9b462a7ad0994893158fbfac5"
+    },
+    {
+      "id": "sample_0087",
+      "relative_path": "reference/tiny-kws/data/test_set/down/0ea0e2f4_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "1eedf4786de289db1e288f1386936210b03848ccacfa7895f3297715d3049f8a"
+    },
+    {
+      "id": "sample_0088",
+      "relative_path": "reference/tiny-kws/data/test_set/down/18f8afd5_nohash_3.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "93b95ecabfa648897b069445d542a3e35e578eaf6beeeae907a8c9f06fad7600"
+    },
+    {
+      "id": "sample_0089",
+      "relative_path": "reference/tiny-kws/data/test_set/down/1b4c9b89_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "4314a5cd7d9ed2dec14798de48a9b865028b3b2f3844f5a9927e3cc01466b4ab"
+    },
+    {
+      "id": "sample_0090",
+      "relative_path": "reference/tiny-kws/data/test_set/down/27c30960_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "74057d9ddb365881655aa352cc0967215d84582dd5400b04f460797563d1a7a1"
+    },
+    {
+      "id": "sample_0091",
+      "relative_path": "reference/tiny-kws/data/test_set/down/37dca74f_nohash_2.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7f5a4432af78c8f65dee98576fdd1bd0ccffb4d09ada81b3a27d9dcad8aae3f9"
+    },
+    {
+      "id": "sample_0092",
+      "relative_path": "reference/tiny-kws/data/test_set/down/3b4f8f24_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f27f7d17fad1cc830b9e54030b1127a2fda37bb693cdfeb804537dfeaa9b5a88"
+    },
+    {
+      "id": "sample_0093",
+      "relative_path": "reference/tiny-kws/data/test_set/down/3b4f8f24_nohash_2.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "251b6a78a0fc18e912c1ee238a3ec29122b11a2103818a8d77c2aea6b1fa3241"
+    },
+    {
+      "id": "sample_0094",
+      "relative_path": "reference/tiny-kws/data/test_set/down/48a8a69d_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "60eaa4926cfdb9a3527cc07c7416dec07a170a4dff25b70f413b6e9f5e20df40"
+    },
+    {
+      "id": "sample_0095",
+      "relative_path": "reference/tiny-kws/data/test_set/down/4fd1443e_nohash_1.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "16808626b06c6d694c8b86bb5884a584cf37697f9a7ff4c4961e2d8cad692789"
+    },
+    {
+      "id": "sample_0096",
+      "relative_path": "reference/tiny-kws/data/test_set/down/5744b6a7_nohash_1.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "3276c18d99d59742e28cfa87930a40c8e769cbc165f3d601183fd752d798f496"
+    },
+    {
+      "id": "sample_0097",
+      "relative_path": "reference/tiny-kws/data/test_set/down/5b1db3ee_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a4af5070a52d2f89fd03c134e8b049dc233ff2fc6df3085b7227cf5ec127b924"
+    },
+    {
+      "id": "sample_0098",
+      "relative_path": "reference/tiny-kws/data/test_set/down/7e1054e7_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e1c9c435669e61261a2a670f6528e99e58087d4b380e14af2e51099886798923"
+    },
+    {
+      "id": "sample_0099",
+      "relative_path": "reference/tiny-kws/data/test_set/down/8056e897_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ed83e237ea6e11273e8698ea35d52a660c591fa82fbed8cf261ce6e70355cf2b"
+    },
+    {
+      "id": "sample_0100",
+      "relative_path": "reference/tiny-kws/data/test_set/down/85d2ac4b_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "56a9bcd196b10c9e3527d983ebb91fc7c4d7cbeeb980065db6341ca870bf0dc7"
+    },
+    {
+      "id": "sample_0101",
+      "relative_path": "reference/tiny-kws/data/test_set/down/87070229_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "cd115cbe8c0aef542f3e9c5bc50492e59012e8fc63a4d58427cf863619c7bb80"
+    },
+    {
+      "id": "sample_0102",
+      "relative_path": "reference/tiny-kws/data/test_set/down/893705bb_nohash_1.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c4dcb23a99ad23eca592f0ad37bee1a8bdcf00e5a43c23a56325716c2fab1f94"
+    },
+    {
+      "id": "sample_0103",
+      "relative_path": "reference/tiny-kws/data/test_set/down/94de6a6a_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "261a9b025b736eb4472c88d80be9c62a3e915f1e31f86dd31c8c26f7d1ef39ba"
+    },
+    {
+      "id": "sample_0104",
+      "relative_path": "reference/tiny-kws/data/test_set/down/964e8cfd_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d1981211a6019b01e6e0682acf370804afecb5bd3e9bb15063e5774a96431717"
+    },
+    {
+      "id": "sample_0105",
+      "relative_path": "reference/tiny-kws/data/test_set/down/97f4c236_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "677a34128328de7496613112084a3c0189e1912d1f5cf2ba0387d292fcd3704c"
+    },
+    {
+      "id": "sample_0106",
+      "relative_path": "reference/tiny-kws/data/test_set/down/9a69672b_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "bd729347d8244048224401498135c61bef60a5c5fdfd3807f6769213822c2232"
+    },
+    {
+      "id": "sample_0107",
+      "relative_path": "reference/tiny-kws/data/test_set/down/9b3ea809_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7c026352b938525180794a06581480f613fe765af5020695cf1f6d98b3279aff"
+    },
+    {
+      "id": "sample_0108",
+      "relative_path": "reference/tiny-kws/data/test_set/down/9dc1889e_nohash_1.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f9500c3f907b910f7cc1ee1edfd7d910781e1791bda94499f2acd83fdd89c735"
+    },
+    {
+      "id": "sample_0109",
+      "relative_path": "reference/tiny-kws/data/test_set/down/af130f12_nohash_1.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "eaeb23ede4a3e80afb4ce6db204922733809d958b2ea6b3561b70135c593b566"
+    },
+    {
+      "id": "sample_0110",
+      "relative_path": "reference/tiny-kws/data/test_set/down/af405b69_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ad17e4913daa8865c32f547b6c5a61b29abf0ec9ef219e69dfa0f32ee632f516"
+    },
+    {
+      "id": "sample_0111",
+      "relative_path": "reference/tiny-kws/data/test_set/down/b49caed3_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f3bcc8ca1c3ce1637ac28d0dacaf01f857a1520d15ac63ad249b79ed314a6957"
+    },
+    {
+      "id": "sample_0112",
+      "relative_path": "reference/tiny-kws/data/test_set/down/c7dc7278_nohash_1.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "aa9fa13ba95838b86092e664567eee9b8d68b3eeca6cf936127fcac65af686cc"
+    },
+    {
+      "id": "sample_0113",
+      "relative_path": "reference/tiny-kws/data/test_set/down/c9b5ff26_nohash_3.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a40e83cd59fb94a9f1ace08651ff7a17635d6f72c8f8a7229b653bf14243bf4c"
+    },
+    {
+      "id": "sample_0114",
+      "relative_path": "reference/tiny-kws/data/test_set/down/ca4d5368_nohash_1.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "3998a3563febff37f81b10817ecaa1de3c7ac33f607c6688941bde11afff83ac"
+    },
+    {
+      "id": "sample_0115",
+      "relative_path": "reference/tiny-kws/data/test_set/down/cd85758f_nohash_2.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "09a57a5a20ad4c6b315debc1e921128ead52dc90d4ed89714a3d0e0db0d2314d"
+    },
+    {
+      "id": "sample_0116",
+      "relative_path": "reference/tiny-kws/data/test_set/down/cfbedff9_nohash_2.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a3a6184cb98d7e539a68ccf5aaa7ddd0ea004cfa4b473d7cbfa7068eb85f2856"
+    },
+    {
+      "id": "sample_0117",
+      "relative_path": "reference/tiny-kws/data/test_set/down/d1a4fb3f_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "83db3b372a6ebe51738847c5c8b1ed3ea4195644359e882b8ceeeac7facd4160"
+    },
+    {
+      "id": "sample_0118",
+      "relative_path": "reference/tiny-kws/data/test_set/down/daf230ac_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "566d1b41ec3906edbb5c299dbcecab42f0af1a78ac9e160d48c978f8b937cf0e"
+    },
+    {
+      "id": "sample_0119",
+      "relative_path": "reference/tiny-kws/data/test_set/down/e1469561_nohash_2.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "80b05771b3f8edba2ea9478f3adf7bd47cf9ec1f5da613ec9f2652b5c063c676"
+    },
+    {
+      "id": "sample_0120",
+      "relative_path": "reference/tiny-kws/data/test_set/down/e41a903b_nohash_1.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "03f0abafac0cdcf50fa11e7932ff103e34d0d41154474027a66cdcc5338c8fd7"
+    },
+    {
+      "id": "sample_0121",
+      "relative_path": "reference/tiny-kws/data/test_set/down/e49428d9_nohash_3.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "69244c6a83430e61fd2a6e27d59ee386a41a3d706284a777c3b91067bebeac8d"
+    },
+    {
+      "id": "sample_0122",
+      "relative_path": "reference/tiny-kws/data/test_set/down/e71b4ce6_nohash_1.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "52b2065db3e40a02ef51d8db9737b19cd8040058ca40acd3fe4e00e7734a4e83"
+    },
+    {
+      "id": "sample_0123",
+      "relative_path": "reference/tiny-kws/data/test_set/down/f264e0df_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "88d4e27e3575cbbb234e10392560394f61dde9b48bf5f2eaede9b97f2afb52fc"
+    },
+    {
+      "id": "sample_0124",
+      "relative_path": "reference/tiny-kws/data/test_set/down/f9643d42_nohash_3.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "4f4da00ed2f107ef8dc5cd3bb7c8a6389b9207d714b86953298219cc6f8101fa"
+    },
+    {
+      "id": "sample_0125",
+      "relative_path": "reference/tiny-kws/data/test_set/down/fb7eb481_nohash_2.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "b984573298c2952b61648cd7800726d052de3c59dab6302f3efd29052102cbec"
+    },
+    {
+      "id": "sample_0126",
+      "relative_path": "reference/tiny-kws/data/test_set/down/fdb5155e_nohash_0.wav",
+      "label": "down",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "bc5799837b5bb10479e74a7b0669a1412804186cf99dad52d6b1233a0ba23ae5"
+    },
+    {
+      "id": "sample_0127",
+      "relative_path": "reference/tiny-kws/data/test_set/go/022cd682_nohash_1.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "acafe8204911ed52a5d68024792c25d68926412e6fac3594cda485bd95d5174c"
+    },
+    {
+      "id": "sample_0128",
+      "relative_path": "reference/tiny-kws/data/test_set/go/0c40e715_nohash_1.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "be6d3267cf88ef666ebc5ca248b4ef177b8838b39e6819fd924a16bd7a0fd4d6"
+    },
+    {
+      "id": "sample_0129",
+      "relative_path": "reference/tiny-kws/data/test_set/go/0fa1e7a9_nohash_1.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "19765c8aaa55483c8a21eca2da4648158d2bd298d58798869e7aa8e26687386e"
+    },
+    {
+      "id": "sample_0130",
+      "relative_path": "reference/tiny-kws/data/test_set/go/189cbabe_nohash_1.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "2d778f54835cc34b95b2e2001f3a1c54e728c064e4496805dcef3f6a76a7208d"
+    },
+    {
+      "id": "sample_0131",
+      "relative_path": "reference/tiny-kws/data/test_set/go/1acc97de_nohash_4.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "bbfac4f0920ab0fcac314dbafbebf985babaf22b6d0fe48f83ac6586c4539cdf"
+    },
+    {
+      "id": "sample_0132",
+      "relative_path": "reference/tiny-kws/data/test_set/go/1b4c9b89_nohash_1.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "b129334a53270839f2e8ff8259474307247c68094ba6dc4b830e98ac5f6a1a48"
+    },
+    {
+      "id": "sample_0133",
+      "relative_path": "reference/tiny-kws/data/test_set/go/1b4c9b89_nohash_4.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f1f4e3323cc8d7158d77499fec252d222d765e7387b9ad6d86f6e5851181611e"
+    },
+    {
+      "id": "sample_0134",
+      "relative_path": "reference/tiny-kws/data/test_set/go/370844f7_nohash_0.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ca42f06b6d41e0aff26b4e1f7364a441f7c834eff93211ba7189b36a7974ed06"
+    },
+    {
+      "id": "sample_0135",
+      "relative_path": "reference/tiny-kws/data/test_set/go/4290ca61_nohash_2.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "88fe80c3238aa52de62a2c1dbcaac8e0ff998098a4c4107097d7f5c48c6188e9"
+    },
+    {
+      "id": "sample_0136",
+      "relative_path": "reference/tiny-kws/data/test_set/go/4fd1443e_nohash_3.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ed3dd360af9ff2b0f68adcaa65a8c189cef22d63f0aae2d4fb2a4b49aa70953a"
+    },
+    {
+      "id": "sample_0137",
+      "relative_path": "reference/tiny-kws/data/test_set/go/5e3dde6b_nohash_4.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "689e84f49e8eedf889be4adbb4c429f0b5ff9b0076878c077b3c977c77db4f32"
+    },
+    {
+      "id": "sample_0138",
+      "relative_path": "reference/tiny-kws/data/test_set/go/5ff3f9a1_nohash_1.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f9207f47ab00f5cd555b8e61a2dc227082827ba906e435d9e30d3d3960c62a53"
+    },
+    {
+      "id": "sample_0139",
+      "relative_path": "reference/tiny-kws/data/test_set/go/63f7a489_nohash_2.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "fb3073766baa374758a9433ab4bdfd625d6dd8e926e704ec66a1d4c829e3917c"
+    },
+    {
+      "id": "sample_0140",
+      "relative_path": "reference/tiny-kws/data/test_set/go/63f7a489_nohash_4.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "2b4ed110e73808bd0e7627c69ef21ebc3da43110fb8ffeb44031a6d62e8b119a"
+    },
+    {
+      "id": "sample_0141",
+      "relative_path": "reference/tiny-kws/data/test_set/go/68dd409e_nohash_0.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d8a79753ed07c42236c12a0727f5f81aab5170caf9ac7e002d985feb2544bc73"
+    },
+    {
+      "id": "sample_0142",
+      "relative_path": "reference/tiny-kws/data/test_set/go/68dd409e_nohash_2.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "caf64af97619ecc72f79bf6499dd1a4c082544cb317db7b05f66cb0f1c74bed1"
+    },
+    {
+      "id": "sample_0143",
+      "relative_path": "reference/tiny-kws/data/test_set/go/692a88e6_nohash_1.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "04b75a2e8d2c692ac81d321483336852fbcb938b2884528d16f706620d03e618"
+    },
+    {
+      "id": "sample_0144",
+      "relative_path": "reference/tiny-kws/data/test_set/go/6f2f57c1_nohash_0.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ccc678cd1fdb5a6dbd6a87dc9109478a028c8cb160f5da9b5a55c87a3a28b7d2"
+    },
+    {
+      "id": "sample_0145",
+      "relative_path": "reference/tiny-kws/data/test_set/go/8056e897_nohash_2.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "98bebc4ccd5bb34cfb51a748d86f928374c4773d0382f067194dbd89db300b2e"
+    },
+    {
+      "id": "sample_0146",
+      "relative_path": "reference/tiny-kws/data/test_set/go/893705bb_nohash_0.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "52edc3cb0ee59f6ff75b8bd848bded56db6e83c010e9c457bbfe7d3522efa557"
+    },
+    {
+      "id": "sample_0147",
+      "relative_path": "reference/tiny-kws/data/test_set/go/893705bb_nohash_4.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "8d2bcfe68404ec11900e3fd93ed632f5122c63e2733636dfe0a5506adee1ded2"
+    },
+    {
+      "id": "sample_0148",
+      "relative_path": "reference/tiny-kws/data/test_set/go/91b03183_nohash_3.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "534a1ed95884597c5e5bcdc5942c5df31780bd1a4c89ba74f13f7239821a958b"
+    },
+    {
+      "id": "sample_0149",
+      "relative_path": "reference/tiny-kws/data/test_set/go/9a69672b_nohash_0.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f852720169c8c5673b518513b2b6c23f17b8df31c67d0dfe5b1eaf16cecefb91"
+    },
+    {
+      "id": "sample_0150",
+      "relative_path": "reference/tiny-kws/data/test_set/go/9a69672b_nohash_2.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "215091ed766327b1920fde6dc0026d0a7d7c815fabb613da2c55d3855f54121a"
+    },
+    {
+      "id": "sample_0151",
+      "relative_path": "reference/tiny-kws/data/test_set/go/9d171fee_nohash_1.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "399f16cec0690685d1403fbdb04bc7fc6abb4d3358ba43848125d35bc5dfcc34"
+    },
+    {
+      "id": "sample_0152",
+      "relative_path": "reference/tiny-kws/data/test_set/go/a7216980_nohash_0.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f6e4da2de8148bf802b40b76f1a0b92eb24c054f29162070f9f2eabf568d4186"
+    },
+    {
+      "id": "sample_0153",
+      "relative_path": "reference/tiny-kws/data/test_set/go/af130f12_nohash_0.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "eb6e4603004ce581306beb0a732550978ed150181e50a03a09c025281d98a73c"
+    },
+    {
+      "id": "sample_0154",
+      "relative_path": "reference/tiny-kws/data/test_set/go/af8b2f2c_nohash_1.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c6275a0bb0114e8deb9253278649efdaf4573b2507241d83737b8a0785191e18"
+    },
+    {
+      "id": "sample_0155",
+      "relative_path": "reference/tiny-kws/data/test_set/go/b1f8326d_nohash_0.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "07ebdd228c2df558c0acd03ee9b21b79588a11d71b065697e7c46ea5f21041df"
+    },
+    {
+      "id": "sample_0156",
+      "relative_path": "reference/tiny-kws/data/test_set/go/b1f8326d_nohash_2.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d4b9ffcfd88e963db096a32bd29b9c047bab398e5ab9ecee9a3eaa61e138d15a"
+    },
+    {
+      "id": "sample_0157",
+      "relative_path": "reference/tiny-kws/data/test_set/go/b737ee80_nohash_1.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d10e2aeea877ca08b3b2ed737fbfc7326fc79074a59916f5076f819570f6c484"
+    },
+    {
+      "id": "sample_0158",
+      "relative_path": "reference/tiny-kws/data/test_set/go/bb05582b_nohash_3.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a77a1d2993313e0d598ab4e60642f304eba35c3fc8553dbd1e4de68cf6c38ccc"
+    },
+    {
+      "id": "sample_0159",
+      "relative_path": "reference/tiny-kws/data/test_set/go/c9b5ff26_nohash_3.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f5cfba77e623f488ed5735b4ce99b5c73975ed5ad7e2acb04f57520a2cd31ef1"
+    },
+    {
+      "id": "sample_0160",
+      "relative_path": "reference/tiny-kws/data/test_set/go/d962e5ac_nohash_2.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "5d7d0d68c0ad41e3ef51d0f826f1a901d40a1e2a786d6f6d086cd6b8cc87f90b"
+    },
+    {
+      "id": "sample_0161",
+      "relative_path": "reference/tiny-kws/data/test_set/go/db24628d_nohash_1.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "004cdef001b354aaa6daf60873fbc2bdb2eb63eb92655c02dc0b4bcacc04d6b6"
+    },
+    {
+      "id": "sample_0162",
+      "relative_path": "reference/tiny-kws/data/test_set/go/e0c782d5_nohash_2.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "618b40762273ead800907cf2a86e719a4c1aeb6aff9ca85743a1276553578ecd"
+    },
+    {
+      "id": "sample_0163",
+      "relative_path": "reference/tiny-kws/data/test_set/go/e41a903b_nohash_3.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "acf4efe567b11fb813f0d00d6179138c369db7bf284c4315ab9738c0ecc70199"
+    },
+    {
+      "id": "sample_0164",
+      "relative_path": "reference/tiny-kws/data/test_set/go/e49428d9_nohash_3.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "18d77869a3492c4f9043084e7101c7343f09ccf6b12ad8fa4564b759379685ab"
+    },
+    {
+      "id": "sample_0165",
+      "relative_path": "reference/tiny-kws/data/test_set/go/f264e0df_nohash_1.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "199eb41da93252f93271c72916e3de2c997e41164239d7bf8d1a012cdd2d90af"
+    },
+    {
+      "id": "sample_0166",
+      "relative_path": "reference/tiny-kws/data/test_set/go/fb7eb481_nohash_0.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "145b414184aff6879eccc2c513b403d121aed9520ebe7cd302b123bae2819dd0"
+    },
+    {
+      "id": "sample_0167",
+      "relative_path": "reference/tiny-kws/data/test_set/go/fb7eb481_nohash_4.wav",
+      "label": "go",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "2348e0867079d76bb6aadc9b12042be9420e3db090c77652d2019964a55150a1"
+    },
+    {
+      "id": "sample_0168",
+      "relative_path": "reference/tiny-kws/data/test_set/left/18f8afd5_nohash_1.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "887db5d1096a4e63e31c2b8f151c8305832c5fba14b0cfcb2d4c99be814b873c"
+    },
+    {
+      "id": "sample_0169",
+      "relative_path": "reference/tiny-kws/data/test_set/left/1acc97de_nohash_0.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "eef395a65249f65e99694e7c49522bbdfb1daf330fa5005716b77f5d3ba7e0c3"
+    },
+    {
+      "id": "sample_0170",
+      "relative_path": "reference/tiny-kws/data/test_set/left/2796ac50_nohash_2.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c1ae8c8e1ccf3fed20992477b5bcb59720081d268ef4fa33628b152b27cd3e20"
+    },
+    {
+      "id": "sample_0171",
+      "relative_path": "reference/tiny-kws/data/test_set/left/283d7a53_nohash_0.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "10ea4cbd9a633742117ad58c6845828b3430b6ed289b8de9fc2422cad2ba6baf"
+    },
+    {
+      "id": "sample_0172",
+      "relative_path": "reference/tiny-kws/data/test_set/left/3efef882_nohash_2.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "5ecf9ebca59de9547d7f0ba501c7ac8bc4701218474414f6fb3422571c808d1b"
+    },
+    {
+      "id": "sample_0173",
+      "relative_path": "reference/tiny-kws/data/test_set/left/422d3197_nohash_0.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9083f363edc1b150d87cfbd0c55f7e1dde9cd66be3da1013f8f51379c216a943"
+    },
+    {
+      "id": "sample_0174",
+      "relative_path": "reference/tiny-kws/data/test_set/left/43fc47a7_nohash_0.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "8d13a36eaef7b0c38ad010da9ba2c9ab3c35ffc3edbbbf550a538219a5b43559"
+    },
+    {
+      "id": "sample_0175",
+      "relative_path": "reference/tiny-kws/data/test_set/left/48a8a69d_nohash_1.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "17928497ee09bf82ae3851e52592126541ebf2e602b4aec72a7bae6d7964151b"
+    },
+    {
+      "id": "sample_0176",
+      "relative_path": "reference/tiny-kws/data/test_set/left/4fd1443e_nohash_1.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "fa6cc58c5712cbf4b1fb29a4e8b944cbc0beadd2a8b472c92967133d8de7311a"
+    },
+    {
+      "id": "sample_0177",
+      "relative_path": "reference/tiny-kws/data/test_set/left/5b1db3ee_nohash_0.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "6ed58852c7cad58c217733516a453f3c70a0c74ceccbefba81e3629e37cb6517"
+    },
+    {
+      "id": "sample_0178",
+      "relative_path": "reference/tiny-kws/data/test_set/left/5e3dde6b_nohash_3.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "2b6840e59b2700ab53787ff6afa4b39654c4f9e8e235479e7582a31e05077827"
+    },
+    {
+      "id": "sample_0179",
+      "relative_path": "reference/tiny-kws/data/test_set/left/5f814c23_nohash_0.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "240fdd9ff3614d3e6bfe5665b555eb9db84b8a9f103cb95455e6419fef4edad8"
+    },
+    {
+      "id": "sample_0180",
+      "relative_path": "reference/tiny-kws/data/test_set/left/5f814c23_nohash_1.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f62ca14ae56632ea9536d4b552b775383f38808d5ac09a34b02003997d9b18c0"
+    },
+    {
+      "id": "sample_0181",
+      "relative_path": "reference/tiny-kws/data/test_set/left/5f814c23_nohash_2.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9bec0204f368d503511b2a6706415d95c93e7a4d79eec9da5b05db868bce88e7"
+    },
+    {
+      "id": "sample_0182",
+      "relative_path": "reference/tiny-kws/data/test_set/left/692a88e6_nohash_3.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "43ffc96c4e3a3b6f0c3d24c514ae76c427e6012a8a237c8b7d5488e7dceb5ac6"
+    },
+    {
+      "id": "sample_0183",
+      "relative_path": "reference/tiny-kws/data/test_set/left/6b889021_nohash_0.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9a9d842b54f9a88ffd9625bd717538a2f66d0030eeafe14347d217c2817d1e46"
+    },
+    {
+      "id": "sample_0184",
+      "relative_path": "reference/tiny-kws/data/test_set/left/80c45ed6_nohash_1.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a7b075441decc9038343864a9bc5f4912491762aca868d8bc52a46d586a05f9a"
+    },
+    {
+      "id": "sample_0185",
+      "relative_path": "reference/tiny-kws/data/test_set/left/83957201_nohash_0.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f60e2e93131b961cced5b55cd6fe47e1d0d5e3eaaa59019622a20d016e0a4775"
+    },
+    {
+      "id": "sample_0186",
+      "relative_path": "reference/tiny-kws/data/test_set/left/8769c34c_nohash_1.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d6d4224021b2b0e477969c14f69e0e539afd4d9017c892143f071dd214568242"
+    },
+    {
+      "id": "sample_0187",
+      "relative_path": "reference/tiny-kws/data/test_set/left/893705bb_nohash_1.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "865dd45ccd89e957928e2045ac988ebe52623c1eacf52c213a88e4d37259eb74"
+    },
+    {
+      "id": "sample_0188",
+      "relative_path": "reference/tiny-kws/data/test_set/left/893705bb_nohash_4.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "774b7ea4c65937d9ad0282365e49744c9fc1cea5a0a7dd270e863cd0ac25e017"
+    },
+    {
+      "id": "sample_0189",
+      "relative_path": "reference/tiny-kws/data/test_set/left/893705bb_nohash_8.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e4f42835432fc242919ff1ef00050946fe1134c6fb1f81c020708328091a7001"
+    },
+    {
+      "id": "sample_0190",
+      "relative_path": "reference/tiny-kws/data/test_set/left/94de6a6a_nohash_2.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9aca6fc80f8573e0022820d2cf1239b8e0ba55860d0bf9b50b4be19e162ca833"
+    },
+    {
+      "id": "sample_0191",
+      "relative_path": "reference/tiny-kws/data/test_set/left/964e8cfd_nohash_4.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ae026d35d630feba8a7ffc78d6015eba015eda01454b4fa6f9c8cad45e7cb5c6"
+    },
+    {
+      "id": "sample_0192",
+      "relative_path": "reference/tiny-kws/data/test_set/left/97f4c236_nohash_1.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c28b54d7d444423c7cfc84aade8dffe1e5e9f66f76ebcb4f539bd9b61bf95cc1"
+    },
+    {
+      "id": "sample_0193",
+      "relative_path": "reference/tiny-kws/data/test_set/left/9a69672b_nohash_4.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "2b0d9d25d7db74ddd20345ad3164d62b78f0d95d43844db8aa13f4590d25affe"
+    },
+    {
+      "id": "sample_0194",
+      "relative_path": "reference/tiny-kws/data/test_set/left/a6f2fd71_nohash_2.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "180b21321859b9138e36713cfac558fc503e035534aa911cc4c7cbd9f33069ff"
+    },
+    {
+      "id": "sample_0195",
+      "relative_path": "reference/tiny-kws/data/test_set/left/aa80f517_nohash_2.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "2ad299c1a02f84484beaca9ec749989b3389e805b3b6e545e5112962956b9442"
+    },
+    {
+      "id": "sample_0196",
+      "relative_path": "reference/tiny-kws/data/test_set/left/af7a8296_nohash_0.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "088bd79684e64916c54624904df13668dbd0451a6f554b7fdc619ddcdccd8989"
+    },
+    {
+      "id": "sample_0197",
+      "relative_path": "reference/tiny-kws/data/test_set/left/c22d3f18_nohash_1.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "1422507bf2747075b9409ae4e85f8b66a6d23bf02de8d93d741dd8cbe0e16991"
+    },
+    {
+      "id": "sample_0198",
+      "relative_path": "reference/tiny-kws/data/test_set/left/c7124b73_nohash_0.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7e09e23313eb13ecfa774eef01332302479b82a6dac62d47bab5bd0cbb9cbf27"
+    },
+    {
+      "id": "sample_0199",
+      "relative_path": "reference/tiny-kws/data/test_set/left/cd85758f_nohash_3.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "31f1d9b5513466585b53e607b3147afa9bff5d92dcbc00e05cb9ab974fd9c738"
+    },
+    {
+      "id": "sample_0200",
+      "relative_path": "reference/tiny-kws/data/test_set/left/d0faf7e4_nohash_4.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "56b13f260439993f19427ac53e0b5d1320b72b8026e76f4faf2a6c0d6f18af4a"
+    },
+    {
+      "id": "sample_0201",
+      "relative_path": "reference/tiny-kws/data/test_set/left/d5b963aa_nohash_2.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "13556a0c51fbc59139ce9da8e853d0408b5ed686063cbf0e845f0cf0200401c2"
+    },
+    {
+      "id": "sample_0202",
+      "relative_path": "reference/tiny-kws/data/test_set/left/d5b963aa_nohash_3.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a139c1547faf4599ced905bef5bdc1fad10a56f0ad49f2be55eb13c5c03e20ed"
+    },
+    {
+      "id": "sample_0203",
+      "relative_path": "reference/tiny-kws/data/test_set/left/d962e5ac_nohash_2.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "4fe31707e1a06911861e978b3986de687cb7fd38f6195da7838b68bf5be596de"
+    },
+    {
+      "id": "sample_0204",
+      "relative_path": "reference/tiny-kws/data/test_set/left/e1469561_nohash_3.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "5dc408fa0e79939650c429c87dce539b5153ff7d055333724d8f48769cf146df"
+    },
+    {
+      "id": "sample_0205",
+      "relative_path": "reference/tiny-kws/data/test_set/left/e49428d9_nohash_2.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9ec32d569f5822846bede2e9cb1d67fff469b9ade06b22e0750497a85866cea7"
+    },
+    {
+      "id": "sample_0206",
+      "relative_path": "reference/tiny-kws/data/test_set/left/f0ae7203_nohash_0.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d49137798e80d4aca1c12627af8ecc4e928878527629a102d7c88606fb840bfc"
+    },
+    {
+      "id": "sample_0207",
+      "relative_path": "reference/tiny-kws/data/test_set/left/f428ca69_nohash_0.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "6c71cfd3e6605fbcc962f0363892aa5f178477a0d457f1f63c3124ff979b4b8e"
+    },
+    {
+      "id": "sample_0208",
+      "relative_path": "reference/tiny-kws/data/test_set/left/f9643d42_nohash_4.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "bc35551bcb514c29add352ec1cf091e6ac0e16ac5462bd3cf14b0c98088429fd"
+    },
+    {
+      "id": "sample_0209",
+      "relative_path": "reference/tiny-kws/data/test_set/left/fa446c16_nohash_0.wav",
+      "label": "left",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7ed6de158561ac9535e5115d19c9c352cbb58d38649aa816b8099325301fb5bd"
+    },
+    {
+      "id": "sample_0210",
+      "relative_path": "reference/tiny-kws/data/test_set/no/0c540988_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a3a507ab136556c09a40bfbeafb9bdd0f68f49074fc83b88b570a9f6f9388763"
+    },
+    {
+      "id": "sample_0211",
+      "relative_path": "reference/tiny-kws/data/test_set/no/0cb74144_nohash_3.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "4677c1d6ada1615ffaea4c0267e7d668f737b6b2a4e51306b778317b78fafa01"
+    },
+    {
+      "id": "sample_0212",
+      "relative_path": "reference/tiny-kws/data/test_set/no/18f8afd5_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c27038ea4ccf18a960dec3838f1d7b4781f65f06432bbd572d33b3141afb37d5"
+    },
+    {
+      "id": "sample_0213",
+      "relative_path": "reference/tiny-kws/data/test_set/no/1acc97de_nohash_1.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "38c6419712a350531a0c8063b595979872c9588604e1f555e0a878b270b73a5e"
+    },
+    {
+      "id": "sample_0214",
+      "relative_path": "reference/tiny-kws/data/test_set/no/1acc97de_nohash_3.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "100847092b41a1fe5ffb03e616ab82a9d3196e01f3cac6c597c86cbece964b61"
+    },
+    {
+      "id": "sample_0215",
+      "relative_path": "reference/tiny-kws/data/test_set/no/1b4c9b89_nohash_4.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "caed902651c763e3763f928f16041f73d829d826cb8ab0ae524bdb2b87cc4072"
+    },
+    {
+      "id": "sample_0216",
+      "relative_path": "reference/tiny-kws/data/test_set/no/1fe4c891_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "1343c59d076195d82a5ae71766c938a29da1ec46733ef530203c03274f28de3a"
+    },
+    {
+      "id": "sample_0217",
+      "relative_path": "reference/tiny-kws/data/test_set/no/27c30960_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "6ba75add2bb4108d17ea4310730dbad9947a111827dc22d10f961a63869114ad"
+    },
+    {
+      "id": "sample_0218",
+      "relative_path": "reference/tiny-kws/data/test_set/no/2c6d3924_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "76b8e174bcef43e66c674c0e8c2914066d6ea772f60b7d3e2f97cf5582a0c269"
+    },
+    {
+      "id": "sample_0219",
+      "relative_path": "reference/tiny-kws/data/test_set/no/3b4f8f24_nohash_1.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "1425461b572dc4b797b9995937818424e280fb280c63ca7d2c48e4b20df4b32b"
+    },
+    {
+      "id": "sample_0220",
+      "relative_path": "reference/tiny-kws/data/test_set/no/3d86b69a_nohash_2.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "20a00ecc1edb56eef17c537aa77178415dd9812dedcadb7055552445fe1b9557"
+    },
+    {
+      "id": "sample_0221",
+      "relative_path": "reference/tiny-kws/data/test_set/no/4fd1443e_nohash_3.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a6d0bced92012846a99a9fe72ab6dc4511335156a801d65a3f68606ae8769734"
+    },
+    {
+      "id": "sample_0222",
+      "relative_path": "reference/tiny-kws/data/test_set/no/5170b77f_nohash_2.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e5028b82b31b675bda9884316dff56d7f6b0bacede1bd934425075ca5f6cbc92"
+    },
+    {
+      "id": "sample_0223",
+      "relative_path": "reference/tiny-kws/data/test_set/no/563aa4e6_nohash_2.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "19fcc788ebb4c00507b6e56b635c1bfeb5e448374089dc1f65d958e56da99283"
+    },
+    {
+      "id": "sample_0224",
+      "relative_path": "reference/tiny-kws/data/test_set/no/5ff3f9a1_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "531274585fa0c9a1c0611420e0d5ae12ccdfa3e2631178d8bce1ba0b17f05219"
+    },
+    {
+      "id": "sample_0225",
+      "relative_path": "reference/tiny-kws/data/test_set/no/653a48f5_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d1919edbf909ebc48f4b5ce354aa964448dff92f9002c8b51ef3a62551429086"
+    },
+    {
+      "id": "sample_0226",
+      "relative_path": "reference/tiny-kws/data/test_set/no/692a88e6_nohash_4.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "178a7aec766af3da180569bae9eb2e10c8cd66af2adfcb50d19b91d04d8eef0a"
+    },
+    {
+      "id": "sample_0227",
+      "relative_path": "reference/tiny-kws/data/test_set/no/6e916de8_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ad894cd91c0e5d64de3ead12e181385278888e5c5cd66b40e47e885be35c0cfc"
+    },
+    {
+      "id": "sample_0228",
+      "relative_path": "reference/tiny-kws/data/test_set/no/84d1e469_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "2f265e7fc9dc42701cdd98f501469d506464666430c67c1de2d439a27cdbe08b"
+    },
+    {
+      "id": "sample_0229",
+      "relative_path": "reference/tiny-kws/data/test_set/no/881583a6_nohash_1.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "12b2400ef24bbee03f98650185734dd97b5efea8a64abc04479871f640e4f6bb"
+    },
+    {
+      "id": "sample_0230",
+      "relative_path": "reference/tiny-kws/data/test_set/no/881583a6_nohash_2.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d2178546abc65d36cb2e4388b8806518fce8568e62e81f9e503000b6ccabf4f8"
+    },
+    {
+      "id": "sample_0231",
+      "relative_path": "reference/tiny-kws/data/test_set/no/8a325749_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "59e53934da28c180347b26dae2e0faa1167ffde338cbd3f1aaef53fe637a9e40"
+    },
+    {
+      "id": "sample_0232",
+      "relative_path": "reference/tiny-kws/data/test_set/no/964e8cfd_nohash_2.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "cfd6aeb3a9701a92cb112a46d9b50949b8c9e92d71953361cf4645a5f530510f"
+    },
+    {
+      "id": "sample_0233",
+      "relative_path": "reference/tiny-kws/data/test_set/no/9a69672b_nohash_4.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "fd4806aa85bc59fba601ec46e650d02c18a3db82380c678342ed0602c8b74cd8"
+    },
+    {
+      "id": "sample_0234",
+      "relative_path": "reference/tiny-kws/data/test_set/no/9a7c1f83_nohash_2.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9dea7853e350314ec78f8f3a337ace368333d8e2635c3c3abbcd533c3d2294f3"
+    },
+    {
+      "id": "sample_0235",
+      "relative_path": "reference/tiny-kws/data/test_set/no/a6f2fd71_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7f002b600e6b44d8b60176716f9e8ac6a7e8d939e63d651d3ce88796f60896c0"
+    },
+    {
+      "id": "sample_0236",
+      "relative_path": "reference/tiny-kws/data/test_set/no/a6f2fd71_nohash_2.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "34b69af69ba4cc8c6591078637579803f1427b4af8c8e49b73614f06c93c9ff0"
+    },
+    {
+      "id": "sample_0237",
+      "relative_path": "reference/tiny-kws/data/test_set/no/aa233654_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "cd70e6295c3e9feacaa5aef8011ca7ff669e0bfd9f96c0eefc38920b7799a194"
+    },
+    {
+      "id": "sample_0238",
+      "relative_path": "reference/tiny-kws/data/test_set/no/aa80f517_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "46af55b4bc05c00dde2fc2eb8178e88875d4dff994cad8e601ef01feea066198"
+    },
+    {
+      "id": "sample_0239",
+      "relative_path": "reference/tiny-kws/data/test_set/no/aa80f517_nohash_2.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "111d6dbf97a5b4245cb917186e7c61e192194fd494d136bc0982bf2959501437"
+    },
+    {
+      "id": "sample_0240",
+      "relative_path": "reference/tiny-kws/data/test_set/no/af405b69_nohash_2.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "561c0a2754fedc78e9b2e2d96fd6a0b10118dbfab1ead84518d90f65e0eb8001"
+    },
+    {
+      "id": "sample_0241",
+      "relative_path": "reference/tiny-kws/data/test_set/no/b97c9f77_nohash_4.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "99febd3fd54c479fb9e385d04bc961cecea7a0c4072666e88f74ce84ac761151"
+    },
+    {
+      "id": "sample_0242",
+      "relative_path": "reference/tiny-kws/data/test_set/no/bb05582b_nohash_4.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "4830679bd50c9e56021cb66a9abfb09a002273a77d4959cb565da084b559e463"
+    },
+    {
+      "id": "sample_0243",
+      "relative_path": "reference/tiny-kws/data/test_set/no/c22d3f18_nohash_2.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "5d411ca70bd8b3da609f3d24adf9b202c271e6f69c5087abcd2254df3afd7255"
+    },
+    {
+      "id": "sample_0244",
+      "relative_path": "reference/tiny-kws/data/test_set/no/c22d3f18_nohash_3.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a433b8f69323fa5494a239c66fa3650fdb8df571c2a266db4915499471ffc575"
+    },
+    {
+      "id": "sample_0245",
+      "relative_path": "reference/tiny-kws/data/test_set/no/c7dc7278_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c6b600b0c279d6488f2d97b72f33dd4781da76ce584fbadaf2ebbd7a9ae77bca"
+    },
+    {
+      "id": "sample_0246",
+      "relative_path": "reference/tiny-kws/data/test_set/no/d0faf7e4_nohash_1.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "84bf906f26cb9590a08206a9ed65a00de9f704780251102f618e5603d0ee91e2"
+    },
+    {
+      "id": "sample_0247",
+      "relative_path": "reference/tiny-kws/data/test_set/no/d5b963aa_nohash_3.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d0499d39555808f83ea34a7ddc2edf17d2a4c3c09c75f4b0e373a4533362ab25"
+    },
+    {
+      "id": "sample_0248",
+      "relative_path": "reference/tiny-kws/data/test_set/no/db24628d_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ca24af3ab64d503d7d489f3c5d6a1554aa692f631fd40dbaa5ecc91c6d9db6a8"
+    },
+    {
+      "id": "sample_0249",
+      "relative_path": "reference/tiny-kws/data/test_set/no/e49428d9_nohash_0.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "109dd27a48f3ec5c2e635c1294d979df0523e40c9300aa4b14a24ec287ae473d"
+    },
+    {
+      "id": "sample_0250",
+      "relative_path": "reference/tiny-kws/data/test_set/no/f2e59fea_nohash_4.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "eec50620bf3b11bc0115fb5efa4f8e5724c7a1d1f891a4236b17c0d7d6c6199f"
+    },
+    {
+      "id": "sample_0251",
+      "relative_path": "reference/tiny-kws/data/test_set/no/f9643d42_nohash_1.wav",
+      "label": "no",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f5dea2a1230a44737c160ea6852b029b89f4d059d6aa6c45e3cd09facb736306"
+    },
+    {
+      "id": "sample_0252",
+      "relative_path": "reference/tiny-kws/data/test_set/off/0cb74144_nohash_4.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "da368571cc4c4121b6f19d25de5dd34a3f06ba51c82df6e0900d900813328dbd"
+    },
+    {
+      "id": "sample_0253",
+      "relative_path": "reference/tiny-kws/data/test_set/off/0d53e045_nohash_0.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "6aeee7db50779258fa32fd9bf20248e7c5ef59fdec00c04a7cde31f9298b5965"
+    },
+    {
+      "id": "sample_0254",
+      "relative_path": "reference/tiny-kws/data/test_set/off/0f250098_nohash_0.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "1232b71b5030545ee5521dc0d055090d29987f0179532e973adcb81662a50598"
+    },
+    {
+      "id": "sample_0255",
+      "relative_path": "reference/tiny-kws/data/test_set/off/1b4c9b89_nohash_1.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "825761db11fd5532639d8b80e50d1c5fdad8caeb368271a0265bfd5dfbdbb1ff"
+    },
+    {
+      "id": "sample_0256",
+      "relative_path": "reference/tiny-kws/data/test_set/off/210f3aa9_nohash_0.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "cecf1c027a54b17ded32dcd4514e08fa37c7f0e9141b49f6cd3e1a34305f1874"
+    },
+    {
+      "id": "sample_0257",
+      "relative_path": "reference/tiny-kws/data/test_set/off/37dca74f_nohash_1.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "78ee023b7a73a1b1f45c9aee4feaf358b329af125eeb0cfde0dc03591bacd661"
+    },
+    {
+      "id": "sample_0258",
+      "relative_path": "reference/tiny-kws/data/test_set/off/4620dc14_nohash_1.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "decf1b4a02bca23fc7a9f7a8142486b1d248ea20399c91c3a6d685e97e6a9f67"
+    },
+    {
+      "id": "sample_0259",
+      "relative_path": "reference/tiny-kws/data/test_set/off/4c6167ca_nohash_1.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "911fc1f01eeb6be5922be5f1d3ab8e8488ed78ac5b463adc6928a09897a99c85"
+    },
+    {
+      "id": "sample_0260",
+      "relative_path": "reference/tiny-kws/data/test_set/off/4c6167ca_nohash_3.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "01619b87cd4d273b7192006e9f9b06a84db4fe2c1882539572b2366952fe1929"
+    },
+    {
+      "id": "sample_0261",
+      "relative_path": "reference/tiny-kws/data/test_set/off/563aa4e6_nohash_1.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9c8b98bf83ab5cbc594143db8a02411db8b3fdd9f1178e9ef674f50fe77b98a3"
+    },
+    {
+      "id": "sample_0262",
+      "relative_path": "reference/tiny-kws/data/test_set/off/653a48f5_nohash_0.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "b1803ff4111444d68729beaedcee26f03465776280ec7bc1e6670a1d8bf2174f"
+    },
+    {
+      "id": "sample_0263",
+      "relative_path": "reference/tiny-kws/data/test_set/off/8056e897_nohash_0.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "68933b1d0338b9a68fc87ae9f334a7b45a186367d16d18389adbeba8e69dd0ac"
+    },
+    {
+      "id": "sample_0264",
+      "relative_path": "reference/tiny-kws/data/test_set/off/81dc4a94_nohash_2.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f9c64ebc3fa13b7bc0c7c7879254cab0fdd1cf96e35ccc0d7868bc7430659420"
+    },
+    {
+      "id": "sample_0265",
+      "relative_path": "reference/tiny-kws/data/test_set/off/82b99576_nohash_0.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "3204f7d07f1d4bb6f37ca58876eea6f92dbab62b14e0c064d32ad8b3a26d3302"
+    },
+    {
+      "id": "sample_0266",
+      "relative_path": "reference/tiny-kws/data/test_set/off/84d1e469_nohash_0.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "26edf98217ee9c36a0ced7c2dd21b8f5cf808f449963b29a261d91bdcfb39626"
+    },
+    {
+      "id": "sample_0267",
+      "relative_path": "reference/tiny-kws/data/test_set/off/8769c34c_nohash_4.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "884b899fe7c811bcd56ac130daf2a0dacc707022867fadbf5d9f97b0d541bca4"
+    },
+    {
+      "id": "sample_0268",
+      "relative_path": "reference/tiny-kws/data/test_set/off/893705bb_nohash_2.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "11b72d3e6a8bba8757451f3e4935ecf7041834056beda97c51163e6909575267"
+    },
+    {
+      "id": "sample_0269",
+      "relative_path": "reference/tiny-kws/data/test_set/off/8a325749_nohash_0.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "94dfb1352ecd4c3d3944b79d60eae49f9f7306147c3ed7681f697cce25775b54"
+    },
+    {
+      "id": "sample_0270",
+      "relative_path": "reference/tiny-kws/data/test_set/off/8c7f81df_nohash_1.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "5d990869d795aa80fc5e904835f6d438a7561b119dfdae95067edf2a9aa26978"
+    },
+    {
+      "id": "sample_0271",
+      "relative_path": "reference/tiny-kws/data/test_set/off/8fe67225_nohash_2.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "abedb2c019cc651d98ff15917589ea487181c472fd9e992ae395b9c6b92e890c"
+    },
+    {
+      "id": "sample_0272",
+      "relative_path": "reference/tiny-kws/data/test_set/off/8fe67225_nohash_4.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "321be0475940d9dc5ce09c011309a53d6b167b916e19a04e9ec7373309c0efe6"
+    },
+    {
+      "id": "sample_0273",
+      "relative_path": "reference/tiny-kws/data/test_set/off/97f4c236_nohash_0.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "8da7471918ff745ae06613d98ffaa35e23b7f48a0f119bda96715517beb48d24"
+    },
+    {
+      "id": "sample_0274",
+      "relative_path": "reference/tiny-kws/data/test_set/off/a4383927_nohash_3.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7ad51bb941b5a6c4f4325d776abfd386f7d5021a3474fed1780ea53e494ef587"
+    },
+    {
+      "id": "sample_0275",
+      "relative_path": "reference/tiny-kws/data/test_set/off/a591c2ea_nohash_1.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e6b0f0fd900465501e077f90aa5b4fcf686a10147bdebe77be21f67706880ef5"
+    },
+    {
+      "id": "sample_0276",
+      "relative_path": "reference/tiny-kws/data/test_set/off/a8e25ebb_nohash_0.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "6277e963587e1b7dd641c5da46ca8fd720aae04659e71138f28720033d7c15eb"
+    },
+    {
+      "id": "sample_0277",
+      "relative_path": "reference/tiny-kws/data/test_set/off/aa48c94a_nohash_0.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "363a07882cd2217f04c995df298d669975b0a7dcbf7c52e2d852cf880c1d8966"
+    },
+    {
+      "id": "sample_0278",
+      "relative_path": "reference/tiny-kws/data/test_set/off/aa80f517_nohash_4.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9b22d2e667517ad99e61827527d9bd95ef03a58d391e85a74e58f163ed79566f"
+    },
+    {
+      "id": "sample_0279",
+      "relative_path": "reference/tiny-kws/data/test_set/off/af130f12_nohash_1.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "388def4f6cda121508167f5e7a6f1156e645fbc45beaf6bcd647248a0b9c738c"
+    },
+    {
+      "id": "sample_0280",
+      "relative_path": "reference/tiny-kws/data/test_set/off/b83c1acf_nohash_2.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "8d222f4a6fdb7e7b6ccbc273501afb9e6031ce289ecbc5a746f75215dd167c0b"
+    },
+    {
+      "id": "sample_0281",
+      "relative_path": "reference/tiny-kws/data/test_set/off/b97c9f77_nohash_1.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "2423d290e9d927cb2c6abc72ad3f31941476d07c5515e71c7d3aca059a218d72"
+    },
+    {
+      "id": "sample_0282",
+      "relative_path": "reference/tiny-kws/data/test_set/off/bb31b82b_nohash_1.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "424d21c1d0562e53c1d36997f569e595de29ef0e9762393a41bc2e07e2b8d986"
+    },
+    {
+      "id": "sample_0283",
+      "relative_path": "reference/tiny-kws/data/test_set/off/c7dc7278_nohash_0.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "79b3e6bd48b5df24126965702a526682399b7165da2d2c8748dc27ca2f426c29"
+    },
+    {
+      "id": "sample_0284",
+      "relative_path": "reference/tiny-kws/data/test_set/off/c7dc7278_nohash_4.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ff47363d5a8e1bff276863bdf3293a4d2ec5fbee1d28bc88fbcba40a987675c5"
+    },
+    {
+      "id": "sample_0285",
+      "relative_path": "reference/tiny-kws/data/test_set/off/caedb73a_nohash_0.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "3ecb77ff44acbb016a3d2e643784994e5c645d3c9ce480bf708e550947c9c71f"
+    },
+    {
+      "id": "sample_0286",
+      "relative_path": "reference/tiny-kws/data/test_set/off/caedb73a_nohash_1.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "53628ab9aec4601e65cf6c5866fd83a5f6aa868fe0f916a8eb2cdf2470c10b4e"
+    },
+    {
+      "id": "sample_0287",
+      "relative_path": "reference/tiny-kws/data/test_set/off/cc592808_nohash_0.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d4a356eaba379d26128a4ad73b454c30082f543298454eb6525cdbee98cbe913"
+    },
+    {
+      "id": "sample_0288",
+      "relative_path": "reference/tiny-kws/data/test_set/off/d0faf7e4_nohash_1.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "47e5a155b1937bfd94e05dfa3e13e19ef8dcfe665fc41084e43fe8beeb794c83"
+    },
+    {
+      "id": "sample_0289",
+      "relative_path": "reference/tiny-kws/data/test_set/off/d0faf7e4_nohash_2.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "108b76583f25e248a29a3975ee22fefd1991199d46dfa52cc64cfd9f5407b75c"
+    },
+    {
+      "id": "sample_0290",
+      "relative_path": "reference/tiny-kws/data/test_set/off/e0c782d5_nohash_1.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "8b832c03965c30835cb7c4c701009df7ff35efceb4b1ec2ed0a7321b70055297"
+    },
+    {
+      "id": "sample_0291",
+      "relative_path": "reference/tiny-kws/data/test_set/off/fb7eb481_nohash_1.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "6b612a224ae63e173ec197275e9725fd2bfa002ae4044ea1849ae91c62fde07d"
+    },
+    {
+      "id": "sample_0292",
+      "relative_path": "reference/tiny-kws/data/test_set/off/ffa76c4a_nohash_2.wav",
+      "label": "off",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "33eeedb9c5938bbdb1e018f9f30573d4cf2f3b86d87bf819a566e9b1f4599409"
+    },
+    {
+      "id": "sample_0293",
+      "relative_path": "reference/tiny-kws/data/test_set/on/0cb74144_nohash_2.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7753c5479c7a0938c867a48a602bd0a1252e3ae1b8011d68e3c76183d3d8acb4"
+    },
+    {
+      "id": "sample_0294",
+      "relative_path": "reference/tiny-kws/data/test_set/on/0ea0e2f4_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "3eb12c81ab13cebbce45ab30982e043771c0345bb6e5968f9706406eeb0c0579"
+    },
+    {
+      "id": "sample_0295",
+      "relative_path": "reference/tiny-kws/data/test_set/on/0fa1e7a9_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "4060ae758052b1e99e9faaec40351a6aa94fe9f74c6b87a919a5e3c22cb2bd28"
+    },
+    {
+      "id": "sample_0296",
+      "relative_path": "reference/tiny-kws/data/test_set/on/18f8afd5_nohash_4.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "5ca90a133a33f2b2c959c4fa62daa950718f63c0383987f6e13d524634575fc2"
+    },
+    {
+      "id": "sample_0297",
+      "relative_path": "reference/tiny-kws/data/test_set/on/1b4c9b89_nohash_4.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ff72666a48de520af998ef359708d0e4c24e585e45e1811dceb7b8bbfb67f2db"
+    },
+    {
+      "id": "sample_0298",
+      "relative_path": "reference/tiny-kws/data/test_set/on/1f3bece8_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "095b76763c3b126a4415c4405bfdb49c1af39ef383946c3cf38f7dc66d89ef83"
+    },
+    {
+      "id": "sample_0299",
+      "relative_path": "reference/tiny-kws/data/test_set/on/2fa39636_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "09100b3b01c568ef52d5bfd82efded940d253b978b7a417bc863e74bcbef4b7e"
+    },
+    {
+      "id": "sample_0300",
+      "relative_path": "reference/tiny-kws/data/test_set/on/370844f7_nohash_1.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "23c9b90f0a51d2a5edbd1eb6ef025ba87ae04025b818488da66c5cabe986b4e5"
+    },
+    {
+      "id": "sample_0301",
+      "relative_path": "reference/tiny-kws/data/test_set/on/3b4f8f24_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e026e0b6679e9bb6a5a8a33d0df77aaeba4dcb42eccbb74b4596bfbc14cd357c"
+    },
+    {
+      "id": "sample_0302",
+      "relative_path": "reference/tiny-kws/data/test_set/on/4a0e2c16_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "166ebfb66be86b99da8ea24014c9521f03d6fd845329d67a3bb1f82c25b9f9a2"
+    },
+    {
+      "id": "sample_0303",
+      "relative_path": "reference/tiny-kws/data/test_set/on/4f8ef132_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "4d7c7544640fd4a439273e2f8528d8e6f2478e84ad33f26bf65c5503456ae1d9"
+    },
+    {
+      "id": "sample_0304",
+      "relative_path": "reference/tiny-kws/data/test_set/on/5170b77f_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "b71c161af5e7897267685111bff9349490cb2093e06ecf50ab72a86d00a0c414"
+    },
+    {
+      "id": "sample_0305",
+      "relative_path": "reference/tiny-kws/data/test_set/on/5eb5fc74_nohash_1.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "67b1e6988734f9397f439ad437fc69a6f18b1993dd1cfed7b96ae05b0f389af2"
+    },
+    {
+      "id": "sample_0306",
+      "relative_path": "reference/tiny-kws/data/test_set/on/5f01c798_nohash_1.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "85ca7e5822b3e06305c5678640fe9abd4a41240980161e280272b23be86fb309"
+    },
+    {
+      "id": "sample_0307",
+      "relative_path": "reference/tiny-kws/data/test_set/on/653a48f5_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "54336a67ef7db4196debbeec478be4239c0317d677b10cb2bc65cea786ae5eb6"
+    },
+    {
+      "id": "sample_0308",
+      "relative_path": "reference/tiny-kws/data/test_set/on/692a88e6_nohash_1.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "0034e9daf989de52db978d0aa4cc039745d7f2065a92b67be25e4a7a465a7948"
+    },
+    {
+      "id": "sample_0309",
+      "relative_path": "reference/tiny-kws/data/test_set/on/692a88e6_nohash_3.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "0dff11c0bf102721b6f28b72bbc85bd117d822432ba749ceeebdba376ce4618d"
+    },
+    {
+      "id": "sample_0310",
+      "relative_path": "reference/tiny-kws/data/test_set/on/7257420c_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "67f0286d87b6094b2520d4a5cf74431a5e7550997e9111c3a0fbd57b53432026"
+    },
+    {
+      "id": "sample_0311",
+      "relative_path": "reference/tiny-kws/data/test_set/on/7dc95912_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "223133c55402c3f4433a2bb027db8ac16915f1a5659db791ef1933657f1b2ebb"
+    },
+    {
+      "id": "sample_0312",
+      "relative_path": "reference/tiny-kws/data/test_set/on/837a0f64_nohash_2.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "3b448d262eb0e9a93e21526129a2929bc771b8f4f8a07f9396d6640520e88828"
+    },
+    {
+      "id": "sample_0313",
+      "relative_path": "reference/tiny-kws/data/test_set/on/840c366d_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "b3c0b30817beb4eeb8d08c2977a1993f7d0c627491a156edf01d288e30d58056"
+    },
+    {
+      "id": "sample_0314",
+      "relative_path": "reference/tiny-kws/data/test_set/on/840c366d_nohash_1.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "1a66db474b7c1f2837219765aafde21445721da05b69709a81e6ceaa90092052"
+    },
+    {
+      "id": "sample_0315",
+      "relative_path": "reference/tiny-kws/data/test_set/on/87070229_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "35fb2ab5e92e7200bd8c2764617eaef2e63e9384c13db475d40b319fff13dfb9"
+    },
+    {
+      "id": "sample_0316",
+      "relative_path": "reference/tiny-kws/data/test_set/on/8769c34c_nohash_4.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "def5caaae2fea34cbea2c105e1b0a0b526af8fc96821691dc656c67d8d1f646e"
+    },
+    {
+      "id": "sample_0317",
+      "relative_path": "reference/tiny-kws/data/test_set/on/893705bb_nohash_4.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ddbe75ee9c72df79cec6213c90342848d8cb3cf23fb7e5147211784b68ba5fdf"
+    },
+    {
+      "id": "sample_0318",
+      "relative_path": "reference/tiny-kws/data/test_set/on/8ea6dec6_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f1a243bc6fe3bc0441ccbc435edc3abc3a3f192b880ace6576c3793eb320e7ee"
+    },
+    {
+      "id": "sample_0319",
+      "relative_path": "reference/tiny-kws/data/test_set/on/964e8cfd_nohash_4.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "5b73ee62875235d4dc717ef76bf92f6090161af489080ddc9a8c3e67aefddbee"
+    },
+    {
+      "id": "sample_0320",
+      "relative_path": "reference/tiny-kws/data/test_set/on/9a7c1f83_nohash_1.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "42ea85bd0d6bb57fb51fae06b03c92ad541238598dbe50e439358e12bbac0c4e"
+    },
+    {
+      "id": "sample_0321",
+      "relative_path": "reference/tiny-kws/data/test_set/on/9a7c1f83_nohash_4.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "42ea85bd0d6bb57fb51fae06b03c92ad541238598dbe50e439358e12bbac0c4e"
+    },
+    {
+      "id": "sample_0322",
+      "relative_path": "reference/tiny-kws/data/test_set/on/9a7c1f83_nohash_6.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "bddc8eb96a5a5ad35392d2f39904096a43abe8c018baa2b5b5da4e55e3772552"
+    },
+    {
+      "id": "sample_0323",
+      "relative_path": "reference/tiny-kws/data/test_set/on/a60a09cf_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "137a6d7850becc1dc5501bc687524e45db2705e6c3882d48e2f32579c21e0018"
+    },
+    {
+      "id": "sample_0324",
+      "relative_path": "reference/tiny-kws/data/test_set/on/bb05582b_nohash_2.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "cf9ab48788785be9ff7734bfd099c670dda3c68666250df65c70b70e583e600a"
+    },
+    {
+      "id": "sample_0325",
+      "relative_path": "reference/tiny-kws/data/test_set/on/bfd26d6b_nohash_3.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d0f608787344920232ab860c07506f675434f223b7c8217a95b14e2ec97a3a41"
+    },
+    {
+      "id": "sample_0326",
+      "relative_path": "reference/tiny-kws/data/test_set/on/c22d3f18_nohash_2.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "125788cfc693793d944471947eaa542f5572767583f75955288216643327c3e4"
+    },
+    {
+      "id": "sample_0327",
+      "relative_path": "reference/tiny-kws/data/test_set/on/ca4d5368_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d503a99ccab25862f55c1a1da999fe3a580fa54ff2af52980570b83a2a16b208"
+    },
+    {
+      "id": "sample_0328",
+      "relative_path": "reference/tiny-kws/data/test_set/on/ca4d5368_nohash_3.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "23d3947a9eb592cccead4a5afa6acfdefc571ef6765ac047cf7ce593b581eb31"
+    },
+    {
+      "id": "sample_0329",
+      "relative_path": "reference/tiny-kws/data/test_set/on/d5b963aa_nohash_2.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a6ea8a6b3169b2dc6d1cb7a5a02442bf77f00cee3227273854f79ea781dfdf71"
+    },
+    {
+      "id": "sample_0330",
+      "relative_path": "reference/tiny-kws/data/test_set/on/d962e5ac_nohash_2.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "63dfe06bbdacb7c0817312cfada4b3795555917445d948e564470c8f5df57282"
+    },
+    {
+      "id": "sample_0331",
+      "relative_path": "reference/tiny-kws/data/test_set/on/e41a903b_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7c4796cf8998fd1f4854464e2c5307afd17908bcc36237d214a42fed206f060f"
+    },
+    {
+      "id": "sample_0332",
+      "relative_path": "reference/tiny-kws/data/test_set/on/f2e59fea_nohash_0.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "042a75fddbf86243353fdee9afe27afb71018dcc908269bb9238f117444234b1"
+    },
+    {
+      "id": "sample_0333",
+      "relative_path": "reference/tiny-kws/data/test_set/on/fb7eb481_nohash_4.wav",
+      "label": "on",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "494e2a3d65957a000dcb7291d05cf15ad8dd61b0c0a14def921f8744309e7e23"
+    },
+    {
+      "id": "sample_0334",
+      "relative_path": "reference/tiny-kws/data/test_set/right/03401e93_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "45a65277e711b93640eb48e1aa425be40c6d3423591cfa05bc4c7f50f6856db3"
+    },
+    {
+      "id": "sample_0335",
+      "relative_path": "reference/tiny-kws/data/test_set/right/0f250098_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "6db2bc48b12db3bf2d9572a1aa464a45c66eb3ba648ee0887f6871b80d487c83"
+    },
+    {
+      "id": "sample_0336",
+      "relative_path": "reference/tiny-kws/data/test_set/right/1acc97de_nohash_1.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "712cde788caa35d41de69e48c794521c3edf1241dbf08afe33bc6f0e94d2a732"
+    },
+    {
+      "id": "sample_0337",
+      "relative_path": "reference/tiny-kws/data/test_set/right/1acc97de_nohash_2.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "2f7b908b3ce565cc4b4ea412cd768e4fb7abbf60abc1c29b05d16f3afd223b8b"
+    },
+    {
+      "id": "sample_0338",
+      "relative_path": "reference/tiny-kws/data/test_set/right/1f653d27_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "6295349718fb7078f7ab04ea8d27bfae86e39f7223f00603f819626049460c32"
+    },
+    {
+      "id": "sample_0339",
+      "relative_path": "reference/tiny-kws/data/test_set/right/2005ca25_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "53765325a4d7f7f0324df2645d885d9b24f7e9b3294b1e3ad748f6ef46520472"
+    },
+    {
+      "id": "sample_0340",
+      "relative_path": "reference/tiny-kws/data/test_set/right/37dca74f_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "6647207a39f32a82cbf7e993a4368b6f55ad7b15bc56082661b6035fe0e5dbf0"
+    },
+    {
+      "id": "sample_0341",
+      "relative_path": "reference/tiny-kws/data/test_set/right/37fc5d97_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "0386c5a65036b157524718ce173b7b082991cbf0ecaacdaffb8ae948fe23eaeb"
+    },
+    {
+      "id": "sample_0342",
+      "relative_path": "reference/tiny-kws/data/test_set/right/5eb5fc74_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9ab31516a1113761f449f71ccf32e8a075f8e47037516cc377f71f7951949569"
+    },
+    {
+      "id": "sample_0343",
+      "relative_path": "reference/tiny-kws/data/test_set/right/63f7a489_nohash_3.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9fdd201ffcfc424553f2b5bcbcbb81b45fa1c5e4f24a940f1bccd8a8fc389bf7"
+    },
+    {
+      "id": "sample_0344",
+      "relative_path": "reference/tiny-kws/data/test_set/right/7192fddc_nohash_1.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "cd557684eb3b65227b8ba7ac3cb239bd6c3f63402b6252f8a52660eee840f14e"
+    },
+    {
+      "id": "sample_0345",
+      "relative_path": "reference/tiny-kws/data/test_set/right/7257420c_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "bc9abc062698f5428a3e64a3604f94e678ef7f212bad396155ed2129e2d291c5"
+    },
+    {
+      "id": "sample_0346",
+      "relative_path": "reference/tiny-kws/data/test_set/right/837a0f64_nohash_1.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "3ffa2e0ab7e65a479c2e97716057a2b1f110dc40d5173673a903647a62322b63"
+    },
+    {
+      "id": "sample_0347",
+      "relative_path": "reference/tiny-kws/data/test_set/right/8769c34c_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "cc3952736c013cfaeda7b7bb4daa7cbd4b426aeb21f18692b506f59fb29be653"
+    },
+    {
+      "id": "sample_0348",
+      "relative_path": "reference/tiny-kws/data/test_set/right/8c7f81df_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "630983bc276515aed95c64877d0659548037e2a3bec1bb3e938d9ba00a67700c"
+    },
+    {
+      "id": "sample_0349",
+      "relative_path": "reference/tiny-kws/data/test_set/right/91b03183_nohash_2.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "8e3e87ea4048ffcb44438073847d4bf9280d59b1847226201451748007f02467"
+    },
+    {
+      "id": "sample_0350",
+      "relative_path": "reference/tiny-kws/data/test_set/right/94de6a6a_nohash_3.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ff9521540091d5cc6991c29e18f389ff472b89a7cbfccdd234bd321c5423afe7"
+    },
+    {
+      "id": "sample_0351",
+      "relative_path": "reference/tiny-kws/data/test_set/right/964e8cfd_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "df0a1b3c4532529da6f8fa2697fb5cbf173ff8375e3b0f13b993e6bd0e982e81"
+    },
+    {
+      "id": "sample_0352",
+      "relative_path": "reference/tiny-kws/data/test_set/right/9a7c1f83_nohash_1.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "87ca0eccb5fc1e8dee7eb162985ae7f5170b3b64f9ea9ddc54a30cc25f2d47af"
+    },
+    {
+      "id": "sample_0353",
+      "relative_path": "reference/tiny-kws/data/test_set/right/a6f2fd71_nohash_2.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "aa4c42d014ad8913511a711fa9446a6e339e685ff8d0df32b974032b51d81222"
+    },
+    {
+      "id": "sample_0354",
+      "relative_path": "reference/tiny-kws/data/test_set/right/a7216980_nohash_3.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "07d241aef2f0039952324ef22033c4d40d3b40ea110853e369a5f6a21334cc37"
+    },
+    {
+      "id": "sample_0355",
+      "relative_path": "reference/tiny-kws/data/test_set/right/af405b69_nohash_1.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "46c69c181d728013fc247ab249f22b47e76c24a79d87dee50ffee328e279bd7e"
+    },
+    {
+      "id": "sample_0356",
+      "relative_path": "reference/tiny-kws/data/test_set/right/b11a05d2_nohash_1.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d128981ad2bdc0e27762279c3b6e777cc705df49782002428554c9ede896e3b6"
+    },
+    {
+      "id": "sample_0357",
+      "relative_path": "reference/tiny-kws/data/test_set/right/beb458a4_nohash_4.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e355ab62ac6a6dbeca80f8e04ba0851d932b784502ce560d00dbd2441a8af6a2"
+    },
+    {
+      "id": "sample_0358",
+      "relative_path": "reference/tiny-kws/data/test_set/right/bfd26d6b_nohash_1.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "fbb157c1a2b56cac75a77d2745911d34b1a69f7ad2f63c99190f05bfef466da4"
+    },
+    {
+      "id": "sample_0359",
+      "relative_path": "reference/tiny-kws/data/test_set/right/bfd26d6b_nohash_3.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "73033f0c8e3542a4c1c9492e75417a919c72bf65cec424592ff3b69450428411"
+    },
+    {
+      "id": "sample_0360",
+      "relative_path": "reference/tiny-kws/data/test_set/right/c7dc7278_nohash_3.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "df56453a72596e71ae5272c50d9cb1a1f9ced7095bb50c829c335268f503b45d"
+    },
+    {
+      "id": "sample_0361",
+      "relative_path": "reference/tiny-kws/data/test_set/right/ca4d5368_nohash_3.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "703419c6d51d77c8c95a8a36049a064bfed14354bca4e04575dfd40c8bb72988"
+    },
+    {
+      "id": "sample_0362",
+      "relative_path": "reference/tiny-kws/data/test_set/right/caedb73a_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "177d6ff9143b59c26908a73793698d17fea34e6393a94f251d8f3e5f63915023"
+    },
+    {
+      "id": "sample_0363",
+      "relative_path": "reference/tiny-kws/data/test_set/right/cc592808_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "5577d2bc91d52a4b9c8565721d1522d83e63050f7474ecd27e9b112b68a5b5a1"
+    },
+    {
+      "id": "sample_0364",
+      "relative_path": "reference/tiny-kws/data/test_set/right/cd85758f_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "424251f9f12986f9273eb2753ead6efd73476b6369fd144714d4a6dc45652ddf"
+    },
+    {
+      "id": "sample_0365",
+      "relative_path": "reference/tiny-kws/data/test_set/right/d0faf7e4_nohash_3.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "0252e8da557dd90c362734cefe40ad1530b8046e5744732348cf5660777e4daf"
+    },
+    {
+      "id": "sample_0366",
+      "relative_path": "reference/tiny-kws/data/test_set/right/d5b963aa_nohash_2.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "fcd1b4a43eab073c2e79b3ed6d5ae368160512500c30814f22b883e29c7db8d8"
+    },
+    {
+      "id": "sample_0367",
+      "relative_path": "reference/tiny-kws/data/test_set/right/d962e5ac_nohash_1.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "8a4d00645740f784db1e2c03e0d0e47a864a08e1e3926b150b119b59d88d1d90"
+    },
+    {
+      "id": "sample_0368",
+      "relative_path": "reference/tiny-kws/data/test_set/right/e0c782d5_nohash_1.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a88c48043c930a4a82ef676ed0056b9b81c760e2dac4484d61e2c90e97f55bdb"
+    },
+    {
+      "id": "sample_0369",
+      "relative_path": "reference/tiny-kws/data/test_set/right/e1469561_nohash_2.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9671994578aa66358886fb071fdea60b1bf801d66ace74f6806214553bdf8808"
+    },
+    {
+      "id": "sample_0370",
+      "relative_path": "reference/tiny-kws/data/test_set/right/e1469561_nohash_3.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e64e5f36143e1636217be3efc970ac2a85437cf791ce8cfc594f59e1931bced7"
+    },
+    {
+      "id": "sample_0371",
+      "relative_path": "reference/tiny-kws/data/test_set/right/e49428d9_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c68c5d8e5e4f817133c3ca35adf3788c0ae84c997ce933b27922d1019010312c"
+    },
+    {
+      "id": "sample_0372",
+      "relative_path": "reference/tiny-kws/data/test_set/right/ef2a3cfb_nohash_0.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "68eff62fadd9adb900c75285821284d2b07264411a6c417645369d75ed16f3d2"
+    },
+    {
+      "id": "sample_0373",
+      "relative_path": "reference/tiny-kws/data/test_set/right/f292725f_nohash_1.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f6eac4e38e22df2976d1516e785c15dddac3e8a4ab322ea2a2d0fde4596c73c5"
+    },
+    {
+      "id": "sample_0374",
+      "relative_path": "reference/tiny-kws/data/test_set/right/f9643d42_nohash_3.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d6b2474d28fe4a4aa6887ea6817552076f4ead128bb14e502ed6f96f193a8121"
+    },
+    {
+      "id": "sample_0375",
+      "relative_path": "reference/tiny-kws/data/test_set/right/fb7eb481_nohash_4.wav",
+      "label": "right",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "175ef22800036263f53152de7bd37041496c5a4c15cf9367a0c84d00cff4f1b4"
+    },
+    {
+      "id": "sample_0376",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/1b4c9b89_nohash_4.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e82cc1ad8f630bde2e82447527f9620b5cfb12994552304905bcfb1c1d48536b"
+    },
+    {
+      "id": "sample_0377",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/47d01978_nohash_0.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "fe1c5aa9dc33fe8f6175be38216bade454f14cd89c4be024ba946cba92c255f2"
+    },
+    {
+      "id": "sample_0378",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/4c6167ca_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "28349d5612c0ad4be50bb7700a4d82ad44abcd4ab138fe7e211f15c2cb6de030"
+    },
+    {
+      "id": "sample_0379",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/4c6167ca_nohash_3.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "13518b8e085f7bf5a6654c897cb7c6679797fc8fe14e35992c29a05da54e8246"
+    },
+    {
+      "id": "sample_0380",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/563aa4e6_nohash_0.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ea7eb09310f64d4a80a1e96f3f964640a70924c19416761a59d395d02b959068"
+    },
+    {
+      "id": "sample_0381",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/563aa4e6_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "928903fa2956ba48d495412e369e415ae3229a82345d5ae9a78c73df736fbdc5"
+    },
+    {
+      "id": "sample_0382",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/563aa4e6_nohash_2.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "158088d75acc47363c4750e81645b488d4b3d3353018946450597ae7b0d74a7a"
+    },
+    {
+      "id": "sample_0383",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/692a88e6_nohash_3.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "52683fa3c46611a51a2a85387248fca53b376752775caab578ce2b34931a57a8"
+    },
+    {
+      "id": "sample_0384",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/6f689791_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "fd5259ea6bf747fff1de6a43b67635270ba2d3be9e3fe869a09883995441b32f"
+    },
+    {
+      "id": "sample_0385",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/7257420c_nohash_0.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "15b4cc2db48528424a4d53c9cfa7a3e68d47cccff6fee810a3e177f512da5b12"
+    },
+    {
+      "id": "sample_0386",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/837a0f64_nohash_0.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "0307c142221c7239a15bebf51c94f48c3b0358ffbc2894dd5ef0964c0e12c9be"
+    },
+    {
+      "id": "sample_0387",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/837a0f64_nohash_2.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "71fc10b40a2a3b0f1de663f2b376c8da9004487de7ce2331ae87cf2180fdfec0"
+    },
+    {
+      "id": "sample_0388",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/893705bb_nohash_15.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "27ba65de8c0815bcd7aa7c6987e16ecfb2f532c02825c4f13486d4a16dd4a9c0"
+    },
+    {
+      "id": "sample_0389",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/8fe67225_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a5163a52c062f2a7bb050dedbb99624614a9c67bde96678dedb2a60f4a421f6b"
+    },
+    {
+      "id": "sample_0390",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/8fe67225_nohash_2.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "3e30765dc9f4b8d41285f8cb83626f135f743708a9f4ead242c489892702a6d0"
+    },
+    {
+      "id": "sample_0391",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/9a69672b_nohash_2.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ba94d94bc5e10a3a8aa3b26de12a9304d01c8d31ce47d4e82e2ff49ae86403b7"
+    },
+    {
+      "id": "sample_0392",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/a2473d62_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "73cb99f1b4a6e0ad8c736472391ef6a1b11345bafa34ce60ccb405ca2a81e71e"
+    },
+    {
+      "id": "sample_0393",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/a4383927_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "8bb379188ad7d57a82b5c2d64db30af375bb0e7803dd76b743cd5d0a31780bf1"
+    },
+    {
+      "id": "sample_0394",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/a4e8a997_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e12449b6aa03049adef0045e1a7781b88e94c23cd4544f23b31677c58dfc22a2"
+    },
+    {
+      "id": "sample_0395",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/a8e25ebb_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "2404ed5ef9edee7d950ca97fde900d906eb4b3ec4485d14d2f03f7992cf7263d"
+    },
+    {
+      "id": "sample_0396",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/aef8dcf5_nohash_2.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c237bfb5382b58b1ed4f7594d9633af169aadef2c26b451353183a52c02e80b6"
+    },
+    {
+      "id": "sample_0397",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/af130f12_nohash_0.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ec37de4cad3b202789ae3d51d82671cc730349bbba1a9e8588f44f8cb9b2a006"
+    },
+    {
+      "id": "sample_0398",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/b1f8326d_nohash_0.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9f2514693916f706bda21500aab58cdd4dc7b3516b9915d216c045b9b2713c6b"
+    },
+    {
+      "id": "sample_0399",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/b49caed3_nohash_3.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "974b5f0e7eed64905c40bbd3dac5ebd15331b0303ba5aae67faf2b6585a02298"
+    },
+    {
+      "id": "sample_0400",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/b83c1acf_nohash_2.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "cb88cc685a6a4ed1ea4e1db03faf4d758d34f519bb96f281e4d173b7bb604e3b"
+    },
+    {
+      "id": "sample_0401",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/b97c9f77_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "748d0da4669140c7df0be7a080f771c2c1548d728d2b5227bb3d779b31b19404"
+    },
+    {
+      "id": "sample_0402",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/b97c9f77_nohash_3.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "da98f41fab319a60141730e0d893a0a777a1ad2a72dbd4b8f67de2b4b7486053"
+    },
+    {
+      "id": "sample_0403",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/b97c9f77_nohash_4.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "07742aa3b4bb2b7192e3e7b771124d51b681aa3cd6e44ba313d603f68926f801"
+    },
+    {
+      "id": "sample_0404",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/bb05582b_nohash_0.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "638dcf0557092376788f66128b359279b1698460dfba7305e84ce8a7eb2f2ad5"
+    },
+    {
+      "id": "sample_0405",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/bb05582b_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "bd2f7c644a4e48847789d89d96a94ec09444545df0853a80f4ec08c054050e90"
+    },
+    {
+      "id": "sample_0406",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/c22d3f18_nohash_3.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "197ac786d5af3c6ab4dc6f5eedfc303d0c653ac1738c1aaa07488a39ddde54b0"
+    },
+    {
+      "id": "sample_0407",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/c7dc7278_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "85e357889ba8e449ff784bf9b284b775aa893834ebc17787a0b57cf7f14140d2"
+    },
+    {
+      "id": "sample_0408",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/d7467392_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "b4b71969bc1b5188a108f7a045c4ca736330deb9e41075a93b40e123a175ddf1"
+    },
+    {
+      "id": "sample_0409",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/d962e5ac_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "db8fb3b4afd710c9ae774229988127527923b31055a0a6425dea0106ab9aa1a6"
+    },
+    {
+      "id": "sample_0410",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/d962e5ac_nohash_2.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "cf68fea861842178aeac9066356232da4a457267815dd4f99c207f6d43322039"
+    },
+    {
+      "id": "sample_0411",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/db24628d_nohash_0.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "cf6b24a21fa713af0932607947c14dc4ca8336bf3010c58b3bcdab4e34fe6539"
+    },
+    {
+      "id": "sample_0412",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/e0c782d5_nohash_0.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "94d9007a63ac0e3150e47461c770f8a23757e65cc45e1b401a87203f71ec2048"
+    },
+    {
+      "id": "sample_0413",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/f5496439_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "4b2fc21d3ee3e81f9f46a665c201b5dd5bef98d11b22ff588e248f30de789e06"
+    },
+    {
+      "id": "sample_0414",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/f6af2457_nohash_0.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "18ada8cf5b550c994030c138b46c6420b6fda6209a86347725de4df5d2c54c15"
+    },
+    {
+      "id": "sample_0415",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/fa446c16_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "0e87ec29438a6c852b3853980cd0234e7e84818bae3b096ea3671ea6064dce80"
+    },
+    {
+      "id": "sample_0416",
+      "relative_path": "reference/tiny-kws/data/test_set/stop/fdb5155e_nohash_1.wav",
+      "label": "stop",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f7ee069866b6d0559f4c0e0807f2413df0a3a042c9f88af2f515d7a2906d1e8a"
+    },
+    {
+      "id": "sample_0417",
+      "relative_path": "reference/tiny-kws/data/test_set/up/0cb74144_nohash_1.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ae1864c9872ab0cae21ecd2efa688a92b1d14628ec65472552f228415edccb52"
+    },
+    {
+      "id": "sample_0418",
+      "relative_path": "reference/tiny-kws/data/test_set/up/135c6841_nohash_0.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a5f12c88ad48289d79b8a027f5f496aaffe2fa50da126eff8a390ee3e4aa7c4f"
+    },
+    {
+      "id": "sample_0419",
+      "relative_path": "reference/tiny-kws/data/test_set/up/18f8afd5_nohash_1.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e4d81d41ae82784fb1cd4d64a9fbd24407db50e43a3944d5de1a8769f607ddac"
+    },
+    {
+      "id": "sample_0420",
+      "relative_path": "reference/tiny-kws/data/test_set/up/37fc5d97_nohash_1.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "fac464a588a601854d534c8945215a7346df591755d72d54bc0719096df1993b"
+    },
+    {
+      "id": "sample_0421",
+      "relative_path": "reference/tiny-kws/data/test_set/up/37fc5d97_nohash_2.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "67528d7e6961e52e6bf8828ddc1b7b49ba48320fda55114538b3222edd2ab0fe"
+    },
+    {
+      "id": "sample_0422",
+      "relative_path": "reference/tiny-kws/data/test_set/up/3d86b69a_nohash_3.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "fbe09e2d115987a9058b47f497a873f659b7dda90e9f47363885ff749148de69"
+    },
+    {
+      "id": "sample_0423",
+      "relative_path": "reference/tiny-kws/data/test_set/up/422d3197_nohash_0.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "043f9d5a47ca72c5f704bd9fae56e67af7cbd3bbade9ac213b44307bbe3af5c6"
+    },
+    {
+      "id": "sample_0424",
+      "relative_path": "reference/tiny-kws/data/test_set/up/42beb5eb_nohash_1.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e9f723be9789a94cc71c1e6f74aab6c74b4ffbeaacf36ad09671a49b1b238ee8"
+    },
+    {
+      "id": "sample_0425",
+      "relative_path": "reference/tiny-kws/data/test_set/up/50033893_nohash_0.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "6926d2cbb55e1b37b82c65f8093b8733b855a0bf66fe6b22697886a5670c4328"
+    },
+    {
+      "id": "sample_0426",
+      "relative_path": "reference/tiny-kws/data/test_set/up/5c8af87a_nohash_2.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e30a82a6b9da26c03735a9059a057da0f52b528a4d9a252330107ce5c9f3aa39"
+    },
+    {
+      "id": "sample_0427",
+      "relative_path": "reference/tiny-kws/data/test_set/up/692a88e6_nohash_1.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a940758c9e2c250ea25dcb4ef3a2b86bd34cff415666907137ebd1311b8e53e6"
+    },
+    {
+      "id": "sample_0428",
+      "relative_path": "reference/tiny-kws/data/test_set/up/7192fddc_nohash_1.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "2fe43cc0602693ee57972da80439470a9344e6f8f4d464061b0195bbf7d0ccb5"
+    },
+    {
+      "id": "sample_0429",
+      "relative_path": "reference/tiny-kws/data/test_set/up/7bae88ed_nohash_0.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "bce44669925dae298ddf800a399b2a7aef05c7521d4afa8d207c7e9baaab9e61"
+    },
+    {
+      "id": "sample_0430",
+      "relative_path": "reference/tiny-kws/data/test_set/up/7dc95912_nohash_0.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "566ae9db7c6980b5a42c926e1dbc8b4346b23e69b4736e5e3e7b0fbe5e3ba279"
+    },
+    {
+      "id": "sample_0431",
+      "relative_path": "reference/tiny-kws/data/test_set/up/837a0f64_nohash_4.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9a1ab52a437e0c2d0469c46193070cd66d532876a48c299a70d5b2108e565102"
+    },
+    {
+      "id": "sample_0432",
+      "relative_path": "reference/tiny-kws/data/test_set/up/840c366d_nohash_0.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ecaeff82d75f5373ec16309173498c347c64c77c8a7feeb4184fc91bcfc69448"
+    },
+    {
+      "id": "sample_0433",
+      "relative_path": "reference/tiny-kws/data/test_set/up/8769c34c_nohash_3.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "9e77ebbab946a2b1dad958df2a9eee882e66ec18ab437653b9d947fa9296c155"
+    },
+    {
+      "id": "sample_0434",
+      "relative_path": "reference/tiny-kws/data/test_set/up/893705bb_nohash_12.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "124bf0b6be6cef499750867a1d2af41a0b731c107e937fcaadfcd68eb449c936"
+    },
+    {
+      "id": "sample_0435",
+      "relative_path": "reference/tiny-kws/data/test_set/up/893705bb_nohash_4.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "107a8d7fe14cf9121c66220756c5c0283dc6897a23c90a0aaa6a6f171113946b"
+    },
+    {
+      "id": "sample_0436",
+      "relative_path": "reference/tiny-kws/data/test_set/up/94de6a6a_nohash_0.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "52f81634e2afa0d21d55f64acc934dcd4e74d95387e491047b1796f1ac00a56e"
+    },
+    {
+      "id": "sample_0437",
+      "relative_path": "reference/tiny-kws/data/test_set/up/94de6a6a_nohash_1.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "8d76e913e72f1b0568a19d0a47f915a89fde12d0f874595a24adb8a7dd4d159f"
+    },
+    {
+      "id": "sample_0438",
+      "relative_path": "reference/tiny-kws/data/test_set/up/964e8cfd_nohash_2.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c75621d7b4b2a8a36ef478f3063e43533bba2e0fc9dae2e4827f7df8f7cbd735"
+    },
+    {
+      "id": "sample_0439",
+      "relative_path": "reference/tiny-kws/data/test_set/up/9a7c1f83_nohash_2.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "adc85740b129f48f6a50dab04f09c1ccc7986d53e42175f7ccc4ddf1ca24175b"
+    },
+    {
+      "id": "sample_0440",
+      "relative_path": "reference/tiny-kws/data/test_set/up/a1533da4_nohash_0.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "012b57af93e80f3c5c564763b011efbea18d6bf81dde4ce314029e3dc4eb8b15"
+    },
+    {
+      "id": "sample_0441",
+      "relative_path": "reference/tiny-kws/data/test_set/up/a60a09cf_nohash_0.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "530d967a9a2f26dcdfe0d187ab68687b6e03933782dae5711ec8c1331a1f39ff"
+    },
+    {
+      "id": "sample_0442",
+      "relative_path": "reference/tiny-kws/data/test_set/up/a7216980_nohash_2.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "4c96652e59676c51a1233218d83a7273452dbf3f846a8c5ca431dd073a86f0f7"
+    },
+    {
+      "id": "sample_0443",
+      "relative_path": "reference/tiny-kws/data/test_set/up/aa48c94a_nohash_0.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "bd0b839327cc64434a8ca258d5f1ab50fe8f549e4105c19a1f19d44d8b8ba24d"
+    },
+    {
+      "id": "sample_0444",
+      "relative_path": "reference/tiny-kws/data/test_set/up/aa80f517_nohash_4.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "41f35b421e8533cca33b7e1719e019a09caa0eec69e428025d4c7a16edcc7a99"
+    },
+    {
+      "id": "sample_0445",
+      "relative_path": "reference/tiny-kws/data/test_set/up/adebe223_nohash_1.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "5709ccb83913fa161e427d8c54ba8c02cadb64471ce6ddcfd9eb42bdfe6bcfe4"
+    },
+    {
+      "id": "sample_0446",
+      "relative_path": "reference/tiny-kws/data/test_set/up/b83c1acf_nohash_4.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "316fb4e43f7d5ac0a465b2e78ff58d4bacb4b1d771ca0e675d4887e49379d75b"
+    },
+    {
+      "id": "sample_0447",
+      "relative_path": "reference/tiny-kws/data/test_set/up/c22d3f18_nohash_2.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "b33713d94001ba8a63d9c0cdda44476e1fed056ea4a393cae29f7e246c118a21"
+    },
+    {
+      "id": "sample_0448",
+      "relative_path": "reference/tiny-kws/data/test_set/up/c7dc7278_nohash_2.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "4e5167fff36499cff2b6c9190b76eb136a1f0235711603e5acf481f460555601"
+    },
+    {
+      "id": "sample_0449",
+      "relative_path": "reference/tiny-kws/data/test_set/up/caedb73a_nohash_1.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "8aabf0a0c0f04db4bf340e32fc51f7d4860bd92dde519dad56ce9cb1ac3525e2"
+    },
+    {
+      "id": "sample_0450",
+      "relative_path": "reference/tiny-kws/data/test_set/up/cc592808_nohash_0.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d9aa22906b689c7d59d6eeed6a51cbf1e93951e30ed942bee3e171b4b6534003"
+    },
+    {
+      "id": "sample_0451",
+      "relative_path": "reference/tiny-kws/data/test_set/up/d962e5ac_nohash_0.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "5a8dbe30ff3528b872807ba212f20493da61babd3bbdf6fcf29530e8d6948d38"
+    },
+    {
+      "id": "sample_0452",
+      "relative_path": "reference/tiny-kws/data/test_set/up/db24628d_nohash_4.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "90348114b2c1fbbd405b7cb26f499201d2b7cd80fa42d53a6d92e40064332247"
+    },
+    {
+      "id": "sample_0453",
+      "relative_path": "reference/tiny-kws/data/test_set/up/ef2a3cfb_nohash_1.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c6896be8ec72987cb21b1252021e3e00e5987454e70433b662fd2e585a113add"
+    },
+    {
+      "id": "sample_0454",
+      "relative_path": "reference/tiny-kws/data/test_set/up/f297e878_nohash_1.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "bb8400f7d991c8904582ae0bb9752712b69fade840a245e0242874e7060d8a04"
+    },
+    {
+      "id": "sample_0455",
+      "relative_path": "reference/tiny-kws/data/test_set/up/f2e59fea_nohash_3.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "1c6cc5a05a0755350d72717f6f8ee9b08c16c02697c3f927310bead00d3d480d"
+    },
+    {
+      "id": "sample_0456",
+      "relative_path": "reference/tiny-kws/data/test_set/up/f428ca69_nohash_2.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e0a8c4b98ccc24930c4f32821f9e7702334cd26a0ca490717d441ec438c8aed9"
+    },
+    {
+      "id": "sample_0457",
+      "relative_path": "reference/tiny-kws/data/test_set/up/fb7eb481_nohash_1.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f38bb288a162ca39132fb840d1a2bd91b5a266f8cdce457877768a2c43da03d2"
+    },
+    {
+      "id": "sample_0458",
+      "relative_path": "reference/tiny-kws/data/test_set/up/fdb5155e_nohash_2.wav",
+      "label": "up",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "3baffa0a7ec00d8b1f564f7cb33301f9be4896168168518c2705e5033019d0db"
+    },
+    {
+      "id": "sample_0459",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/189cbabe_nohash_0.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "72f210badafdbdd0e9d689fac5d6be4b108218aa284cb4f873ff98982b20c146"
+    },
+    {
+      "id": "sample_0460",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/1acc97de_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ebe52e316084b6bc3a9a81bdab3233e066dfde290e009e1ef808b24e8859eeb0"
+    },
+    {
+      "id": "sample_0461",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/1b4c9b89_nohash_0.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c28a4f2323111ecf5a45c4fa11450e19a674aac8240eb64c47cd6d068beefe68"
+    },
+    {
+      "id": "sample_0462",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/1b4c9b89_nohash_3.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "de249177ad9c03e184232a53dd785220b2e2d7d780bc525a3c67c467615c599d"
+    },
+    {
+      "id": "sample_0463",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/210f3aa9_nohash_0.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c12dbe96ffe0880915738cfe52f46021a8c64915aef5cbefedd9d45e2e6d535a"
+    },
+    {
+      "id": "sample_0464",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/2796ac50_nohash_0.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "b7d544227da2d0a83e6cb05a6b8543eddee060d1dfb909a934556c53974bc2f2"
+    },
+    {
+      "id": "sample_0465",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/37dca74f_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d1ad68535cfc46ec8c29280e23d92ad044d2105a2a5787c223fe7ca529b34ccd"
+    },
+    {
+      "id": "sample_0466",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/3d86b69a_nohash_0.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "a40b9d2d6af1e7bd1f783ce266c323c7e0a9515afb0be1ccf74266a7f4efee48"
+    },
+    {
+      "id": "sample_0467",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/3d86b69a_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "1a1f92f828c014eff7aa41e864b4f35eb4c5468e12d7a752c0a16ca79f9b002f"
+    },
+    {
+      "id": "sample_0468",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/3f170018_nohash_0.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "cbde1beb8697be6101bd60effa1b968b5b7680bcada78c8484eea9c5a68a04a8"
+    },
+    {
+      "id": "sample_0469",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/43fc47a7_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "26f61c04530cc0649b64ca9f07ef344ddc19932158403a7a57431f599501b85d"
+    },
+    {
+      "id": "sample_0470",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/4c6167ca_nohash_2.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "650d9b72416c5569a33387f7fa9365ef7ed3155a1e65a95c71841041b398a7bb"
+    },
+    {
+      "id": "sample_0471",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/553f1a79_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "bf9ad9effb538f29fc18ab57db80709d2c2950c2bd38424ec802a148e1b876ab"
+    },
+    {
+      "id": "sample_0472",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/6736bc64_nohash_2.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "43fb171abc121e139342396a142b2d3316f42cb4ee67c4567e0d8d6d7a5296f5"
+    },
+    {
+      "id": "sample_0473",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/6f2f57c1_nohash_0.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "801d72e55416937cc12dc100e57dc9d452232d513756a8848ee634aa1cc129b5"
+    },
+    {
+      "id": "sample_0474",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/6f2f57c1_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "4c2be4356ad231eb3fa9c7cbcedb973bbccbb61a13425c86c20897f4b9354bfa"
+    },
+    {
+      "id": "sample_0475",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/6f689791_nohash_0.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "78bafd0f7397f71a818ad500daac63aa6b3fd6e4aa3dd35e4e2df97d52ebfc89"
+    },
+    {
+      "id": "sample_0476",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/7257420c_nohash_0.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "7716fbc03906544c4fee3db7161dc4fbf137ec370469de1644881bcad3aa4eda"
+    },
+    {
+      "id": "sample_0477",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/837a0f64_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "ac9ba3c774fd650fd19adb771fe27b4e00a4872ea280ff6c2821864f1a178c18"
+    },
+    {
+      "id": "sample_0478",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/84d1e469_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "283f74ae59d7a5b9361ba575d671031691e76f925e8d67f707a2b580566d9377"
+    },
+    {
+      "id": "sample_0479",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/87070229_nohash_3.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "b42ddf43479c0c682a8cbbdb09fb205b71b8590cde560fff181e7b717b6b0535"
+    },
+    {
+      "id": "sample_0480",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/8769c34c_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "418c376fba619e10973ec40cd1b13936250226842c26e71b770a15ab48802b90"
+    },
+    {
+      "id": "sample_0481",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/8769c34c_nohash_3.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "eac701a048edf544aafe59295d32c82b9efd0b5b62f6dccfcb55a0bf53c1666c"
+    },
+    {
+      "id": "sample_0482",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/893705bb_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "3cad64288b741517f2a73fcd15578758da275b12aa676d01811d26ed9abba9d6"
+    },
+    {
+      "id": "sample_0483",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/893705bb_nohash_4.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "417b5d21473897d5ca2e4820304e0f242ab9ca411336e41ba485d43a77eebf18"
+    },
+    {
+      "id": "sample_0484",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/893705bb_nohash_5.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "1518b1829be47c3be2c2583760e6857042f7583bbe5f703620c13f6cfdc60845"
+    },
+    {
+      "id": "sample_0485",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/8fe67225_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "0a06f97ca8bc6dc332ec770a55eb6b6408be2a3625abea957163461ebff911b9"
+    },
+    {
+      "id": "sample_0486",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/a60a09cf_nohash_0.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "dd4b8bd8a293009859d143bd30d436ace7d357e8ca1cea5e84f59593e3cc2999"
+    },
+    {
+      "id": "sample_0487",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/a6f2fd71_nohash_4.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "159d30445896b02b4090a58b9f708ce3a97c652476e4f89073233c074d2c3004"
+    },
+    {
+      "id": "sample_0488",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/b97c9f77_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "3b7f13b3182ea64faf5478f0fed7bd8c624b1d2897adecd3b42657012672a08e"
+    },
+    {
+      "id": "sample_0489",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/b97c9f77_nohash_4.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "b2b3166513d0a660d8c15b913eb079d19792731c4312f41dbee8121e239f23ae"
+    },
+    {
+      "id": "sample_0490",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/bfd26d6b_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "5f61b23c93a4365c67c7fd390edeb0d477f1a2c5b0f66cec1737218efbfae3c1"
+    },
+    {
+      "id": "sample_0491",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/c22d3f18_nohash_3.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "8bd971d9301f6b682f8fc7e2ceea061550118ca75ee9b6f21d8fc5bb6e33c4af"
+    },
+    {
+      "id": "sample_0492",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/cfbedff9_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "5dd12da771bedb66f87c1144a956e701fc32369650fd0d0a65cdcfa8261a967a"
+    },
+    {
+      "id": "sample_0493",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/d1a4fb3f_nohash_0.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "37f54bfc71f5b8ec25e01be7682c9dcc434da404dcaa9b427e440e05f90dcfde"
+    },
+    {
+      "id": "sample_0494",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/d5b963aa_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "37bd7f09d8d36908f364f92fbe907db3dd78b12d32d3ab1232ba25a69dc1d610"
+    },
+    {
+      "id": "sample_0495",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/d5b963aa_nohash_2.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "e811108b3d3f1cf4911b3e27fb2eabcf30f2149a1ee9af36be462c7471d5f789"
+    },
+    {
+      "id": "sample_0496",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/db24628d_nohash_2.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "8cdc9ed408bab26a507a1c8ebf7c604164edaf729ef0288e084c97791f06b4f5"
+    },
+    {
+      "id": "sample_0497",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/e0c782d5_nohash_0.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "f7dbbd60ee9f407f25e51fcfed4d1260904e5fbaeeeff0fcff8de22d68b1cfa3"
+    },
+    {
+      "id": "sample_0498",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/f2e59fea_nohash_3.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "aa1ff909f949a358c1fb62b0a6e28d426fa55f09a2ce2b9a260b54027719fde6"
+    },
+    {
+      "id": "sample_0499",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/f9643d42_nohash_1.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "c59ef416ed281b559c2edd7dd9a5d8adbd031b3224e23a5de98f0e0133f041ba"
+    },
+    {
+      "id": "sample_0500",
+      "relative_path": "reference/tiny-kws/data/test_set/yes/fb7eb481_nohash_0.wav",
+      "label": "yes",
+      "sample_rate": 16000,
+      "num_samples": 16000,
+      "sha256": "d5ddb4137b54c34e13d371c1a71e4103ac6b22404453a4625c93fb81fef85b61"
+    }
+  ]
+}
