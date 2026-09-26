@@ -135,12 +135,12 @@
           "required": ["prediction_agreement","accuracy_ref","accuracy_impl","accuracy_delta"],
           "properties": {
             "prediction_agreement": {
-              "type": "number", "minimum": 0, "maximum": 1,
-              "description": "Fraction of samples where ref and impl agree on top-1 class"
+              "type": ["number","null"], "minimum": 0, "maximum": 1,
+              "description": "Fraction of samples where ref and impl agree on top-1 class; null if no corpus-wide model-level comparison has been run yet (e.g. a preprocessing-only parity gate)"
             },
-            "accuracy_ref":  { "type": "number", "minimum": 0, "maximum": 1 },
-            "accuracy_impl": { "type": "number", "minimum": 0, "maximum": 1 },
-            "accuracy_delta":{ "type": "number", "description": "accuracy_impl - accuracy_ref (negative = regression)" }
+            "accuracy_ref":  { "type": ["number","null"], "minimum": 0, "maximum": 1 },
+            "accuracy_impl": { "type": ["number","null"], "minimum": 0, "maximum": 1 },
+            "accuracy_delta":{ "type": ["number","null"], "description": "accuracy_impl - accuracy_ref (negative = regression); null if either side is null" }
           },
           "additionalProperties": false
         },
@@ -159,6 +159,12 @@
             "per_sample_csv": { "type": "string", "description": "Path to CSV with per-sample per-stage metrics" }
           },
           "additionalProperties": false
+        },
+
+        "warnings": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Non-fatal caveats about this result, e.g. a metric that could not be measured"
         },
 
         "error_message": {
