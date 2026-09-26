@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.0.0",
+  "tool": "run_parity_test",
+  "source": "real",
+  "run_id": "run-7d942761",
+  "timestamp": "2026-09-26T09:58:11Z",
+  "status": "PASS",
+  "gate": "host",
+  "attempt": 1,
+  "corpus": {
+    "n_samples": 500,
+    "corpus_id": "Google Speech Commands v0.02-deterministic_stratified-seed42",
+    "sha256": "202ddafc913962af648927c7d23e367061defc362437d5159596f814cbac28ef"
+  },
+  "tolerances": {
+    "fft": {
+      "max_abs_diff": 0.01,
+      "mean_abs_diff": 0.0001
+    },
+    "mel": {
+      "max_abs_diff": 0.01,
+      "mean_abs_diff": 0.0002
+    },
+    "log": {
+      "max_abs_diff": 0.005,
+      "mean_abs_diff": 0.0005
+    },
+    "normalize": {
+      "max_abs_diff": 0.001,
+      "mean_abs_diff": 0.0001
+    },
+    "min_prediction_agreement": 0.95,
+    "max_accuracy_delta": 0.03
+  },
+  "stages": [
+    {
+      "name": "fft",
+      "order": 0,
+      "shape_ref": [
+        1,
+        201,
+        101
+      ],
+      "shape_impl": [
+        201,
+        101
+      ],
+      "dtype_ref": "float32",
+      "dtype_impl": "float32",
+      "max_abs_diff": 0.001953125,
+      "mean_abs_diff": 1.628724540370578e-07,
+      "cosine_similarity": 0.9999999999999798,
+      "tolerance": {
+        "max_abs_diff": 0.01,
+        "mean_abs_diff": 0.0001
+      },
+      "status": "PASS",
+      "worst_sample_id": "sample_0028",
+      "worst_index": 0
+    },
+    {
+      "name": "mel",
+      "order": 1,
+      "shape_ref": [
+        1,
+        64,
+        101
+      ],
+      "shape_impl": [
+        64,
+        101
+      ],
+      "dtype_ref": "float32",
+      "dtype_impl": "float32",
+      "max_abs_diff": 0.0009765625,
+      "mean_abs_diff": 3.6727668122024076e-07,
+      "cosine_similarity": 0.9999999999999808,
+      "tolerance": {
+        "max_abs_diff": 0.01,
+        "mean_abs_diff": 0.0002
+      },
+      "status": "PASS",
+      "worst_sample_id": "sample_0128",
+      "worst_index": 1779
+    },
+    {
+      "name": "log",
+      "order": 2,
+      "shape_ref": [
+        1,
+        1,
+        64,
+        101
+      ],
+      "shape_impl": [
+        64,
+        101
+      ],
+      "dtype_ref": "float32",
+      "dtype_impl": "float32",
+      "max_abs_diff": 0.0007829666137695312,
+      "mean_abs_diff": 1.145530296327693e-06,
+      "cosine_similarity": 0.999999999987655,
+      "tolerance": {
+        "max_abs_diff": 0.005,
+        "mean_abs_diff": 0.0005
+      },
+      "status": "PASS",
+      "worst_sample_id": "sample_0181",
+      "worst_index": 6406
+    },
+    {
+      "name": "normalize",
+      "order": 3,
+      "shape_ref": [
+        1,
+        1,
+        64,
+        101
+      ],
+      "shape_impl": [
+        64,
+        101
+      ],
+      "dtype_ref": "float32",
+      "dtype_impl": "float32",
+      "max_abs_diff": 0.00016254186630249023,
+      "mean_abs_diff": 2.377985725960732e-07,
+      "cosine_similarity": 0.9999999999731027,
+      "tolerance": {
+        "max_abs_diff": 0.001,
+        "mean_abs_diff": 0.0001
+      },
+      "status": "PASS",
+      "worst_sample_id": "sample_0181",
+      "worst_index": 6406
+    }
+  ],
+  "first_divergent_stage": null,
+  "end_to_end": {
+    "accuracy_ref": 0.9664621676891616,
+    "prediction_agreement": null,
+    "accuracy_impl": null,
+    "accuracy_delta": null
+  },
+  "diagnosis_hints": [],
+  "artifacts": {
+    "report_path": "evidence/parity/host_parity_report.json",
+    "per_sample_csv": "evidence/parity/host_parity_per_sample.csv"
+  },
+  "warnings": [
+    "end_to_end.prediction_agreement/accuracy_impl/accuracy_delta are null: tools/run_host_parity.py measures preprocessing-stage parity only, not corpus-wide model prediction agreement. See docs/interface-requests.md."
+  ]
+}
