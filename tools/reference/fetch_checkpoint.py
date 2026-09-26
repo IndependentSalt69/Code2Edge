@@ -9,6 +9,7 @@ import hashlib
 import sys
 import urllib.request
 from pathlib import Path
+from typing import Optional
 
 HF_URL = "https://huggingface.co/priyadeepjaiswal9c/tiny-kws/resolve/main/best.pt"
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -23,7 +24,7 @@ def compute_sha256(filepath: Path) -> str:
     return hasher.hexdigest().lower()
 
 
-def download_checkpoint(url: str, dest_path: Path, expected_hash: str | None = None) -> bool:
+def download_checkpoint(url: str, dest_path: Path, expected_hash: Optional[str] = None) -> bool:
     dest_path.parent.mkdir(parents=True, exist_ok=True)
     print(f"Downloading checkpoint from:\n  {url}\nto:\n  {dest_path}")
 
