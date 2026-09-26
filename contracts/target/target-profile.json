@@ -29,9 +29,11 @@
     "status": "VERIFIED"
   },
   "bridge": {
-    "transport": "Arduino_RouterBridge (RPClite over /dev/ttyHS1)",
-    "socket_path": "/var/run/arduino-router.sock",
+    "transport": "UART",
+    "device_path": "/dev/ttyHS1",
     "baud_rate": 115200,
+    "socket_path": "/var/run/arduino-router.sock",
+    "packet_format": "binary_8byte_framed",
     "smoke_test_result": "BRIDGE_BEGIN_OK, BRIDGE_PROVIDE_OK, code2edge_ping() -> 42",
     "status": "VERIFIED"
   },
