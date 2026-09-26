@@ -13,6 +13,7 @@ Conforms to:
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 import sys
@@ -95,15 +96,30 @@ def run_check_target(
     if model_path.is_file():
         model_flash_kb = round(model_path.stat().st_size / 1024.0, 1)
     else:
-        # Reference checkpoint exists or standard int8 baseline (119k params ~= 120 KB)
-        checkpoint_path = _REPO_ROOT / "checkpoints" / "best.pt"
-        if checkpoint_path.is_file() and ("best.pt" in model_file or model_file.endswith(".pt")):
-            model_flash_kb = round(checkpoint_path.stat().st_size / 1024.0, 1)
-        else:
+        # model_file didn't resolve (e.g. caller passed the training
+        # checkpoint path, not the deployable artifact). The real frozen
+        # int8 model is src/pipeline/model_data.c/.h; its header documents
+        # the exact compiled byte size, which is the number that actually
+        # matters for flash budgeting -- read that instead of falling
+        # straight to a generic estimate.
+        model_flash_kb = None
+        model_data_header = _REPO_ROOT / "src" / "pipeline" / "model_data.h"
+        if model_data_header.is_file():
+            import re
+            match = re.search(r"Size:\s*(\d+)\s*bytes", model_data_header.read_text(encoding="utf-8"))
+            if match:
+                model_flash_kb = round(int(match.group(1)) / 1024.0, 1)
+                warnings.append(
+                    f"Model file '{model_file}' not found on disk; used the frozen "
+                    f"int8 model size documented in src/pipeline/model_data.h "
+                    f"({model_flash_kb} KB) instead."
+                )
+        if model_flash_kb is None:
             # Baseline estimate for DS-CNN int8 model (119,372 params ~= 119.4 KB)
             model_flash_kb = 120.0
             warnings.append(
-                f"Model file '{model_file}' not found on disk; estimated size based on 119k parameter DS-CNN int8 footprint (~120.0 KB)."
+                f"Model file '{model_file}' not found on disk and src/pipeline/model_data.h "
+                "is unavailable; estimated size based on 119k parameter DS-CNN int8 footprint (~120.0 KB)."
             )
 
     feature_buffer_kb = PREPROC_FEATURE_BUFFER_KB
@@ -218,35 +234,56 @@ def run_benchmark_target(
     min_ms = float(lat_info.get("inference_min_ms", avg_ms))
     max_ms = float(lat_info.get("inference_max_ms", avg_ms))
 
-    flash_used_bytes = mem_info.get("flash_used_bytes", 311336)
-    sram_used_bytes = mem_info.get("sram_used_bytes", 242224)
-    flash_used_kb = round(flash_used_bytes / 1024.0, 1)
-    sram_peak_kb = round(sram_used_bytes / 1024.0, 1)
+    warnings: List[str] = []
 
-    # Predicted baseline metrics for predicted_vs_measured table
-    pred_latency_mean = 5000.0
-    pred_sram_peak_kb = 236.5
-    pred_flash_used_kb = 304.0
+    if "flash_used_bytes" not in mem_info or "sram_used_bytes" not in mem_info:
+        raise RuntimeError(
+            "Physical benchmark runner did not report flash_used_bytes/"
+            "sram_used_bytes in memory_bytes -- refusing to substitute a "
+            "placeholder value for a measured quantity."
+        )
+    flash_used_kb = round(mem_info["flash_used_bytes"] / 1024.0, 1)
+    sram_peak_kb = round(mem_info["sram_used_bytes"] / 1024.0, 1)
 
-    delta_lat = round(((avg_ms - pred_latency_mean) / pred_latency_mean) * 100.0, 2) if pred_latency_mean else None
+    # Predicted SRAM: the same arena/feature-buffer sizing baked into this
+    # firmware build, run through check_target's own computation -- a real
+    # design-time estimate, comparable to sram_peak_kb (also static+arena
+    # SRAM). Flash and latency have no equivalent a priori estimate anywhere
+    # in the repo: check_target's model_flash_kb is model-weights-only, not
+    # the full firmware image benchmark_target measures, so comparing them
+    # would mismatch two different quantities rather than predict one.
+    # Schema allows a non-numeric "predicted" with delta_pct=null for this.
+    predicted_arena_kb = 166560 / 1024.0
+    predicted_check = run_check_target(
+        model_file=model_file, arena_kb=predicted_arena_kb, target_id=target_id,
+    )
+    pred_sram_peak_kb = predicted_check["target"]["total_sram_kb"]
     delta_sram = round(((sram_peak_kb - pred_sram_peak_kb) / pred_sram_peak_kb) * 100.0, 2) if pred_sram_peak_kb else None
-    delta_flash = round(((flash_used_kb - pred_flash_used_kb) / pred_flash_used_kb) * 100.0, 2) if pred_flash_used_kb else None
 
-    predictions = [
-        {
-            "sample_id": str(sample_pred.get("test_fixture", "yes.wav")),
-            "class_id": int(sample_pred.get("predicted_class_index", 2)),
-            "label": str(sample_pred.get("predicted_label", "yes")),
-            "confidence": 1.0,
-        }
-    ]
+    predictions: List[Dict[str, Any]] = []
+    measured_logits = sample_pred.get("measured_logits")
+    if measured_logits and "predicted_class_index" in sample_pred:
+        predicted_class_index = int(sample_pred["predicted_class_index"])
+        exp_logits = [math.exp(l - max(measured_logits)) for l in measured_logits]
+        confidence = exp_logits[predicted_class_index] / sum(exp_logits)
+        predictions.append({
+            "sample_id": str(sample_pred.get("test_fixture", "unknown")),
+            "class_id": predicted_class_index,
+            "label": str(sample_pred.get("predicted_label", "")),
+            "confidence": round(confidence, 6),
+        })
+    else:
+        warnings.append(
+            "Physical benchmark result had no measured_logits/predicted_class_index; "
+            "predictions left empty rather than fabricating a confidence value."
+        )
 
     predicted_vs_measured = [
         {
             "metric": "latency_ms_mean",
-            "predicted": pred_latency_mean,
+            "predicted": "not estimated",
             "measured": avg_ms,
-            "delta_pct": delta_lat,
+            "delta_pct": None,
         },
         {
             "metric": "sram_peak_kb",
@@ -256,13 +293,17 @@ def run_benchmark_target(
         },
         {
             "metric": "flash_used_kb",
-            "predicted": pred_flash_used_kb,
+            "predicted": "not estimated",
             "measured": flash_used_kb,
-            "delta_pct": delta_flash,
+            "delta_pct": None,
         },
     ]
+    warnings.append(
+        "latency_ms_mean and flash_used_kb have no design-time prediction source "
+        "in this repo yet (check_target's model_flash_kb is model-weights-only, "
+        "not the full firmware image size) -- see docs/interface-requests.md."
+    )
 
-    warnings: List[str] = []
     val_status = validation.get("status")
     if val_status and val_status != "PASS":
         warnings.append(f"Target benchmark validation status: {val_status}")

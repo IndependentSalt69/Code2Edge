@@ -26,7 +26,13 @@ async def run(model_file: str, n_inferences: int,
                 model_file=model_file, n_inferences=n_inferences,
                 target_id=target_id, corpus_dir=corpus_dir,
             )
-        except NotImplementedError as e:
+        except (NotImplementedError, FileNotFoundError, ValueError, RuntimeError) as e:
+            # target_adapter.run_benchmark_target validates inputs (ValueError),
+            # requires a real model artifact on disk (FileNotFoundError), and
+            # can surface a malformed physical-runner result (RuntimeError) --
+            # all of these are real, expected failure modes, not bugs, so they
+            # become a schema-valid ERROR response rather than an unhandled
+            # exception.
             return {
                 "schema_version": "1.0.0", "tool": _TOOL, "source": "real",
                 "run_id": run_id, "timestamp": utcnow_iso(),
