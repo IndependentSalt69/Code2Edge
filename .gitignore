@@ -41,3 +41,7 @@ reference/artifacts/test_cache_check/
 
 # Local Bob generated artifacts
 .bob/artifacts/
+
+# Local Bob/benchmark diagnostics
+.bob/tmp/
+evidence/benchmarks/compile_debug.txt
