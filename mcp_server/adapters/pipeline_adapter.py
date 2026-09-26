@@ -12,13 +12,15 @@ reference/tiny-kws/src/model.py, reference/tiny-kws/src/common.py) as of
 this surfaced: no exported quantized model, and the real 4-stage pipeline
 not matching contracts/inspect_pipeline.schema.json's 7-stage enum.
 
-run_parity_test and quantize_model are still stubs: Person A's C++ so far
-only compares a single stage (power spectrum, via tools/compare_power.py)
-against a single sample, not the full stage-wise JSON harness our
-contract needs (Prompt 10B, once that lands).
+run_parity_test (gate="host") is wired to Person A's real 500-sample
+corpus-wide host parity report (evidence/parity/host_parity_report.json,
+produced by tools/run_host_parity.py) as of 2026-09-26 (Prompt 11 prep).
+gate="device" and quantize_model are still stubs -- see docstrings below
+and docs/interface-requests.md.
 """
 from __future__ import annotations
 
+import csv
 import hashlib
 import json
 from pathlib import Path
@@ -31,6 +33,20 @@ _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 
 def _load_json(relative_path: str) -> dict[str, Any]:
     return json.loads((_REPO_ROOT / relative_path).read_text(encoding="utf-8"))
+
+
+def _corpus_info() -> dict[str, Any]:
+    """Shared corpus identity used by both inspect_pipeline and run_parity_test."""
+    corpus_manifest = _load_json("reference/corpus_manifest.json")
+    corpus_manifest_bytes = (_REPO_ROOT / "reference" / "corpus_manifest.json").read_bytes()
+    return {
+        "n_samples": corpus_manifest["selection"]["count"],
+        "corpus_id": f"{corpus_manifest['dataset']['name']}-{corpus_manifest['selection']['strategy']}"
+                     f"-seed{corpus_manifest['selection']['seed']}",
+        # No single aggregate hash in corpus_manifest.json (each sample has
+        # its own sha256) — hash the manifest file itself as a stable proxy.
+        "sha256": hashlib.sha256(corpus_manifest_bytes).hexdigest(),
+    }
 
 
 def run_profile_model(repo_path: str, model_file: str,
@@ -164,7 +180,6 @@ def run_inspect_pipeline(repo_path: str, manifest_path: str,
     """
     manifest = _load_json(manifest_path) if manifest_path else _load_json("reference/pipeline_manifest.json")
     normalization = _load_json("reference/normalization.json")
-    corpus_manifest = _load_json("reference/corpus_manifest.json")
 
     frontend = manifest["frontend"]
     stages_raw = manifest["stages"]
@@ -227,15 +242,7 @@ def run_inspect_pipeline(repo_path: str, manifest_path: str,
         "norm_std": normalization["std"],
     }
 
-    corpus_manifest_bytes = (_REPO_ROOT / "reference" / "corpus_manifest.json").read_bytes()
-    corpus = {
-        "n_samples": corpus_manifest["selection"]["count"],
-        "corpus_id": f"{corpus_manifest['dataset']['name']}-{corpus_manifest['selection']['strategy']}"
-                     f"-seed{corpus_manifest['selection']['seed']}",
-        # No single aggregate hash in corpus_manifest.json (each sample has
-        # its own sha256) — hash the manifest file itself as a stable proxy.
-        "sha256": hashlib.sha256(corpus_manifest_bytes).hexdigest(),
-    }
+    corpus = _corpus_info()
 
     return {
         "schema_version": "1.0.0",
@@ -259,16 +266,155 @@ def run_inspect_pipeline(repo_path: str, manifest_path: str,
     }
 
 
+# Real-report stage name -> contract stage name (contracts/run_parity_test.schema.json's
+# enum assumes 7 separable stages; the real pipeline only has these 4 -- same
+# mapping as inspect_pipeline, see docs/interface-requests.md). S0_raw_waveform
+# is the unprocessed input, not a transform stage, so it's excluded here too.
+_HOST_STAGE_MAP = {
+    "S1_power_spectrum": "fft",
+    "S1_mel_energy": "mel",
+    "S2_log_mel": "log",
+    "S3_normalized_features": "normalize",
+}
+_STAGE_ORDER = ["fft", "mel", "log", "normalize"]
+
+
+def _ravel_index(idx: list[int], shape: list[int]) -> int | None:
+    """Flatten a multi-dimensional index against shape (trimming any leading
+    dims shape has beyond idx's rank, e.g. a batch dim of 1)."""
+    if not idx:
+        return None
+    dims = shape[-len(idx):]
+    flat = 0
+    for i, d in zip(idx, dims):
+        flat = flat * d + i
+    return flat
+
+
 def run_run_parity_test(gate: str, attempt: int, corpus_dir: str,
                          ref_pipeline_path: str, impl_pipeline_path: str,
                          run_id: str = "") -> dict[str, Any]:
-    """Return run_parity_test Output payload."""
-    raise NotImplementedError(
-        "waiting on Person A: implement run_parity_test in pipeline_adapter.py. "
-        "Needs: compiled impl_pipeline_path binary or shared lib, corpus_dir of "
-        ".wav files, and reference tensors from dump_reference.py. "
-        "Must produce per-stage max_abs_diff, mean_abs_diff, cosine_similarity."
-    )
+    """Return run_parity_test Output payload for the host gate, built from
+    Person A's real 500-sample corpus-wide host parity report.
+
+    Only gate="host" is wired: evidence/parity/host_parity_report.json comes
+    from tools/run_host_parity.py, which hardcodes src/pipeline/feature_extraction.c
+    as the file under test (not parameterized by impl_pipeline_path) -- so this
+    verifies Person A's committed pipeline, not necessarily a copy sitting in
+    a deploy worktree. Logged in docs/interface-requests.md. The device gate
+    has no equivalent corpus-wide sweep yet (only a single-fixture smoke test),
+    so it still raises NotImplementedError.
+    """
+    if gate != "host":
+        raise NotImplementedError(
+            f"waiting on Person B: run_parity_test gate={gate!r} has no real-mode "
+            "adapter yet. Only a single-fixture (yes.wav) on-device inference "
+            "check exists (tools/target/run_device_parity.py); there's no "
+            "corpus-wide device parity sweep to read a stage-wise report from. "
+            "See docs/interface-requests.md."
+        )
+
+    report = _load_json("evidence/parity/host_parity_report.json")
+    sample_reports = report["sample_reports"]
+    metrics = _load_json("reference/tiny-kws/assets/metrics.json")
+
+    stages: list[dict[str, Any]] = []
+    for order, (raw_name, our_name) in enumerate(_HOST_STAGE_MAP.items()):
+        entries = [
+            (s["sample_id"], next(st for st in s["stages"] if st["stage"] == raw_name))
+            for s in sample_reports
+        ]
+        first = entries[0][1]
+        worst_sample_id, worst_entry = max(entries, key=lambda e: e[1]["max_abs_diff"])
+
+        stages.append({
+            "name": our_name,
+            "order": order,
+            "shape_ref": first["shape_ref"],
+            "shape_impl": first["shape_impl"],
+            "dtype_ref": first["dtype_ref"],
+            "dtype_impl": first["dtype_impl"],
+            "max_abs_diff": worst_entry["max_abs_diff"],
+            "mean_abs_diff": sum(e[1]["mean_abs_diff"] for e in entries) / len(entries),
+            "cosine_similarity": min(e[1]["cosine_similarity"] for e in entries),
+            "tolerance": {
+                "max_abs_diff": first["tolerance"]["max_abs_diff"],
+                "mean_abs_diff": first["tolerance"]["mean_abs_diff"],
+            },
+            "status": "PASS" if all(e[1]["status"] == "PASS" for e in entries) else "FAIL",
+            "worst_sample_id": worst_sample_id,
+            "worst_index": _ravel_index(worst_entry["worst_index"], worst_entry["shape_impl"]),
+        })
+
+    first_divergent_stage = next((s["name"] for s in stages if s["status"] == "FAIL"), None)
+    status = "PASS" if (
+        first_divergent_stage is None and report["summary"]["overall_status"] == "PASS"
+    ) else "FAIL"
+
+    diagnosis_hints: list[dict[str, Any]] = []
+    for s in stages:
+        if s["status"] == "FAIL":
+            diagnosis_hints.append({
+                "stage": s["name"],
+                "hypothesis": f"{s['name']} stage diverges from the frozen reference across the corpus",
+                "evidence": f"max_abs_diff={s['max_abs_diff']}, worst sample={s['worst_sample_id']}",
+            })
+
+    corpus = _corpus_info()
+
+    corpus_manifest = _load_json("reference/corpus_manifest.json")
+    labels_by_sample = {s["id"]: s["label"] for s in corpus_manifest["samples"]}
+
+    per_sample_csv_path = _REPO_ROOT / "evidence" / "parity" / "host_parity_per_sample.csv"
+    with per_sample_csv_path.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(["sample_id", "label", "stage", "status", "max_abs_diff", "mean_abs_diff", "cosine_similarity"])
+        for s in sample_reports:
+            label = labels_by_sample.get(s["sample_id"], "")
+            for st in s["stages"]:
+                if st["stage"] in _HOST_STAGE_MAP:
+                    writer.writerow([
+                        s["sample_id"], label, _HOST_STAGE_MAP[st["stage"]],
+                        st["status"], st["max_abs_diff"], st["mean_abs_diff"], st["cosine_similarity"],
+                    ])
+
+    return {
+        "schema_version": "1.0.0",
+        "tool": "run_parity_test",
+        "source": "real",
+        "run_id": run_id or new_run_id("run_parity_test"),
+        "timestamp": utcnow_iso(),
+        "status": status,
+        "gate": gate,
+        "attempt": attempt,
+        "corpus": corpus,
+        "tolerances": {
+            **{s["name"]: s["tolerance"] for s in stages},
+            "min_prediction_agreement": 0.95,
+            "max_accuracy_delta": 0.03,
+        },
+        "stages": stages,
+        "first_divergent_stage": first_divergent_stage,
+        "end_to_end": {
+            # Real: the PyTorch reference model's own test-set accuracy.
+            "accuracy_ref": metrics["accuracy"],
+            # Not measured: tools/run_host_parity.py verifies preprocessing-
+            # stage parity only, not corpus-wide model prediction agreement.
+            "prediction_agreement": None,
+            "accuracy_impl": None,
+            "accuracy_delta": None,
+        },
+        "diagnosis_hints": diagnosis_hints,
+        "artifacts": {
+            "report_path": "evidence/parity/host_parity_report.json",
+            "per_sample_csv": "evidence/parity/host_parity_per_sample.csv",
+        },
+        "warnings": [
+            "end_to_end.prediction_agreement/accuracy_impl/accuracy_delta are null: "
+            "tools/run_host_parity.py measures preprocessing-stage parity only, not "
+            "corpus-wide model prediction agreement. See docs/interface-requests.md.",
+        ],
+    }
 
 
 def run_quantize_model(model_file: str, representative_data_dir: str,
