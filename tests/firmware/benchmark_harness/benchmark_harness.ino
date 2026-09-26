@@ -472,12 +472,7 @@ static void dump_parity_features(void) {
 
 void setup() {
     Serial.begin(SERIAL_BAUD_RATE);
-    delay(800);
-
-    Serial.println(F("================================================================"));
-    Serial.println(F(" Code2Edge Target Benchmark & DS-CNN Inference Harness"));
-    Serial.println(F(" Target: STM32U585 MCU on Arduino UNO Q (160 MHz)"));
-    Serial.println(F("================================================================"));
+    delay(500);
 
     bool dwt_ok = dwt_init();
     if (!dwt_ok) {
@@ -486,57 +481,46 @@ void setup() {
             delay(1000);
         }
     }
-    Serial.println(F("DWT cycle counter initialized successfully."));
     
     // Initialize feature extraction tables and model runner
     feature_extraction_init();
     bool model_ok = model_runner_init();
     if (!model_ok) {
         Serial.println(F("FATAL: Failed to initialize DS-CNN model runner!"));
-    } else {
-        Serial.println(F("DS-CNN Model Runner initialized successfully."));
     }
 
     // Prepare input features once for benchmarking
     feature_extraction_run(g_audio_fixture_yes, s_mel_features_out);
-
-    // 1. Run full DS-CNN inference verification on compiled fixture
-    Serial.println(F("\n--- Executing Initial DS-CNN Verification on yes.wav fixture ---"));
-    print_inference_report();
-
-    // Print ready prompt
-    Serial.println(F("\nBenchmark & Inference Ready."));
-    Serial.println(F("Interactive Commands:"));
-    Serial.println(F("  'I'       : Run full DS-CNN inference and print detailed report"));
-    Serial.println(F("  'B'       : Run all benchmarks (deterministic + mel_spectrogram + dscnn_inference)"));
-    Serial.println(F("  'M'       : Run mel_spectrogram benchmark only"));
-    Serial.println(F("  'N'       : Run dscnn_inference benchmark only"));
-    Serial.println(F("  'D'       : Dump preprocessed features for host/device parity verification"));
-    Serial.println(F("  'K'       : Run deterministic_kernel benchmark only"));
 }
 
 void loop() {
     if (Serial.available() > 0) {
-        char ch = (char)Serial.read();
-        if (ch == 'I' || ch == 'i') {
+        int c = Serial.read();
+        if (c == 'I' || c == 'i') {
             print_inference_report();
-        } else if (ch == 'B' || ch == 'b' || ch == 'R' || ch == 'r') {
+            Serial.flush();
+        } else if (c == 'B' || c == 'b' || c == 'R' || c == 'r') {
             Serial.println(F("\n--- Triggering All Benchmarks ---"));
             benchmark_target("deterministic_kernel", deterministic_kernel, 50, 5);
             benchmark_target("mel_spectrogram", mel_spectrogram_workload, 10, 2);
             benchmark_target("dscnn_inference", dscnn_inference_workload, 10, 2);
-        } else if (ch == 'M' || ch == 'm' || ch == 'P' || ch == 'p') {
+            Serial.flush();
+        } else if (c == 'M' || c == 'm' || c == 'P' || c == 'p') {
             Serial.println(F("\n--- Triggering mel_spectrogram Benchmark ---"));
             benchmark_target("mel_spectrogram", mel_spectrogram_workload, 10, 2);
-        } else if (ch == 'N' || ch == 'n') {
+            Serial.flush();
+        } else if (c == 'N' || c == 'n') {
             Serial.println(F("\n--- Triggering dscnn_inference Benchmark ---"));
             benchmark_target("dscnn_inference", dscnn_inference_workload, 10, 2);
-        } else if (ch == 'D' || ch == 'd') {
+            Serial.flush();
+        } else if (c == 'D' || c == 'd') {
             dump_parity_features();
-        } else if (ch == 'K' || ch == 'k') {
+            Serial.flush();
+        } else if (c == 'K' || c == 'k') {
             Serial.println(F("\n--- Triggering deterministic_kernel Benchmark ---"));
             benchmark_target("deterministic_kernel", deterministic_kernel, 50, 5);
+            Serial.flush();
         }
     }
-    delay(100);
+    delay(20);
 }

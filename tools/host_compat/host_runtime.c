@@ -50,3 +50,12 @@ float logf(float x) {
     double res = poly + (double)exp * 0.693147180559945309417232;
     return (float)res;
 }
+
+float floorf(float x) {
+    int i = (int)x;
+    if (x < 0.0f && (float)i != x) {
+        return (float)(i - 1);
+    }
+    return (float)i;
+}
+
