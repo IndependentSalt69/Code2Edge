@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "package": "code2edge_golden_smoke",
+  "source": "reference/tiny-kws/app/examples",
+  "reference_model": {
+    "checkpoint": "checkpoints/best.pt",
+    "checkpoint_sha256": "3ec8eed15c9db102f524022beae1455aca2ad46460f665fcf78c40410445c1df",
+    "model": "DSCNN(n_classes=12,width=160,n_blocks=4,dropout=0.2)",
+    "logits_dtype": "float32",
+    "logits_shape": [
+      1,
+      12
+    ]
+  },
+  "clips": {
+    "yes": {
+      "expected_class_index": 2,
+      "source_wav": "reference/tiny-kws/app/examples/yes.wav",
+      "source_wav_sha256": "b2a08b7b932afa26b95002c80ed940cc348f4a604162fa4553a35397c2983c9d",
+      "stage_files": {
+        "S0": "post_input.npy",
+        "S1_power": "post_power_spectrum.npy",
+        "S1_mel": "post_mel.npy",
+        "S2_log": "post_log.npy",
+        "S3_normalize": "post_normalize.npy",
+        "S5_logits": "post_logits.npy",
+        "S6_class_index": "predicted_class.npy"
+      },
+      "prediction": {
+        "predicted_class": 2,
+        "predicted_label": "yes",
+        "expected_label": "yes"
+      }
+    },
+    "no": {
+      "expected_class_index": 3,
+      "source_wav": "reference/tiny-kws/app/examples/no.wav",
+      "source_wav_sha256": "b3da9ec4a4b6f28e08ac5720fa56066a06a5acb1daf61a9b99c8abc5c8ce4629",
+      "stage_files": {
+        "S0": "post_input.npy",
+        "S1_power": "post_power_spectrum.npy",
+        "S1_mel": "post_mel.npy",
+        "S2_log": "post_log.npy",
+        "S3_normalize": "post_normalize.npy",
+        "S5_logits": "post_logits.npy",
+        "S6_class_index": "predicted_class.npy"
+      },
+      "prediction": {
+        "predicted_class": 3,
+        "predicted_label": "no",
+        "expected_label": "no"
+      }
+    },
+    "go": {
+      "expected_class_index": 11,
+      "source_wav": "reference/tiny-kws/app/examples/go.wav",
+      "source_wav_sha256": "b8434db0824e4ad1a0c43e963b5c5d84161433bb1da61194136e26c3ba14addd",
+      "stage_files": {
+        "S0": "post_input.npy",
+        "S1_power": "post_power_spectrum.npy",
+        "S1_mel": "post_mel.npy",
+        "S2_log": "post_log.npy",
+        "S3_normalize": "post_normalize.npy",
+        "S5_logits": "post_logits.npy",
+        "S6_class_index": "predicted_class.npy"
+      },
+      "prediction": {
+        "predicted_class": 11,
+        "predicted_label": "go",
+        "expected_label": "go"
+      }
+    },
+    "stop": {
+      "expected_class_index": 10,
+      "source_wav": "reference/tiny-kws/app/examples/stop.wav",
+      "source_wav_sha256": "c11075ea61364ab19054ebcb70b2e8c214febde3cf1578f6662cdca119986fbd",
+      "stage_files": {
+        "S0": "post_input.npy",
+        "S1_power": "post_power_spectrum.npy",
+        "S1_mel": "post_mel.npy",
+        "S2_log": "post_log.npy",
+        "S3_normalize": "post_normalize.npy",
+        "S5_logits": "post_logits.npy",
+        "S6_class_index": "predicted_class.npy"
+      },
+      "prediction": {
+        "predicted_class": 10,
+        "predicted_label": "stop",
+        "expected_label": "stop"
+      }
+    }
+  },
+  "validation": {
+    "clips": 4,
+    "all_predictions_match_expected": true,
+    "stages": [
+      "S0",
+      "S1_power",
+      "S1_mel",
+      "S2_log",
+      "S3_normalize",
+      "S5_logits",
+      "S6_class_index"
+    ]
+  }
+}

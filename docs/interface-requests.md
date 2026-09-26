@@ -16,11 +16,11 @@ To guarantee seamless integration between host differential parity and microcont
 | ID | Item | Producer | Consumer | Target Path / Schema | Description | Status |
 |---|---|---|---|---|---|---|
 | **IF-01** | Target Profile | Person B | Person A | `contracts/target/target-profile.schema.json` | Hardware limits (786 KB SRAM, 2 MB Flash), supported ops, no-heap rule | **DEFINED** |
-| **IF-02** | Input Contract | Person A | Person B | `contracts/target/input-tensor.json` | Audio input shape `(16000,)`, int16/float32, sampling rate 16 kHz | **PENDING (Person A)** |
-| **IF-03** | Model Artifact | Person A | Person B | `src/pipeline/model_data.h` | C array of quantized int8 TFLite model or CMSIS-NN weight tensors | **PENDING (Person A)** |
-| **IF-04** | Preprocessing C Code | Person A | Person B | `src/pipeline/feature_extraction.h / .c` | Self-contained C implementation of STFT -> Mel -> Log -> Normalize | **PENDING (Person A)** |
-| **IF-05** | Golden Reference Tensors | Person A | Person B | `reference/golden/` | Serialized intermediate tensors (S0–S6) for the smoke-test WAV clips | **PENDING (Person A)** |
-| **IF-06** | Host Parity Sign-off | Person A | Person B | `evidence/parity/host_parity_report.json` | Automated proof that generated C matches PyTorch within tolerance | **PENDING (Person A)** |
+| **IF-02** | Input Contract | Person A | Person B | `contracts/target/input-tensor.json` | Audio input shape `(16000,)`, int16/float32, sampling rate 16 kHz | **DONE / VERIFIED** |
+| **IF-03** | Model Artifact | Person A | Person B | `src/pipeline/model_data.h` | C array of quantized int8 TFLite model or CMSIS-NN weight tensors | **DONE / VERIFIED** |
+| **IF-04** | Preprocessing C Code | Person A | Person B | `src/pipeline/feature_extraction.h / .c` | Self-contained C implementation of STFT -> Mel -> Log -> Normalize | **DONE / VERIFIED** |
+| **IF-05** | Golden Reference Tensors | Person A | Person B | `reference/golden/` | Serialized intermediate tensors (S0–S6) for the smoke-test WAV clips | **DONE / VERIFIED** |
+| **IF-06** | Host Parity Sign-off | Person A | Person B | `evidence/parity/host_parity_report.json` | Automated proof that generated C matches PyTorch within tolerance | **DONE / VERIFIED** |
 | **IF-07** | Target Benchmark Tool | Person B | Project | `contracts/target/benchmark-result.schema.json` | Execution metrics: latency (ms), Flash (KB), SRAM (KB), arena (KB) | **DEFINED** |
 | **IF-08** | Device Parity Report | Person B | Project | `contracts/target/device-parity-result.schema.json` | Verification that on-target inference matches golden tensors | **DEFINED** |
 
