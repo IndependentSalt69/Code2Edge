@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "tool": "validate_model_artifact",
-  "timestamp": "2026-09-26T01:41:58.884010+00:00",
+  "timestamp": "2026-09-26T02:14:36.920368+00:00",
   "artifact_path": "src\\pipeline\\model_data.c",
   "target": {
     "target_id": "STM32U585",
@@ -11,11 +11,7 @@
   "sha256": "0cd6cefbcba738c13d028ffd9a8ad73d6c88f0046368de974d3aa38c47926876",
   "file_size_bytes": 172216,
   "file_size_kb": 168.18,
-  "header_file": {
-    "path": "src\\pipeline\\model_data.h",
-    "type": "extern_declaration_header",
-    "declares_g_model_data": true
-  },
+  "header_file": null,
   "input_tensor": {
     "index": 0,
     "name": "serving_default_args_0",
