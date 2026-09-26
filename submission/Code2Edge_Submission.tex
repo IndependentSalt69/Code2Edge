@@ -86,10 +86,10 @@
 \begin{tikzpicture}
   \node[draw=c2eAccent, thick, rounded corners=3pt, fill=c2eBg,
         text width=11.5cm, align=center, inner sep=10pt]
-  {\small A Bob-native workflow that traces an ML repository's inference
-   pipeline, generates a constrained-device implementation, and verifies
-   numerical equivalence through stage-wise differential parity before and
-   after real hardware deployment.};
+  {\small A Bob-native workflow that traces an ML inference pipeline,
+   generates a constrained-device implementation, and verifies numerical
+   equivalence through stage-wise differential parity, with targeted
+   validation on real hardware.};
 \end{tikzpicture}
 
 \vfill
@@ -125,9 +125,9 @@ in Section~\ref{sec:results}.}
 \begin{infobox}[Elevator pitch]
 Code2Edge gives IBM Bob hardware awareness through an MCP server, so it can
 trace an ML repository's audio pipeline, generate an equivalent C
-implementation for a microcontroller, and \emph{prove} the two are
-numerically equivalent --- stage by stage, on real hardware --- instead of
-just hoping the ported code works.
+implementation for a microcontroller, and verify numerical equivalence
+stage by stage, followed by targeted validation on real hardware --- instead
+of just hoping the ported code works.
 \end{infobox}
 
 \subsection{Long Description}
@@ -583,12 +583,13 @@ different things into one claim:
   \texttt{check\_target\_tool} and \texttt{benchmark\_target\_tool} both
   executed in real mode against the actual STM32U585.
   \item \textbf{The 50-run benchmark} (Section~\ref{sec:device-benchmark}):
-  the same real run's full statistical evidence --- latency distribution,
-  memory usage, and 50/50 prediction correctness.
+  a separate direct physical benchmark on the same target, firmware, and
+  fixture, providing the full statistical evidence --- latency
+  distribution, memory usage, and 50/50 prediction correctness.
 \end{itemize}
-These are reported as three distinct facts rather than one identical run,
-because that is what actually happened and is the more honest --- and
-ultimately stronger --- story the evidence supports.
+These are reported as three distinct pieces of evidence rather than one
+identical run, because that is what actually happened and is the more
+honest story the evidence supports.
 
 \subsection{Engineering hygiene}
 \begin{center}
