@@ -40,7 +40,7 @@
     "dwt_benchmark_infrastructure": "VERIFIED",
     "preprocessing_target_execution": "VERIFIED",
     "host_parity": "VERIFIED",
-    "device_parity": "NOT_VERIFIED",
+    "device_parity": "VERIFIED",
     "model_inference_dscnn": "NOT_VERIFIED"
   },
   "supported_runtimes": [

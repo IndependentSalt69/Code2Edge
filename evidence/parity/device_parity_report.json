@@ -1,0 +1,40 @@
+{
+  "$schema": "contracts/target/device-parity-result.schema.json",
+  "target_id": "arduino_uno_q_stm32u585",
+  "corpus_id": "fixture_yes_v1",
+  "timestamp": "2026-09-26T00:08:03.678909+00:00",
+  "host_parity_precheck": true,
+  "overall_pass": true,
+  "total_samples_evaluated": 1,
+  "samples_matched": 1,
+  "samples_diverged": 0,
+  "prediction_agreement_rate": 1.0,
+  "first_divergent_stage": null,
+  "stage_results": [
+    {
+      "stage_id": "S3",
+      "stage_name": "S3_normalized_features",
+      "max_abs_error": 2.5153160095214844e-05,
+      "mean_abs_error": 3.0160390451783314e-07,
+      "relative_error": 7.648748925531866e-07,
+      "cosine_similarity": 1.0000000950358154,
+      "tolerance_threshold": 0.001,
+      "passed": true
+    }
+  ],
+  "divergent_samples": [],
+  "metadata": {
+    "fixture_label": "yes",
+    "fixture_checksum": "0x8B8CD8",
+    "tensor_shape": [
+      1,
+      1,
+      64,
+      101
+    ],
+    "tensor_elements": 6464,
+    "reference_description": "Frozen PyTorch reference pipeline (reference/tiny-kws/src/common.py)",
+    "uart_dump_path": "D:\\Projects\\Code2Edge\\evidence\\parity\\device_parity_yes_uart.txt",
+    "fixture_wav_path": "D:\\Projects\\Code2Edge\\reference\\tiny-kws\\app\\examples\\yes.wav"
+  }
+}
