@@ -202,12 +202,14 @@ def run_benchmark_target(
             f"Deployable model artifact not found: {model_path}"
         )
 
+    warmup_count = 0 if n_inferences == 1 else 5
+
     with redirect_stdout(sys.stderr):
         result = run_physical_benchmark(
             port="COM3",
             baud_rate=115200,
             num_iterations=n_inferences,
-            warmup_iterations=5,
+            warmup_iterations=warmup_count,
             timeout_per_inference=40.0,
             sketch_path=_REPO_ROOT / "tests" / "firmware" / "benchmark_harness",
             fqbn="arduino:zephyr:unoq",

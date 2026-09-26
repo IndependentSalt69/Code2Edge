@@ -255,6 +255,9 @@ def test_run_benchmark_target_adapter_invocation_and_redirection(capsys):
     Focused adapter test verifying run_benchmark_target() invokes
     run_physical_benchmark() with exact arguments and redirects diagnostic
     stdout to stderr to prevent MCP JSON-RPC stdio pollution.
+    Verifies:
+      - n_inferences=1 -> warmup_iterations=0
+      - n_inferences>1 -> warmup_iterations=5
     """
     mock_benchmark_report = {
         "$schema": "contracts/target/benchmark-result.schema.json",
@@ -310,21 +313,48 @@ def test_run_benchmark_target_adapter_invocation_and_redirection(capsys):
         # Simulate stdout diagnostic prints from real benchmark runner
         print("[Code2Edge] Compiling firmware...")
         print("[Code2Edge] Connecting to target MCU on COM3 @ 115200 baud...")
-        print("[Code2Edge] Running 5 warmup iterations...")
-        print("  [Warmup 1/5] DWT Cycles: 803,912,575 | Latency: 5024.45 ms")
-        print("[Code2Edge] Running 10 measured iterations...")
-        print("  [Iter  1/10] Cycles: 803,912,575 | 5024.45 ms | Predicted: 'yes' (2) [MATCH]")
+        if kwargs.get("warmup_iterations", 0) > 0:
+            print("[Code2Edge] Running 5 warmup iterations...")
+            print("  [Warmup 1/5] DWT Cycles: 803,912,575 | Latency: 5024.45 ms")
+        print(f"[Code2Edge] Running {kwargs.get('num_iterations', 1)} measured iterations...")
+        print("  [Iter  1/1] Cycles: 803,912,575 | 5024.45 ms | Predicted: 'yes' (2) [MATCH]")
         return mock_benchmark_report
 
     with mock.patch("mcp_server.adapters.target_adapter.run_physical_benchmark", side_effect=fake_physical_runner) as mock_runner:
-        result = run_benchmark_target(
+        # 1. Single inference (n_inferences=1) -> warmup_iterations=0
+        result_single = run_benchmark_target(
+            model_file="src/pipeline/model_data.c",
+            n_inferences=1,
+            target_id="STM32U585",
+        )
+
+        mock_runner.assert_called_with(
+            port="COM3",
+            baud_rate=115200,
+            num_iterations=1,
+            warmup_iterations=0,
+            timeout_per_inference=40.0,
+            sketch_path=REPO_ROOT / "tests" / "firmware" / "benchmark_harness",
+            fqbn="arduino:zephyr:unoq",
+            tensor_arena_bytes=166560,
+            feature_buffer_bytes=25856,
+            output_file=REPO_ROOT / "evidence" / "benchmarks" / "stm32u585_benchmark_report.json",
+            skip_compile=False,
+        )
+        assert result_single["tool"] == "benchmark_target"
+        assert result_single["source"] == "real"
+        assert result_single["benchmark"]["n_inferences"] == 1
+
+        mock_runner.reset_mock()
+
+        # 2. Multi-inference (n_inferences > 1) -> warmup_iterations=5
+        result_multi = run_benchmark_target(
             model_file="src/pipeline/model_data.c",
             n_inferences=10,
             target_id="STM32U585",
         )
 
-        # 1. Verify exact argument contract
-        mock_runner.assert_called_once_with(
+        mock_runner.assert_called_with(
             port="COM3",
             baud_rate=115200,
             num_iterations=10,
@@ -338,16 +368,14 @@ def test_run_benchmark_target_adapter_invocation_and_redirection(capsys):
             skip_compile=False,
         )
 
-        # 2. Verify stdout remains completely clean while stderr receives progress
+        # 3. Verify stdout remains completely clean while stderr receives progress
         captured = capsys.readouterr()
         assert captured.out == "", "stdout must be empty to avoid corrupting MCP JSON-RPC"
         assert "[Code2Edge] Compiling firmware..." in captured.err
         assert "[Code2Edge] Connecting to target MCU" in captured.err
-        assert "[Warmup 1/5]" in captured.err
-        assert "[Iter  1/10]" in captured.err
 
-        # 3. Verify returned payload
-        assert result["tool"] == "benchmark_target"
-        assert result["source"] == "real"
-        assert result["benchmark"]["n_inferences"] == 10
-        assert result["benchmark"]["latency_ms"]["mean"] == 5024.45
+        # 4. Verify returned payload
+        assert result_multi["tool"] == "benchmark_target"
+        assert result_multi["source"] == "real"
+        assert result_multi["benchmark"]["n_inferences"] == 10
+        assert result_multi["benchmark"]["latency_ms"]["mean"] == 5024.45
