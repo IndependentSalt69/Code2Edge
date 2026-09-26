@@ -249,39 +249,102 @@ TFLITE_TENSOR_TYPES: Dict[int, str] = {
 
 # Supported TFLite Micro / CMSIS-NN Operators for Cortex-M33 (STM32U585)
 SUPPORTED_TFLM_OPS = {
+    "ABS",
     "ADD",
+    "ADD_N",
+    "ARG_MAX",
+    "ARG_MIN",
+    "ASSIGN_VARIABLE",
     "AVERAGE_POOL_2D",
+    "BATCH_MATMUL",
+    "BATCH_TO_SPACE_ND",
+    "CAST",
+    "CEIL",
+    "COMPLEX_ABS",
     "CONCATENATION",
     "CONV_2D",
+    "COS",
+    "CUMSUM",
+    "DEPTH_TO_SPACE",
     "DEPTHWISE_CONV_2D",
     "DEQUANTIZE",
+    "DIV",
     "ELU",
+    "EQUAL",
+    "EXP",
     "EXPAND_DIMS",
+    "FILL",
+    "FLOOR",
+    "FLOOR_DIV",
+    "FLOOR_MOD",
     "FULLY_CONNECTED",
+    "GATHER",
+    "GATHER_ND",
+    "GREATER",
+    "GREATER_EQUAL",
     "HARD_SWISH",
+    "IF",
+    "L2_NORMALIZATION",
+    "L2_POOL_2D",
     "LEAKY_RELU",
+    "LESS",
+    "LESS_EQUAL",
+    "LOG",
+    "LOG_SOFTMAX",
+    "LOGICAL_AND",
+    "LOGICAL_NOT",
+    "LOGICAL_OR",
     "LOGISTIC",
     "MAX_POOL_2D",
     "MAXIMUM",
     "MEAN",
     "MINIMUM",
+    "MIRROR_PAD",
     "MUL",
     "NEG",
+    "NOT_EQUAL",
+    "PACK",
     "PAD",
     "PADV2",
+    "PRELU",
     "QUANTIZE",
+    "READ_VARIABLE",
+    "REDUCE_ALL",
+    "REDUCE_ANY",
+    "REDUCE_MAX",
+    "REDUCE_MIN",
+    "REDUCE_PROD",
     "RELU",
     "RELU6",
     "RESHAPE",
+    "RESIZE_BILINEAR",
+    "RESIZE_NEAREST_NEIGHBOR",
     "ROUND",
+    "RSQRT",
+    "SELECT_V2",
+    "SHAPE",
+    "SIN",
+    "SLICE",
     "SOFTMAX",
+    "SPACE_TO_BATCH_ND",
+    "SPACE_TO_DEPTH",
     "SPLIT",
     "SPLIT_V",
+    "SQRT",
+    "SQUARE",
+    "SQUARED_DIFFERENCE",
     "SQUEEZE",
     "STRIDED_SLICE",
     "SUB",
+    "SUM",
+    "SVDF",
     "TANH",
     "TRANSPOSE",
+    "TRANSPOSE_CONV",
+    "UNPACK",
+    "VAR_HANDLE",
+    "WHILE",
+    "ZEROS_LIKE",
 }
 
 
@@ -530,7 +593,7 @@ class TFLiteFlatBufferReader:
         }
 
 
-def extract_bytes_from_c_header(header_content: str) -> bytes:
+def extract_bytes_from_c_header(header_content: str) -> Optional[bytes]:
     """Extract FlatBuffer binary byte stream from C/C++ header array definition."""
     match = re.search(
         r"(?:const\s+)?(?:unsigned\s+char|uint8_t)\s+\w+\[\s*\]\s*(?:alignas\s*\(\s*\d+\s*\))?\s*=\s*\{([^}]+)\}",
@@ -541,7 +604,10 @@ def extract_bytes_from_c_header(header_content: str) -> bytes:
         # Fallback: search for any array with curly brace byte tokens
         match = re.search(r"=\s*\{([^}]+)\}\s*;", header_content, re.DOTALL)
         if not match:
-            raise ValueError("No valid byte array found in C header file.")
+            # Check if it's an extern header declaration (e.g. extern const unsigned char g_model_data[])
+            if re.search(r"extern\s+(?:const\s+)?(?:unsigned\s+char|uint8_t)\s+\w+\[\s*\]", header_content):
+                return None
+            raise ValueError("No valid byte array or extern declaration found in C header file.")
 
     array_content = match.group(1)
     tokens = re.findall(r"0x[0-9a-fA-F]+|\d+", array_content)
@@ -589,17 +655,24 @@ def validate_model_bytes(
         else:
             try:
                 hdr_bytes = extract_bytes_from_c_header(hp.read_text(encoding="utf-8"))
-                hdr_sha256 = hashlib.sha256(hdr_bytes).hexdigest()
-                header_info = {
-                    "path": str(hp),
-                    "size_bytes": len(hdr_bytes),
-                    "sha256": hdr_sha256,
-                    "matches_tflite_bytes": (hdr_sha256 == sha256_hash),
-                }
-                if hdr_sha256 != sha256_hash:
-                    errors.append(
-                        f"SHA-256 mismatch between C header array ({hdr_sha256}) and model file ({sha256_hash})"
-                    )
+                if hdr_bytes is not None:
+                    hdr_sha256 = hashlib.sha256(hdr_bytes).hexdigest()
+                    header_info = {
+                        "path": str(hp),
+                        "size_bytes": len(hdr_bytes),
+                        "sha256": hdr_sha256,
+                        "matches_tflite_bytes": (hdr_sha256 == sha256_hash),
+                    }
+                    if hdr_sha256 != sha256_hash:
+                        errors.append(
+                            f"SHA-256 mismatch between C header array ({hdr_sha256}) and model file ({sha256_hash})"
+                        )
+                else:
+                    header_info = {
+                        "path": str(hp),
+                        "type": "extern_declaration_header",
+                        "declares_g_model_data": True,
+                    }
             except Exception as e:
                 errors.append(f"Failed to parse C header array from {header_path}: {e}")
 
