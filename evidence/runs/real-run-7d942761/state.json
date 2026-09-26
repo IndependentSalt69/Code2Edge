@@ -1,0 +1,625 @@
+{
+  "run_id": "run-7d942761",
+  "created_at": "2026-09-26T09:52:58Z",
+  "updated_at": "2026-09-26T10:00:39Z",
+  "requested_by": "person-c-real-deployment",
+  "current_stage": "pr",
+  "status": "completed",
+  "stages": [
+    {
+      "name": "analysis",
+      "status": "passed",
+      "entered_at": "2026-09-26T09:52:58Z",
+      "exited_at": "2026-09-26T09:53:12Z"
+    },
+    {
+      "name": "edge_readiness",
+      "status": "passed",
+      "entered_at": "2026-09-26T09:53:12Z",
+      "exited_at": "2026-09-26T09:58:11Z"
+    },
+    {
+      "name": "approval",
+      "status": "passed",
+      "entered_at": null,
+      "exited_at": "2026-09-26T09:58:11Z"
+    },
+    {
+      "name": "generation",
+      "status": "passed",
+      "entered_at": null,
+      "exited_at": "2026-09-26T09:58:11Z"
+    },
+    {
+      "name": "host_parity",
+      "status": "passed",
+      "entered_at": "2026-09-26T09:58:11Z",
+      "exited_at": "2026-09-26T09:58:11Z"
+    },
+    {
+      "name": "mcu_build",
+      "status": "passed",
+      "entered_at": null,
+      "exited_at": "2026-09-26T09:58:20Z"
+    },
+    {
+      "name": "device_parity",
+      "status": "passed",
+      "entered_at": "2026-09-26T09:58:20Z",
+      "exited_at": "2026-09-26T09:58:20Z"
+    },
+    {
+      "name": "benchmark",
+      "status": "passed",
+      "entered_at": "2026-09-26T09:58:27Z",
+      "exited_at": "2026-09-26T09:58:35Z"
+    },
+    {
+      "name": "report",
+      "status": "passed",
+      "entered_at": "2026-09-26T09:58:35Z",
+      "exited_at": "2026-09-26T09:58:35Z"
+    },
+    {
+      "name": "pr",
+      "status": "passed",
+      "entered_at": null,
+      "exited_at": "2026-09-26T10:00:39Z"
+    }
+  ],
+  "history": [
+    {
+      "stage": "analysis",
+      "event": "run_started",
+      "timestamp": "2026-09-26T09:52:58Z",
+      "detail": null
+    },
+    {
+      "stage": "analysis",
+      "event": "passed",
+      "timestamp": "2026-09-26T09:53:12Z",
+      "detail": "profile_model, inspect_pipeline, check_target -- all real"
+    },
+    {
+      "stage": "edge_readiness",
+      "event": "in_progress",
+      "timestamp": "2026-09-26T09:53:12Z",
+      "detail": null
+    },
+    {
+      "stage": "approval",
+      "event": "passed",
+      "timestamp": "2026-09-26T09:57:19Z",
+      "detail": "edge_readiness: APPROVE by user"
+    },
+    {
+      "stage": "edge_readiness",
+      "event": "passed",
+      "timestamp": "2026-09-26T09:58:11Z",
+      "detail": null
+    },
+    {
+      "stage": "approval",
+      "event": "passed",
+      "timestamp": "2026-09-26T09:58:11Z",
+      "detail": null
+    },
+    {
+      "stage": "generation",
+      "event": "passed",
+      "timestamp": "2026-09-26T09:58:11Z",
+      "detail": "copied verified src/pipeline/feature_extraction.{c,h} and model_data.{c,h} into ../code2edge-deploy/deploy/ (no independent code-gen step; Bob orchestrates+proves, does not author novel C++ here)"
+    },
+    {
+      "stage": "host_parity",
+      "event": "in_progress",
+      "timestamp": "2026-09-26T09:58:11Z",
+      "detail": null
+    },
+    {
+      "stage": "host_parity",
+      "event": "passed",
+      "timestamp": "2026-09-26T09:58:11Z",
+      "detail": "attempt 1"
+    },
+    {
+      "stage": "mcu_build",
+      "event": "passed",
+      "timestamp": "2026-09-26T09:58:20Z",
+      "detail": "referencing Person B existing evidence: compiles clean for arduino:zephyr:unoq, 68.75KB flash / 35.66KB SRAM (PREPROCESSING_INTEGRATION_LOG.md) -- not independently re-compiled in this session, no board connected"
+    },
+    {
+      "stage": "device_parity",
+      "event": "in_progress",
+      "timestamp": "2026-09-26T09:58:20Z",
+      "detail": null
+    },
+    {
+      "stage": "device_parity",
+      "event": "passed",
+      "timestamp": "2026-09-26T09:58:20Z",
+      "detail": "attempt 1"
+    },
+    {
+      "stage": "benchmark",
+      "event": "in_progress",
+      "timestamp": "2026-09-26T09:58:27Z",
+      "detail": null
+    },
+    {
+      "stage": "benchmark",
+      "event": "passed",
+      "timestamp": "2026-09-26T09:58:35Z",
+      "detail": null
+    },
+    {
+      "stage": "report",
+      "event": "in_progress",
+      "timestamp": "2026-09-26T09:58:35Z",
+      "detail": null
+    },
+    {
+      "stage": "report",
+      "event": "passed",
+      "timestamp": "2026-09-26T09:58:35Z",
+      "detail": null
+    },
+    {
+      "stage": "pr",
+      "event": "passed",
+      "timestamp": "2026-09-26T10:00:39Z",
+      "detail": "https://github.com/IndependentSalt69/Code2Edge/pull/10"
+    },
+    {
+      "stage": "pr",
+      "event": "run_completed",
+      "timestamp": "2026-09-26T10:00:39Z",
+      "detail": "real deployment run; host parity real PASS, device parity + benchmark mocked (no board connected)"
+    }
+  ],
+  "approvals": [
+    {
+      "schema_version": "1.0.0",
+      "tool": "record_approval",
+      "source": "real",
+      "run_id": "run-7d942761",
+      "timestamp": "2026-09-26T09:57:19Z",
+      "checkpoint": "edge_readiness",
+      "approved": true,
+      "approver": "user",
+      "notes": "real deployment run approve",
+      "workflow_action": "proceed"
+    }
+  ],
+  "parity_history": {
+    "host": [
+      {
+        "schema_version": "1.0.0",
+        "tool": "run_parity_test",
+        "source": "real",
+        "run_id": "run-7d942761",
+        "timestamp": "2026-09-26T09:58:11Z",
+        "status": "PASS",
+        "gate": "host",
+        "attempt": 1,
+        "corpus": {
+          "n_samples": 500,
+          "corpus_id": "Google Speech Commands v0.02-deterministic_stratified-seed42",
+          "sha256": "202ddafc913962af648927c7d23e367061defc362437d5159596f814cbac28ef"
+        },
+        "tolerances": {
+          "fft": {
+            "max_abs_diff": 0.01,
+            "mean_abs_diff": 0.0001
+          },
+          "mel": {
+            "max_abs_diff": 0.01,
+            "mean_abs_diff": 0.0002
+          },
+          "log": {
+            "max_abs_diff": 0.005,
+            "mean_abs_diff": 0.0005
+          },
+          "normalize": {
+            "max_abs_diff": 0.001,
+            "mean_abs_diff": 0.0001
+          },
+          "min_prediction_agreement": 0.95,
+          "max_accuracy_delta": 0.03
+        },
+        "stages": [
+          {
+            "name": "fft",
+            "order": 0,
+            "shape_ref": [
+              1,
+              201,
+              101
+            ],
+            "shape_impl": [
+              201,
+              101
+            ],
+            "dtype_ref": "float32",
+            "dtype_impl": "float32",
+            "max_abs_diff": 0.001953125,
+            "mean_abs_diff": 1.628724540370578e-07,
+            "cosine_similarity": 0.9999999999999798,
+            "tolerance": {
+              "max_abs_diff": 0.01,
+              "mean_abs_diff": 0.0001
+            },
+            "status": "PASS",
+            "worst_sample_id": "sample_0028",
+            "worst_index": 0
+          },
+          {
+            "name": "mel",
+            "order": 1,
+            "shape_ref": [
+              1,
+              64,
+              101
+            ],
+            "shape_impl": [
+              64,
+              101
+            ],
+            "dtype_ref": "float32",
+            "dtype_impl": "float32",
+            "max_abs_diff": 0.0009765625,
+            "mean_abs_diff": 3.6727668122024076e-07,
+            "cosine_similarity": 0.9999999999999808,
+            "tolerance": {
+              "max_abs_diff": 0.01,
+              "mean_abs_diff": 0.0002
+            },
+            "status": "PASS",
+            "worst_sample_id": "sample_0128",
+            "worst_index": 1779
+          },
+          {
+            "name": "log",
+            "order": 2,
+            "shape_ref": [
+              1,
+              1,
+              64,
+              101
+            ],
+            "shape_impl": [
+              64,
+              101
+            ],
+            "dtype_ref": "float32",
+            "dtype_impl": "float32",
+            "max_abs_diff": 0.0007829666137695312,
+            "mean_abs_diff": 1.145530296327693e-06,
+            "cosine_similarity": 0.999999999987655,
+            "tolerance": {
+              "max_abs_diff": 0.005,
+              "mean_abs_diff": 0.0005
+            },
+            "status": "PASS",
+            "worst_sample_id": "sample_0181",
+            "worst_index": 6406
+          },
+          {
+            "name": "normalize",
+            "order": 3,
+            "shape_ref": [
+              1,
+              1,
+              64,
+              101
+            ],
+            "shape_impl": [
+              64,
+              101
+            ],
+            "dtype_ref": "float32",
+            "dtype_impl": "float32",
+            "max_abs_diff": 0.00016254186630249023,
+            "mean_abs_diff": 2.377985725960732e-07,
+            "cosine_similarity": 0.9999999999731027,
+            "tolerance": {
+              "max_abs_diff": 0.001,
+              "mean_abs_diff": 0.0001
+            },
+            "status": "PASS",
+            "worst_sample_id": "sample_0181",
+            "worst_index": 6406
+          }
+        ],
+        "first_divergent_stage": null,
+        "end_to_end": {
+          "accuracy_ref": 0.9664621676891616,
+          "prediction_agreement": null,
+          "accuracy_impl": null,
+          "accuracy_delta": null
+        },
+        "diagnosis_hints": [],
+        "artifacts": {
+          "report_path": "evidence/parity/host_parity_report.json",
+          "per_sample_csv": "evidence/parity/host_parity_per_sample.csv"
+        },
+        "warnings": [
+          "end_to_end.prediction_agreement/accuracy_impl/accuracy_delta are null: tools/run_host_parity.py measures preprocessing-stage parity only, not corpus-wide model prediction agreement. See docs/interface-requests.md."
+        ]
+      }
+    ],
+    "device": [
+      {
+        "schema_version": "1.0.0",
+        "tool": "run_parity_test",
+        "source": "mock",
+        "run_id": "run-7d942761",
+        "timestamp": "2026-09-26T09:58:20Z",
+        "status": "PASS",
+        "gate": "device",
+        "attempt": 1,
+        "corpus": {
+          "n_samples": 500,
+          "corpus_id": "kws-corpus-v1",
+          "sha256": "a3f1c8b2e9d04f7a6c5b3e2d1f8a9c0e4b7d6f3a2c1e0d9b8a7f6c5e4d3b2a10"
+        },
+        "tolerances": {
+          "resample": {
+            "max_abs_diff": 1e-05,
+            "mean_abs_diff": 1e-06
+          },
+          "pre_emphasis": {
+            "max_abs_diff": 1e-05,
+            "mean_abs_diff": 1e-06
+          },
+          "framing": {
+            "max_abs_diff": 1e-05,
+            "mean_abs_diff": 1e-06
+          },
+          "fft": {
+            "max_abs_diff": 0.0001,
+            "mean_abs_diff": 1e-05
+          },
+          "mel": {
+            "max_abs_diff": 0.0001,
+            "mean_abs_diff": 1e-05
+          },
+          "log": {
+            "max_abs_diff": 0.0001,
+            "mean_abs_diff": 1e-05
+          },
+          "normalize": {
+            "max_abs_diff": 0.0005,
+            "mean_abs_diff": 0.0001
+          },
+          "min_prediction_agreement": 0.95,
+          "max_accuracy_delta": 0.03
+        },
+        "stages": [
+          {
+            "name": "resample",
+            "order": 0,
+            "shape_ref": [
+              500,
+              16000
+            ],
+            "shape_impl": [
+              500,
+              16000
+            ],
+            "dtype_ref": "float32",
+            "dtype_impl": "float32",
+            "max_abs_diff": 0.0,
+            "mean_abs_diff": 0.0,
+            "cosine_similarity": 1.0,
+            "tolerance": {
+              "max_abs_diff": 1e-05,
+              "mean_abs_diff": 1e-06
+            },
+            "status": "PASS",
+            "worst_sample_id": null,
+            "worst_index": null
+          },
+          {
+            "name": "pre_emphasis",
+            "order": 1,
+            "shape_ref": [
+              500,
+              16000
+            ],
+            "shape_impl": [
+              500,
+              16000
+            ],
+            "dtype_ref": "float32",
+            "dtype_impl": "float32",
+            "max_abs_diff": 2.3e-07,
+            "mean_abs_diff": 4.1e-08,
+            "cosine_similarity": 0.9999998,
+            "tolerance": {
+              "max_abs_diff": 1e-05,
+              "mean_abs_diff": 1e-06
+            },
+            "status": "PASS",
+            "worst_sample_id": "sample_0042",
+            "worst_index": 1234
+          },
+          {
+            "name": "framing",
+            "order": 2,
+            "shape_ref": [
+              500,
+              49,
+              400
+            ],
+            "shape_impl": [
+              500,
+              49,
+              400
+            ],
+            "dtype_ref": "float32",
+            "dtype_impl": "float32",
+            "max_abs_diff": 8.1e-06,
+            "mean_abs_diff": 1.2e-07,
+            "cosine_similarity": 0.9999991,
+            "tolerance": {
+              "max_abs_diff": 1e-05,
+              "mean_abs_diff": 1e-06
+            },
+            "status": "PASS",
+            "worst_sample_id": "sample_0042",
+            "worst_index": 1234
+          },
+          {
+            "name": "fft",
+            "order": 3,
+            "shape_ref": [
+              500,
+              49,
+              201
+            ],
+            "shape_impl": [
+              500,
+              49,
+              201
+            ],
+            "dtype_ref": "float32",
+            "dtype_impl": "float32",
+            "max_abs_diff": 6.4e-05,
+            "mean_abs_diff": 9.3e-06,
+            "cosine_similarity": 0.9999921,
+            "tolerance": {
+              "max_abs_diff": 0.0001,
+              "mean_abs_diff": 1e-05
+            },
+            "status": "PASS",
+            "worst_sample_id": "sample_0042",
+            "worst_index": 1234
+          },
+          {
+            "name": "mel",
+            "order": 4,
+            "shape_ref": [
+              500,
+              49,
+              40
+            ],
+            "shape_impl": [
+              500,
+              49,
+              40
+            ],
+            "dtype_ref": "float32",
+            "dtype_impl": "float32",
+            "max_abs_diff": 7.2e-05,
+            "mean_abs_diff": 8.1e-06,
+            "cosine_similarity": 0.9999912,
+            "tolerance": {
+              "max_abs_diff": 0.0001,
+              "mean_abs_diff": 1e-05
+            },
+            "status": "PASS",
+            "worst_sample_id": "sample_0042",
+            "worst_index": 1234
+          },
+          {
+            "name": "log",
+            "order": 5,
+            "shape_ref": [
+              500,
+              49,
+              40
+            ],
+            "shape_impl": [
+              500,
+              49,
+              40
+            ],
+            "dtype_ref": "float32",
+            "dtype_impl": "float32",
+            "max_abs_diff": 9.1e-05,
+            "mean_abs_diff": 1.1e-05,
+            "cosine_similarity": 0.9999901,
+            "tolerance": {
+              "max_abs_diff": 0.0001,
+              "mean_abs_diff": 1e-05
+            },
+            "status": "PASS",
+            "worst_sample_id": "sample_0042",
+            "worst_index": 1234
+          },
+          {
+            "name": "normalize",
+            "order": 6,
+            "shape_ref": [
+              500,
+              49,
+              40
+            ],
+            "shape_impl": [
+              500,
+              49,
+              40
+            ],
+            "dtype_ref": "float32",
+            "dtype_impl": "float32",
+            "max_abs_diff": 0.00043,
+            "mean_abs_diff": 8.7e-05,
+            "cosine_similarity": 0.999988,
+            "tolerance": {
+              "max_abs_diff": 0.0005,
+              "mean_abs_diff": 0.0001
+            },
+            "status": "PASS",
+            "worst_sample_id": "sample_0042",
+            "worst_index": 1234
+          }
+        ],
+        "first_divergent_stage": null,
+        "end_to_end": {
+          "prediction_agreement": 0.978,
+          "accuracy_ref": 0.923,
+          "accuracy_impl": 0.921,
+          "accuracy_delta": -0.002
+        },
+        "diagnosis_hints": [],
+        "artifacts": {
+          "report_path": "workflow/runs/run-7d942761/parity_device_attempt1.json",
+          "per_sample_csv": "workflow/runs/run-7d942761/parity_device_attempt1_per_sample.csv"
+        }
+      }
+    ]
+  },
+  "gate_decisions": [
+    {
+      "schema_version": "1.0.0",
+      "tool": "gate_step",
+      "source": "real",
+      "run_id": "run-7d942761",
+      "timestamp": "2026-09-26T09:58:11Z",
+      "decision": "continue",
+      "attempt": 1,
+      "max_attempts": 3,
+      "remaining": 0,
+      "focus_stage": null,
+      "repair_hint": null,
+      "escalation_report_path": null,
+      "gate": "host"
+    },
+    {
+      "schema_version": "1.0.0",
+      "tool": "gate_step",
+      "source": "real",
+      "run_id": "run-7d942761",
+      "timestamp": "2026-09-26T09:58:20Z",
+      "decision": "continue",
+      "attempt": 1,
+      "max_attempts": 3,
+      "remaining": 0,
+      "focus_stage": null,
+      "repair_hint": null,
+      "escalation_report_path": null,
+      "gate": "device"
+    }
+  ]
+}
