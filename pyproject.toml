@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "code2edge"
+version = "0.1.0"
+description = "Deployment with proof — Bob-native edge AI deployment and differential parity verification pipeline"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "mcp>=1.0.0,<2.0.0",
+    "jsonschema>=4.18.0",
+    "referencing>=0.28.0",
+    "pyserial>=3.5",
+    "numpy",
+]
+
+[project.optional-dependencies]
+host = [
+    "torch>=2.6",
+    "torchaudio>=2.6",
+    "soundfile",
+    "scikit-learn",
+]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.23",
+    "jsonschema>=4.18.0",
+    "referencing>=0.28.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["mcp_server*", "workflow*", "tools*"]
+
+# ---------------------------------------------------------------------------
+# Unified pytest configuration (replaces mcp_server/pytest.ini and
+# workflow/pytest.ini — those files are removed in this commit).
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+    "mcp_server/tests",
+    "workflow/tests",
+]
+asyncio_mode = "auto"
+
+# ---------------------------------------------------------------------------
+# Ruff linting (zero extra install needed when ruff is in dev deps)
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = [
+    "E501",  # line too long — enforced by formatter, not linter
+]

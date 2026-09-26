@@ -1,5 +1,7 @@
 # Code2Edge
 
+[![CI](https://github.com/IndependentSalt69/Code2Edge/actions/workflows/ci.yml/badge.svg)](https://github.com/IndependentSalt69/Code2Edge/actions/workflows/ci.yml)
+
 > **Deployment with proof.**
 
 Code2Edge is a Bob-native edge AI deployment and differential parity verification pipeline. It traces an ML model's complete inference pipeline, generates a constrained-device implementation, and proves numerical correctness through stage-wise differential parity — before and after real hardware deployment.
@@ -64,6 +66,18 @@ checkpoints/        Local model weights (gitignored)
 | Flash usage | 310.8 KB / 2 MB (39.0% of virtual partition) |
 | SRAM usage | 242.2 KB / 786 KB (92.0% of virtual partition) |
 | Test suite | 46/46 pytest tests passing |
+
+## Getting Started
+
+```bash
+git clone git@github.com:IndependentSalt69/Code2Edge.git
+cd Code2Edge
+python3 -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+pytest tests/ --ignore=tests/mcp --ignore=tests/target -q
+```
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for full setup, branch conventions, and how to add a new MCP tool.
 
 ## Architecture
 

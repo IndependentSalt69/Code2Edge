@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "person-*/work", "deploy/**"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Host Python test suite
+  # Runs all tests that do NOT require physical hardware (COM3 / STM32U585).
+  # Hardware-bound tests (tests/mcp, tests/target) are excluded because they
+  # require jsonschema/flatbuffers deps not in the base install, and they need
+  # a live serial device — they must be run manually on the bench machine.
+  # ---------------------------------------------------------------------------
+  test:
+    name: "Test suite (Python ${{ matrix.python-version }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install project (dev extras)
+        run: pip install -e ".[dev]"
+
+      - name: Run host test suite
+        # mcp_server/tests and workflow/tests require optional deps (jsonschema,
+        # pyserial, pytest-asyncio>=0.23) not in the base install; they are run
+        # separately by contributors who install mcp_server/requirements.txt.
+        # Hardware-gated suites (tests/mcp, tests/target) require physical COM3.
+        run: |
+          pytest tests/ \
+            --ignore=tests/mcp \
+            --ignore=tests/target \
+            -q --tb=short
+
+  # ---------------------------------------------------------------------------
+  # Contract schema validation
+  # Validates every example JSON in contracts/mcp/examples/ against its schema.
+  # ---------------------------------------------------------------------------
+  contracts:
+    name: "Contract schema validation"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install schema deps
+        run: pip install "jsonschema>=4.18.0" "referencing>=0.28.0"
+
+      - name: Validate MCP tool contracts
+        run: python contracts/mcp/validate.py

@@ -20,6 +20,9 @@ A Bob-native workflow that traces an ML repository's complete inference pipeline
 
 ```text
 Code2Edge/
+├── .github/
+│   └── workflows/
+│       └── ci.yml             # CI: host tests + contract validation on every push/PR
 ├── reference/
 │   ├── tiny-kws/              # IMMUTABLE upstream reference workload (c097b35)
 │   ├── corpus/                # Small/fixed test corpus metadata
@@ -48,18 +51,22 @@ Code2Edge/
 ├── contracts/
 │   ├── mcp/                   # MCP tool JSON schemas + examples + validate.py
 │   └── target/                # target-profile, benchmark-result, device-parity schemas
-├── docs/                      # Architecture, problem, feasibility, hardware, plan,
-│                              #   audit, integration log, and hardware validation docs
+├── docs/
+│   ├── internal/              # Internal planning docs (person-b-plan, etc.)
+│   └── *.md                   # Architecture, audit, integration log, hardware validation
 ├── evidence/
 │   ├── parity/                # Host & device parity verification evidence + per-stage reports
 │   ├── benchmarks/            # Authoritative benchmark tables (predicted vs measured)
 │   ├── model/                 # Model artifact validation reports
+│   ├── mcp/                   # Real MCP tool response captures
 │   ├── runs/                  # Per-run workflow execution records
 │   │   ├── mock-rehearsal-2026-09-26/
 │   │   └── real-run-7d942761/
 │   └── screenshots/           # Hardware and UI capture evidence
 ├── bob_sessions/              # Bob session tracking (member-1, member-2, person-c)
 ├── submission/                # Final project submission bundle
+├── pyproject.toml             # Project metadata, unified deps, pytest config
+├── CONTRIBUTING.md            # Dev setup, test commands, branch/PR conventions
 └── checkpoints/               # Local model weights (gitignored except .gitkeep)
 ```
 
