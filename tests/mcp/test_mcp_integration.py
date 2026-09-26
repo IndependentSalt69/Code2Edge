@@ -91,12 +91,10 @@ async def test_mcp_server_end_to_end_check_target_real_mode(tmp_path):
             }
             jsonschema.validate(instance=payload, schema=output_schema)
 
-            # 5. Save evidence report
-            evidence_dir = REPO_ROOT / "evidence" / "mcp"
-            evidence_dir.mkdir(parents=True, exist_ok=True)
-            evidence_path = evidence_dir / "check_target_real_response.json"
-            evidence_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-            assert evidence_path.exists()
+            # 5. Save test evidence report to tmp_path
+            test_evidence_path = tmp_path / "check_target_test_response.json"
+            test_evidence_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+            assert test_evidence_path.exists()
 
 
 @pytest.mark.asyncio
