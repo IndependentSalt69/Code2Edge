@@ -1,0 +1,27 @@
+{
+  "contract": "Code2Edge target audio input",
+  "version": "1.0.0",
+  "input": {
+    "name": "audio_pcm_16k",
+    "shape": [16000],
+    "sample_rate_hz": 16000,
+    "channels": 1,
+    "duration_ms": 1000,
+    "accepted_dtypes": [
+      "int16",
+      "float32"
+    ],
+    "device_dtype": "int16",
+    "layout": "mono_1d"
+  },
+  "device_abi": {
+    "c_type": "int16_t",
+    "parameter": "audio_pcm_16k",
+    "sample_count": 16000,
+    "payload_bytes": 32000
+  },
+  "reference": {
+    "waveform_shape": [16000],
+    "waveform_dtype": "float32"
+  }
+}
