@@ -23,33 +23,43 @@ Code2Edge/
 ├── reference/
 │   ├── tiny-kws/              # IMMUTABLE upstream reference workload (c097b35)
 │   ├── corpus/                # Small/fixed test corpus metadata
-│   └── golden/                # Frozen reference intermediate fixtures (S0–S6)
+│   └── golden/                # Frozen reference intermediate fixtures (S0–S6) [gitignored]
 ├── src/
-│   ├── pipeline/              # Generated edge pipeline implementation (C/C++)
+│   ├── pipeline/              # Generated edge pipeline (C): feature_extraction, model_data
+│   ├── parity/                # Host parity harness (C++): preprocess, parity_runner
 │   ├── inference/             # Host reference inference runner & non-invasive hooks
-│   ├── parity/                # Host differential parity comparison engine
 │   └── firmware/              # STM32U585 firmware integration & Arduino sketch
-├── mcp_server/                # Code2Edge MCP server tools
+├── mcp_server/                # Code2Edge MCP server (10 tools, adapters, mocks, tests)
+├── workflow/                  # Bob workflow state machine (gates, approvals, state)
 ├── tools/
-│   ├── reference/             # Checkpoint fetcher and reference integrity checker
-│   └── target/                # Hardware build, flash, bridge test, and benchmark tools
+│   ├── reference/             # Checkpoint fetcher, reference integrity checker, C codegen
+│   ├── target/                # Hardware benchmark, check, parity, map-parse, physical inference
+│   └── host_compat/           # Host-side C stdlib compatibility shims for DLL builds
 ├── tests/
-│   ├── pipeline/              # Unit tests for generated C pipeline
-│   ├── parity/                # Parity gate test suite
-│   ├── mcp/                   # MCP server contract tests
-│   ├── firmware/              # Firmware unit and memory tests
+│   ├── pipeline/              # Unit tests for generated C pipeline (preprocessing parity)
+│   ├── parity/                # Parity gate test suite (device parity)
+│   ├── mcp/                   # MCP server contract & integration tests
+│   ├── firmware/
+│   │   ├── benchmark_harness/ # Firmware benchmark sketch + audio fixture
+│   │   ├── router_bridge_smoke/ # RouterBridge RPC smoke test sketch
+│   │   └── hardware_test/     # Basic hardware bringup sketch
+│   ├── target/                # Host-side target tool unit tests
 │   └── integration/           # End-to-end integration tests
 ├── contracts/
-│   ├── mcp/                   # MCP tool interfaces
-│   ├── parity/                # Parity schemas
+│   ├── mcp/                   # MCP tool JSON schemas + examples + validate.py
 │   └── target/                # target-profile, benchmark-result, device-parity schemas
-├── docs/                      # Architecture, problem, feasibility, hardware, plan docs
+├── docs/                      # Architecture, problem, feasibility, hardware, plan,
+│                              #   audit, integration log, and hardware validation docs
 ├── evidence/
-│   ├── parity/                # Host & device parity verification evidence
+│   ├── parity/                # Host & device parity verification evidence + per-stage reports
 │   ├── benchmarks/            # Authoritative benchmark tables (predicted vs measured)
+│   ├── model/                 # Model artifact validation reports
+│   ├── runs/                  # Per-run workflow execution records
+│   │   ├── mock-rehearsal-2026-09-26/
+│   │   └── real-run-7d942761/
 │   └── screenshots/           # Hardware and UI capture evidence
+├── bob_sessions/              # Bob session tracking (member-1, member-2, person-c)
 ├── submission/                # Final project submission bundle
-├── bob_sessions/              # Bob session tracking (member-1, member-2)
 └── checkpoints/               # Local model weights (gitignored except .gitkeep)
 ```
 

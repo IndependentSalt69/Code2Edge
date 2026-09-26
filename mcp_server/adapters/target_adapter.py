@@ -6,8 +6,8 @@ Integrates real target profile inspection (tools/target/check_target.py)
 and grounds memory limits against STM32U585 hardware contracts.
 
 Conforms to:
-  - contracts/check_target.schema.json
-  - contracts/benchmark_target.schema.json
+  - contracts/mcp/check_target.schema.json
+  - contracts/mcp/benchmark_target.schema.json
   - contracts/target/target-profile.json
 """
 from __future__ import annotations

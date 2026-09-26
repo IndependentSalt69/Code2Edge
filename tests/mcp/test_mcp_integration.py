@@ -30,7 +30,7 @@ from mcp_server.adapters.target_adapter import run_benchmark_target
 from mcp_server.server import mcp
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-CONTRACTS_DIR = REPO_ROOT / "contracts"
+CONTRACTS_DIR = REPO_ROOT / "contracts" / "mcp"
 
 
 @pytest.mark.asyncio
