@@ -87,9 +87,9 @@
   \node[draw=c2eAccent, thick, rounded corners=3pt, fill=c2eBg,
         text width=11.5cm, align=center, inner sep=10pt]
   {\small A Bob-native workflow that traces an ML repository's inference
-   pipeline, generates a constrained-device implementation, and proves
-   mathematical correctness through stage-wise differential parity ---
-   before and after real hardware deployment.};
+   pipeline, generates a constrained-device implementation, and verifies
+   numerical equivalence through stage-wise differential parity before and
+   after real hardware deployment.};
 \end{tikzpicture}
 
 \vfill
@@ -540,12 +540,13 @@ Prediction correctness & 50/50 iterations --- logits, argmax and label all match
 
 The multi-second latency is genuine and internally consistent
 ($804{,}196{,}284 \div 160\,\text{MHz} = 5.026\,\text{s}$, exactly matching
-the reported mean) --- it reflects unaccelerated reference kernels rather
-than CMSIS-NN SIMD dispatch, which \texttt{docs/hardware.md} already
-flagged as not yet enabled at the time of writing. This is a real,
-reportable performance finding, not a measurement error: the next
-optimization target is enabling CMSIS-NN kernel dispatch for the
-depthwise/pointwise convolutions, which should close most of that gap.
+the reported mean). This is a real, reportable performance finding, not a
+measurement error: the current implementation uses unaccelerated reference
+kernels rather than CMSIS-NN SIMD dispatch, which \texttt{docs/hardware.md}
+already flagged as not yet enabled at the time of writing. Enabling
+CMSIS-NN kernel dispatch for the depthwise/pointwise convolutions is
+therefore the next optimization target --- the expected improvement has
+not been measured yet, and this submission does not claim one.
 
 \subsection{The real deployment run}
 \label{sec:run}
@@ -565,12 +566,29 @@ and pull request:
   \item A deploy branch was pushed and a pull request opened containing the
   generated code, both parity reports, the predicted-vs-measured table, and
   the hardware validation guide.
-  \item \emph{Since that run}, the team has produced a real physical DS-CNN
-  benchmark (Section~\ref{sec:device-benchmark}) --- the deploy branch's own
-  benchmark artifact has not yet been re-run against it, so this submission
-  reports it as a separate, current piece of evidence rather than silently
-  back-filling the earlier PR.
+  \item A subsequent live Bob/MCP execution was run in \textbf{REAL} mode
+  against the physical Arduino UNO Q over COM3. \texttt{check\_target\_tool}
+  verified the STM32U585 target and memory fit, and
+  \texttt{benchmark\_target\_tool} executed the DS-CNN inference on
+  physical silicon, producing \texttt{yes} (class index 2) with
+  approximately 5.02\,s measured latency.
 \end{itemize}
+
+This makes the distinction deliberately explicit rather than blurring three
+different things into one claim:
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Earlier full-workflow PR run} (above): device parity and
+  benchmark were mock, because no board was attached to that machine.
+  \item \textbf{Subsequent live Bob/MCP run}: real physical hardware,
+  \texttt{check\_target\_tool} and \texttt{benchmark\_target\_tool} both
+  executed in real mode against the actual STM32U585.
+  \item \textbf{The 50-run benchmark} (Section~\ref{sec:device-benchmark}):
+  the same real run's full statistical evidence --- latency distribution,
+  memory usage, and 50/50 prediction correctness.
+\end{itemize}
+These are reported as three distinct facts rather than one identical run,
+because that is what actually happened and is the more honest --- and
+ultimately stronger --- story the evidence supports.
 
 \subsection{Engineering hygiene}
 \begin{center}
