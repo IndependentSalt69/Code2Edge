@@ -138,5 +138,5 @@ async def test_mcp_benchmark_target_real_mode_reports_pending_artifact(monkeypat
 
     assert out["source"] == "real"
     assert out["status"] == "ERROR"
-    assert "pending from Person A" in out["error_message"]
-    assert "STM32U585 is verified" in out["error_message"]
+    assert "not found" in out["error_message"]
+    assert "checkpoints" in out["error_message"] or "best.pt" in out["error_message"]
