@@ -1,0 +1,101 @@
+{
+  "$schema": "contracts/target/benchmark-result.schema.json",
+  "target_id": "arduino_uno_q_stm32u585",
+  "model_id": "tiny-kws-dscnn-int8",
+  "run_type": "MEASURED",
+  "timestamp": "2026-09-26T11:24:46.752208+00:00",
+  "latency_ms": {
+    "inference_avg_ms": 5018.8695,
+    "inference_min_ms": 5018.8695,
+    "inference_max_ms": 5018.8695,
+    "inference_std_ms": 0.0,
+    "preprocessing_avg_ms": null,
+    "end_to_end_avg_ms": null,
+    "clock_cycles_inference": 803019155
+  },
+  "memory_bytes": {
+    "flash_used_bytes": 310788,
+    "flash_total_bytes": 2097152,
+    "flash_headroom_bytes": 1786364,
+    "sram_used_bytes": 242224,
+    "sram_total_bytes": 804864,
+    "sram_headroom_bytes": 562640,
+    "tensor_arena_bytes": 166560,
+    "feature_buffer_bytes": 25856,
+    "static_ram_bytes": 75664,
+    "stack_peak_bytes": null,
+    "application_partition": {
+      "flash_partition_max_bytes": 786432,
+      "flash_partition_usage_pct": 39.0,
+      "sram_partition_max_bytes": 262144,
+      "sram_partition_usage_pct": 92.0
+    }
+  },
+  "execution_metadata": {
+    "clock_mhz": 160.0,
+    "num_iterations": 1,
+    "warmup_iterations": 0,
+    "runtime": "native_static_dscnn_runner",
+    "quantization": "int8",
+    "toolchain_version": "arduino-cli 1.5.2-rc.1 (arduino:zephyr 1.0.0)",
+    "measurement_source": "physical_stm32u585",
+    "serial_port": "COM3",
+    "fixture": "yes.wav"
+  },
+  "sample_prediction": {
+    "test_fixture": "yes.wav",
+    "predicted_class_index": 2,
+    "predicted_label": "yes",
+    "measured_logits": [
+      -30,
+      -21,
+      83,
+      -39,
+      -28,
+      -27,
+      -20,
+      -28,
+      -30,
+      -16,
+      -29,
+      -23
+    ],
+    "dequantized": [
+      -1.6498,
+      -1.1998,
+      3.9995,
+      -2.0997,
+      -1.5498,
+      -1.4998,
+      -1.1498,
+      -1.5498,
+      -1.6498,
+      -0.9499,
+      -1.5998,
+      -1.2998
+    ]
+  },
+  "validation": {
+    "expected_logits": [
+      -30,
+      -21,
+      83,
+      -39,
+      -28,
+      -27,
+      -20,
+      -28,
+      -30,
+      -16,
+      -29,
+      -23
+    ],
+    "expected_predicted_index": 2,
+    "expected_predicted_label": "yes",
+    "all_logits_matched": true,
+    "all_argmax_matched": true,
+    "all_labels_matched": true,
+    "total_iterations_verified": 1,
+    "status": "PASS"
+  }
+}

@@ -181,12 +181,34 @@ def compile_firmware(
     print(f"[Code2Edge] Compiling firmware via {arduino_cli_path}...")
     print(f"            Command: {' '.join(cmd)}")
     res = subprocess.run(cmd, capture_output=True, text=True)
-    if res.returncode != 0:
-        raise RuntimeError(
-            f"Firmware compilation failed (exit code {res.returncode}):\n{res.stderr}\n{res.stdout}"
-        )
-
     combined_output = f"{res.stdout}\n{res.stderr}"
+
+    # Write debug log so we can diagnose failures in the MCP server subprocess context
+    try:
+        import tempfile as _tmpmod
+        _dbg = Path(REPO_ROOT) / "evidence" / "benchmarks" / "compile_debug.txt"
+        _dbg.parent.mkdir(parents=True, exist_ok=True)
+        _dbg.write_text(
+            f"returncode={res.returncode}\nstdout={repr(res.stdout)}\nstderr={repr(res.stderr)}\n",
+            encoding="utf-8",
+        )
+    except Exception:
+        pass
+
+    if res.returncode != 0:
+        # arduino-cli exits 1 for the "Low memory available" advisory warning even
+        # when compilation succeeded and memory stats are present in stdout.
+        # Attempt to parse memory usage first; only raise if parsing also fails.
+        try:
+            mem_info = parse_compiler_memory_usage(combined_output)
+        except ValueError:
+            raise RuntimeError(
+                f"Firmware compilation failed (exit code {res.returncode}):\n{res.stderr}\n{res.stdout}"
+            )
+        mem_info["raw_output"] = combined_output
+        mem_info["toolchain_version"] = get_cli_version(arduino_cli_path)
+        return mem_info
+
     mem_info = parse_compiler_memory_usage(combined_output)
     mem_info["raw_output"] = combined_output
     mem_info["toolchain_version"] = get_cli_version(arduino_cli_path)
@@ -217,46 +239,81 @@ def calculate_sample_stats(values: List[float]) -> Dict[str, float]:
 def open_serial_connection(
     port: str,
     baud_rate: int = 115200,
-    drain_timeout: float = 2.0,
+    readiness_timeout: float = 60.0,
 ) -> serial.Serial:
-    """Opens serial connection, pulses DTR, and drains initial serial buffer."""
+    """Opens serial connection and performs query-response readiness handshake with STM32U585 MCU.
+
+    Sends query command '?' upon opening and re-sends every 500 ms until the target MCU
+    acknowledges with 'CODE2EDGE_READY' from loop() or setup().
+    """
     print(f"[Code2Edge] Connecting to target MCU on {port} @ {baud_rate} baud...", flush=True)
     try:
         ser = serial.Serial(
             port=port,
             baudrate=baud_rate,
-            timeout=1.0,
+            timeout=0.2,
             write_timeout=1.0,
         )
     except Exception as e:
         raise ConnectionError(f"Failed to open serial port {port}: {e}") from e
 
-    # Reset / Wakeup sequence via DTR toggle
-    ser.setDTR(False)
-    time.sleep(0.1)
-    ser.setDTR(True)
-    time.sleep(0.5)
+    print(f"[Code2Edge] Querying target MCU readiness on {port} (timeout: {readiness_timeout:.0f}s)...", flush=True)
+    start_time = time.time()
+    last_query_time = 0.0
+    startup_lines: List[str] = []
+    ready = False
 
-    # Drain any startup banner / initial text until silence
-    ser.reset_input_buffer()
-    start_drain = time.time()
-    last_byte_time = time.time()
+    # Send initial single-byte query immediately upon opening
+    try:
+        ser.write(b"?")
+        ser.flush()
+        last_query_time = time.time()
+    except Exception:
+        pass
 
-    while time.time() - start_drain < drain_timeout:
-        if ser.in_waiting > 0:
-            ser.read(ser.in_waiting)
-            last_byte_time = time.time()
-        elif time.time() - last_byte_time > 0.5:
+    while time.time() - start_time < readiness_timeout:
+        # Re-send single-byte query ping every 500 ms if not yet acknowledged
+        now = time.time()
+        if now - last_query_time >= 0.5:
+            try:
+                ser.write(b"?")
+                ser.flush()
+                last_query_time = now
+            except Exception:
+                pass
+
+        line_bytes = ser.readline()
+        if not line_bytes:
+            continue
+
+        line_str = line_bytes.decode("utf-8", errors="replace").strip()
+        if not line_str:
+            continue
+
+        if line_str == "CODE2EDGE_READY":
+            ready = True
             break
-        time.sleep(0.05)
 
-    print("[Code2Edge] Target serial connection established and synchronized.", flush=True)
+        startup_lines.append(line_str)
+        print(f"  [Target Boot] {line_str}", flush=True)
+
+    if not ready:
+        elapsed = time.time() - start_time
+        context_str = "\n".join(f"    {line}" for line in startup_lines[-10:]) if startup_lines else "    (No startup output received)"
+        ser.close()
+        raise TimeoutError(
+            f"Target MCU on {port} did not send 'CODE2EDGE_READY' within {elapsed:.1f}s.\n"
+            f"Recent startup output received before timeout:\n{context_str}"
+        )
+
+    elapsed = time.time() - start_time
+    print(f"[Code2Edge] Target MCU ready ({elapsed:.2f}s). Serial connection established and synchronized.", flush=True)
     return ser
 
 
 def trigger_single_inference(
     ser: serial.Serial,
-    timeout_sec: float = 20.0,
+    timeout_sec: float = 40.0,
 ) -> Dict[str, Any]:
     """
     Sends 'I' command to MCU and captures the INFERENCE_JSON block.
@@ -265,21 +322,25 @@ def trigger_single_inference(
     if ser.in_waiting > 0:
         ser.read(ser.in_waiting)
 
-    ser.write(b"I\r\n")
+    ser.write(b"I")
     ser.flush()
 
     start_time = time.time()
     in_block = False
     inference_json_data: Optional[Dict[str, Any]] = None
+    captured_lines: List[str] = []
 
     while time.time() - start_time < timeout_sec:
         line_bytes = ser.readline()
         if not line_bytes:
             continue
 
+        elapsed = time.time() - start_time
         line_str = line_bytes.decode("utf-8", errors="replace").strip()
         if not line_str:
             continue
+
+        captured_lines.append(f"[{elapsed:6.2f}s] {line_str}")
 
         if line_str == "CODE2EDGE_INFERENCE_START":
             in_block = True
@@ -299,8 +360,10 @@ def trigger_single_inference(
                 break
 
     if not in_block or inference_json_data is None:
+        recent_log = "\n".join(f"      {l}" for l in captured_lines[-10:]) if captured_lines else "      (No output received)"
         raise TimeoutError(
-            f"Did not receive complete INFERENCE_JSON block from MCU within {timeout_sec}s timeout."
+            f"Did not receive complete INFERENCE_JSON block from MCU within {timeout_sec:.1f}s timeout.\n"
+            f"Recent lines received during inference window:\n{recent_log}"
         )
 
     cycles = inference_json_data.get("inference_cycles", 0)
@@ -407,7 +470,7 @@ def run_physical_benchmark(
     baud_rate: int = 115200,
     num_iterations: int = 50,
     warmup_iterations: int = 5,
-    timeout_per_inference: float = 15.0,
+    timeout_per_inference: float = 40.0,
     sketch_path: Path = DEFAULT_SKETCH,
     fqbn: str = "arduino:zephyr:unoq",
     tensor_arena_bytes: int = DEFAULT_TENSOR_ARENA_BYTES,
@@ -649,8 +712,8 @@ def main() -> int:
     parser.add_argument(
         "--timeout-per-inference",
         type=float,
-        default=15.0,
-        help="Timeout per inference in seconds (default: 15.0)",
+        default=40.0,
+        help="Timeout per inference in seconds (default: 40.0)",
     )
     parser.add_argument(
         "--tensor-arena-bytes",

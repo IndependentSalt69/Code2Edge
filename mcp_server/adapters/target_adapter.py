@@ -208,7 +208,7 @@ def run_benchmark_target(
             baud_rate=115200,
             num_iterations=n_inferences,
             warmup_iterations=5,
-            timeout_per_inference=15.0,
+            timeout_per_inference=40.0,
             sketch_path=_REPO_ROOT / "tests" / "firmware" / "benchmark_harness",
             fqbn="arduino:zephyr:unoq",
             tensor_arena_bytes=166560,

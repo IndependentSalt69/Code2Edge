@@ -170,3 +170,106 @@ def test_generate_benchmark_report_conformance():
     assert meta["measurement_source"] == "physical_stm32u585"
     assert meta["serial_port"] == "COM3"
     assert meta["fixture"] == "yes.wav"
+
+
+def test_open_serial_connection_query_and_immediate_ready():
+    """Verify open_serial_connection sends single-byte '?' query and completes on exact CODE2EDGE_READY."""
+    import unittest.mock as mock
+    from tools.target.benchmark_target import open_serial_connection
+
+    mock_ser = mock.MagicMock()
+    mock_ser.readline.side_effect = [b"CODE2EDGE_READY\r\n"]
+
+    with mock.patch("serial.Serial", return_value=mock_ser):
+        ser = open_serial_connection(port="COM3", baud_rate=115200, readiness_timeout=5.0)
+
+        # 1. Verify single-byte initial query write
+        mock_ser.write.assert_called_with(b"?")
+        assert ser is mock_ser
+
+
+def test_open_serial_connection_repeated_query_after_delay():
+    """Verify open_serial_connection re-sends single-byte '?' query after 500 ms when waiting for readiness."""
+    import unittest.mock as mock
+    from tools.target.benchmark_target import open_serial_connection
+
+    mock_ser = mock.MagicMock()
+    # First returns empty/boot log, then after delay returns readiness marker
+    mock_ser.readline.side_effect = [
+        b"",
+        b"[Boot] Feature extraction initialized\r\n",
+        b"",
+        b"CODE2EDGE_READY\r\n",
+    ]
+
+    with mock.patch("serial.Serial", return_value=mock_ser):
+        ser = open_serial_connection(port="COM3", baud_rate=115200, readiness_timeout=5.0)
+        assert ser is mock_ser
+        # Verify single-byte query was sent at least once
+        assert mock_ser.write.call_count >= 1
+        assert mock_ser.write.call_args[0][0] == b"?"
+
+
+def test_open_serial_connection_exact_marker_matching_and_timeout():
+    """Verify open_serial_connection rejects partial substrings and raises TimeoutError on expiry."""
+    import unittest.mock as mock
+    from tools.target.benchmark_target import open_serial_connection
+
+    mock_ser = mock.MagicMock()
+    responses = [
+        b"NOT_CODE2EDGE_READY\r\n",
+        b"PREFIX_CODE2EDGE_READY_SUFFIX\r\n",
+    ]
+    mock_ser.readline.side_effect = lambda: responses.pop(0) if responses else b""
+
+    with mock.patch("serial.Serial", return_value=mock_ser):
+        with pytest.raises(TimeoutError, match="did not send 'CODE2EDGE_READY'"):
+            open_serial_connection(port="COM3", baud_rate=115200, readiness_timeout=0.2)
+
+        # Ensure serial port was closed on timeout
+        mock_ser.close.assert_called_once()
+
+
+def test_trigger_single_inference_sends_single_byte_and_parses():
+    """Verify trigger_single_inference sends single-byte 'I' command and parses INFERENCE_JSON correctly."""
+    import unittest.mock as mock
+    from tools.target.benchmark_target import trigger_single_inference
+
+    mock_ser = mock.MagicMock()
+    mock_ser.in_waiting = 0
+    mock_ser.readline.side_effect = [
+        b"CODE2EDGE_INFERENCE_START\r\n",
+        b"================================================================\r\n",
+        b" OUTPUT INT8 LOGITS: [-30, -21, 83, -39, -28, -27, -20, -28, -30, -16, -29, -23]\r\n",
+        b'INFERENCE_JSON={"fixture":"yes","predicted_index":2,"predicted_label":"yes","inference_cycles":803912575,"inference_us":5024453.60,"arena_bytes":166560,"logits":[-30,-21,83,-39,-28,-27,-20,-28,-30,-16,-29,-23],"dequantized":[0.0]}\r\n',
+        b"CODE2EDGE_INFERENCE_END\r\n",
+    ]
+
+    result = trigger_single_inference(mock_ser, timeout_sec=5.0)
+
+    # 1. Verify single-byte 'I' write
+    mock_ser.write.assert_called_with(b"I")
+    mock_ser.flush.assert_called_once()
+
+    # 2. Verify parsed result
+    assert result["predicted_index"] == 2
+    assert result["predicted_label"] == "yes"
+    assert result["inference_cycles"] == 803912575
+    assert result["inference_us"] == 5024453.60
+    assert result["logits"][2] == 83
+
+
+def test_trigger_single_inference_timeout_diagnostic():
+    """Verify trigger_single_inference raises TimeoutError with diagnostic details on timeout."""
+    import unittest.mock as mock
+    from tools.target.benchmark_target import trigger_single_inference
+
+    mock_ser = mock.MagicMock()
+    mock_ser.in_waiting = 0
+    responses = [
+        b"CODE2EDGE_READY\r\n",
+    ]
+    mock_ser.readline.side_effect = lambda: responses.pop(0) if responses else b""
+
+    with pytest.raises(TimeoutError, match="Did not receive complete INFERENCE_JSON block"):
+        trigger_single_inference(mock_ser, timeout_sec=0.1)

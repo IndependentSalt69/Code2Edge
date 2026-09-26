@@ -491,12 +491,23 @@ void setup() {
 
     // Prepare input features once for benchmarking
     feature_extraction_run(g_audio_fixture_yes, s_mel_features_out);
+
+    Serial.println("CODE2EDGE_READY");
+    Serial.flush();
 }
 
 void loop() {
-    if (Serial.available() > 0) {
+    while (Serial.available() > 0) {
         int c = Serial.read();
-        if (c == 'I' || c == 'i') {
+
+        if (c == '\r' || c == '\n') {
+            continue;
+        }
+
+        if (c == '?' || c == 'Q' || c == 'q') {
+            Serial.println(F("CODE2EDGE_READY"));
+            Serial.flush();
+        } else if (c == 'I' || c == 'i') {
             print_inference_report();
             Serial.flush();
         } else if (c == 'B' || c == 'b' || c == 'R' || c == 'r') {
