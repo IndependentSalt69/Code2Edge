@@ -5,6 +5,7 @@ Adheres strictly to reference/tiny-kws/src/common.py and contracts/target/input-
 """
 
 import math
+import json
 import wave
 import numpy as np
 from pathlib import Path
@@ -23,13 +24,35 @@ HOP_LENGTH = 160
 N_MELS = 64
 F_MIN = 20.0
 F_MAX = 7600.0
-LOG_EPS = 1e-6
 N_FRAMES = 101
+
 N_FFT_BINS = N_FFT // 2 + 1  # 201
 
-# Normalization constants from checkpoints/best.pt
-NORM_MEAN = -6.9023613929748535
-NORM_STD = 4.81721305847168
+
+def load_reference_config():
+    normalization_path = REPO_ROOT / "reference" / "normalization.json"
+    model_validation_path = (
+        REPO_ROOT / "evidence" / "model" / "model_artifact_validation.json"
+    )
+
+    normalization = json.loads(normalization_path.read_text())
+    model_validation = json.loads(model_validation_path.read_text())
+    input_tensor = model_validation["input_tensor"]
+
+    if input_tensor["shape"] != [1, 1, 64, 101]:
+        raise ValueError(f"Unexpected model input shape: {input_tensor['shape']}")
+    if input_tensor["dtype"] != "INT8":
+        raise ValueError(f"Unexpected model input dtype: {input_tensor['dtype']}")
+    if len(input_tensor["scales"]) != 1 or len(input_tensor["zero_points"]) != 1:
+        raise ValueError("Expected one tensorwise model input scale and zero point")
+
+    return {
+        "norm_mean": float(normalization["mean"]),
+        "norm_std": float(normalization["std"]),
+        "log_eps": float(normalization["log_eps"]),
+        "input_scale": float(input_tensor["scales"][0]),
+        "input_zero_point": int(input_tensor["zero_points"][0]),
+    }
 
 
 def generate_tables():
@@ -41,25 +64,19 @@ def generate_tables():
     cos_table = np.cos(2 * np.pi * n / N_FFT).astype(np.float32)
     sin_table = np.sin(2 * np.pi * n / N_FFT).astype(np.float32)
 
-    # 3. Mel Filterbank: load from frozen reference artifact if available, or compute
+    # 3. Mel Filterbank: require the tracked frozen reference artifact.
     mel_fb_path = REPO_ROOT / "reference" / "artifacts" / "mel_filterbank.npy"
-    if mel_fb_path.exists():
-        mel_fb = np.load(str(mel_fb_path)) # shape (201, 64)
-    else:
-        m_min = 2595.0 * np.log10(1.0 + F_MIN / 700.0)
-        m_max = 2595.0 * np.log10(1.0 + F_MAX / 700.0)
-        m_pts = np.linspace(m_min, m_max, N_MELS + 2)
-        f_pts = 700.0 * (10.0**(m_pts / 2595.0) - 1.0)
-        freq_bins = np.linspace(0, SAMPLE_RATE // 2, N_FFT_BINS)
-        mel_fb = np.zeros((N_FFT_BINS, N_MELS), dtype=np.float32)
-        for i in range(N_MELS):
-            left, center, right = f_pts[i], f_pts[i + 1], f_pts[i + 2]
-            for k in range(N_FFT_BINS):
-                f = freq_bins[k]
-                if left <= f <= center and center > left:
-                    mel_fb[k, i] = (f - left) / (center - left)
-                elif center < f <= right and right > center:
-                    mel_fb[k, i] = (right - f) / (right - center)
+    if not mel_fb_path.exists():
+        raise FileNotFoundError(
+            f"Required frozen mel filterbank artifact missing: {mel_fb_path}"
+        )
+
+    mel_fb = np.load(str(mel_fb_path), allow_pickle=False).astype(np.float32)
+    expected_mel_shape = (N_FFT_BINS, N_MELS)
+    if mel_fb.shape != expected_mel_shape:
+        raise ValueError(
+            f"Frozen mel filterbank shape {mel_fb.shape} != {expected_mel_shape}"
+        )
 
     mel_bands = []
     flat_weights = []
@@ -85,9 +102,15 @@ def generate_tables():
 
 
 def write_header_and_c():
+    config = load_reference_config()
+    norm_mean = config["norm_mean"]
+    norm_std = config["norm_std"]
+    log_eps = config["log_eps"]
+    input_scale = config["input_scale"]
+    input_zero_point = config["input_zero_point"]
+
     PIPELINE_DIR.mkdir(parents=True, exist_ok=True)
     FIXTURES_DIR.mkdir(parents=True, exist_ok=True)
-    BENCHMARK_DIR = REPO_ROOT / "tests" / "firmware" / "benchmark_harness"
 
     hann, cos_table, sin_table, mel_bands, flat_weights = generate_tables()
 
@@ -113,11 +136,15 @@ def write_header_and_c():
 #define PREPROC_N_MELS        {N_MELS}
 #define PREPROC_N_FRAMES      {N_FRAMES}
 #define PREPROC_N_FFT_BINS    {N_FFT_BINS}
-#define PREPROC_OUTPUT_SIZE   (PREPROC_N_MELS * PREPROC_N_FRAMES) // {N_MELS * N_FRAMES} floats
+#define PREPROC_OUTPUT_SIZE   (PREPROC_N_MELS * PREPROC_N_FRAMES) // {N_MELS * N_FRAMES} int8_t values
 
-#define NORM_MEAN             ({NORM_MEAN:.16f}f)
-#define NORM_STD              ({NORM_STD:.16f}f)
-#define LOG_EPS               ({LOG_EPS}f)
+#define NORM_MEAN             ({norm_mean:.16f}f)
+#define NORM_STD              ({norm_std:.16f}f)
+#define LOG_EPS               ({log_eps}f)
+#define FEATURE_INPUT_SCALE      ({input_scale:.15f}f)
+#define FEATURE_INPUT_ZERO_POINT ({input_zero_point})
+#define FEATURE_INPUT_MIN        (-128)
+#define FEATURE_INPUT_MAX        (127)
 
 #ifdef __cplusplus
 extern "C" {{
@@ -155,10 +182,10 @@ void feature_extraction_stages_f32(
  * Execute STFT -> Mel -> Log -> Normalize on 16 kHz 16-bit mono PCM audio.
  *
  * @param audio_pcm_16k Pointer to 16,000 int16_t PCM audio samples (1.0 sec @ 16 kHz)
- * @param mel_features_out Output buffer for 6,464 float32 normalized log-mel features.
+ * @param mel_features_out Output buffer for 6,464 int8_t quantized normalized log-mel features.
  *                         Row-major layout: (64 mels, 101 frames) -> [mel_idx * 101 + frame_idx]
  */
-void feature_extraction_run(const int16_t *audio_pcm_16k, float *mel_features_out);
+void feature_extraction_run(const int16_t *audio_pcm_16k, int8_t *mel_features_out);
 
 /**
  * Compute checksum (FNV-1a hash) over the generated float32 output feature array.
@@ -173,8 +200,6 @@ uint32_t feature_extraction_compute_checksum(const float *features, size_t count
 """
 
     with open(PIPELINE_DIR / "feature_extraction.h", "w", encoding="utf-8") as f:
-        f.write(header_content)
-    with open(BENCHMARK_DIR / "feature_extraction.h", "w", encoding="utf-8") as f:
         f.write(header_content)
 
     # 2. C Source File
@@ -335,7 +360,35 @@ void feature_extraction_run_f32(const float *audio_pcm_f32_16k, float *mel_featu
     feature_extraction_stages_f32(audio_pcm_f32_16k, NULL, NULL, NULL, NULL, mel_features_out);
 }
 
-void feature_extraction_run(const int16_t *audio_pcm_16k, float *mel_features_out) {
+static int8_t quantize_feature_int8(float value) {
+    // Round the float32 quotient before adding the integer zero point.
+    float scaled = value / FEATURE_INPUT_SCALE;
+    float lower = floorf(scaled);
+    float frac = scaled - lower;
+    int rounded;
+
+    if (frac > 0.5f) {
+        rounded = (int)lower + 1;
+    } else if (frac < 0.5f) {
+        rounded = (int)lower;
+    } else {
+        // Ties-to-even, matching NumPy's np.round behavior.
+        int lower_i = (int)lower;
+        rounded = (lower_i % 2 == 0) ? lower_i : (lower_i + 1);
+    }
+
+    rounded += FEATURE_INPUT_ZERO_POINT;
+
+    if (rounded < FEATURE_INPUT_MIN) {
+        rounded = FEATURE_INPUT_MIN;
+    } else if (rounded > FEATURE_INPUT_MAX) {
+        rounded = FEATURE_INPUT_MAX;
+    }
+
+    return (int8_t)rounded;
+}
+
+void feature_extraction_run(const int16_t *audio_pcm_16k, int8_t *mel_features_out) {
     static float frame_windowed[PREPROC_N_FFT];
     static float power_spec[PREPROC_N_FFT_BINS];
     static float mel_energies[PREPROC_N_MELS];
@@ -358,7 +411,7 @@ void feature_extraction_run(const int16_t *audio_pcm_16k, float *mel_features_ou
             float norm_val = (log_val - NORM_MEAN) / NORM_STD;
 
             // Store in row-major layout: (64 mels, 101 frames) -> [m * 101 + t]
-            mel_features_out[m * PREPROC_N_FRAMES + t] = norm_val;
+            mel_features_out[m * PREPROC_N_FRAMES + t] = quantize_feature_int8(norm_val);
         }
     }
 }
@@ -378,8 +431,6 @@ uint32_t feature_extraction_compute_checksum(const float *features, size_t count
 
     code_str = "\n".join(c_content)
     with open(PIPELINE_DIR / "feature_extraction.c", "w", encoding="utf-8") as f:
-        f.write(code_str)
-    with open(BENCHMARK_DIR / "feature_extraction.c", "w", encoding="utf-8") as f:
         f.write(code_str)
 
 

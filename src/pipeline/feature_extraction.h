@@ -19,11 +19,15 @@
 #define PREPROC_N_MELS        64
 #define PREPROC_N_FRAMES      101
 #define PREPROC_N_FFT_BINS    201
-#define PREPROC_OUTPUT_SIZE   (PREPROC_N_MELS * PREPROC_N_FRAMES) // 6464 floats
+#define PREPROC_OUTPUT_SIZE   (PREPROC_N_MELS * PREPROC_N_FRAMES) // 6464 int8_t values
 
-#define NORM_MEAN             (-6.9023613929748535f)
+#define NORM_MEAN             (-6.9023604393005371f)
 #define NORM_STD              (4.8172130584716797f)
 #define LOG_EPS               (1e-06f)
+#define FEATURE_INPUT_SCALE      (0.018517991527915f)
+#define FEATURE_INPUT_ZERO_POINT (-51)
+#define FEATURE_INPUT_MIN        (-128)
+#define FEATURE_INPUT_MAX        (127)
 
 #ifdef __cplusplus
 extern "C" {
@@ -61,10 +65,10 @@ void feature_extraction_stages_f32(
  * Execute STFT -> Mel -> Log -> Normalize on 16 kHz 16-bit mono PCM audio.
  *
  * @param audio_pcm_16k Pointer to 16,000 int16_t PCM audio samples (1.0 sec @ 16 kHz)
- * @param mel_features_out Output buffer for 6,464 float32 normalized log-mel features.
+ * @param mel_features_out Output buffer for 6,464 int8_t quantized normalized log-mel features.
  *                         Row-major layout: (64 mels, 101 frames) -> [mel_idx * 101 + frame_idx]
  */
-void feature_extraction_run(const int16_t *audio_pcm_16k, float *mel_features_out);
+void feature_extraction_run(const int16_t *audio_pcm_16k, int8_t *mel_features_out);
 
 /**
  * Compute checksum (FNV-1a hash) over the generated float32 output feature array.

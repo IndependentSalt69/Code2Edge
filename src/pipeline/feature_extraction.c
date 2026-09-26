@@ -399,7 +399,35 @@ void feature_extraction_run_f32(const float *audio_pcm_f32_16k, float *mel_featu
     feature_extraction_stages_f32(audio_pcm_f32_16k, NULL, NULL, NULL, NULL, mel_features_out);
 }
 
-void feature_extraction_run(const int16_t *audio_pcm_16k, float *mel_features_out) {
+static int8_t quantize_feature_int8(float value) {
+    // Round the float32 quotient before adding the integer zero point.
+    float scaled = value / FEATURE_INPUT_SCALE;
+    float lower = floorf(scaled);
+    float frac = scaled - lower;
+    int rounded;
+
+    if (frac > 0.5f) {
+        rounded = (int)lower + 1;
+    } else if (frac < 0.5f) {
+        rounded = (int)lower;
+    } else {
+        // Ties-to-even, matching NumPy's np.round behavior.
+        int lower_i = (int)lower;
+        rounded = (lower_i % 2 == 0) ? lower_i : (lower_i + 1);
+    }
+
+    rounded += FEATURE_INPUT_ZERO_POINT;
+
+    if (rounded < FEATURE_INPUT_MIN) {
+        rounded = FEATURE_INPUT_MIN;
+    } else if (rounded > FEATURE_INPUT_MAX) {
+        rounded = FEATURE_INPUT_MAX;
+    }
+
+    return (int8_t)rounded;
+}
+
+void feature_extraction_run(const int16_t *audio_pcm_16k, int8_t *mel_features_out) {
     static float frame_windowed[PREPROC_N_FFT];
     static float power_spec[PREPROC_N_FFT_BINS];
     static float mel_energies[PREPROC_N_MELS];
@@ -422,7 +450,7 @@ void feature_extraction_run(const int16_t *audio_pcm_16k, float *mel_features_ou
             float norm_val = (log_val - NORM_MEAN) / NORM_STD;
 
             // Store in row-major layout: (64 mels, 101 frames) -> [m * 101 + t]
-            mel_features_out[m * PREPROC_N_FRAMES + t] = norm_val;
+            mel_features_out[m * PREPROC_N_FRAMES + t] = quantize_feature_int8(norm_val);
         }
     }
 }
