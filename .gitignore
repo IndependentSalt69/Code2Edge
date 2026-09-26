@@ -35,3 +35,9 @@ checkpoints/*.pt
 reference/golden/
 reference/golden_smoke/
 reference/artifacts/test_cache_check/
+
+# Local model export environment
+.export-venv/
+
+# Local Bob generated artifacts
+.bob/artifacts/
