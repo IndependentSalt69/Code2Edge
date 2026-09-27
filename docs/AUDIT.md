@@ -33,8 +33,7 @@
 * **`contracts/`**: JSON schemas defining tool interfaces, target hardware profiles, and benchmark reporting:
   * `contracts/target/target-profile.json` & `target-profile.schema.json`
   * `contracts/target/benchmark-result.schema.json`
-  * `contracts/parity/host-parity-report.schema.json` & `device-parity-report.schema.json`
-  * `contracts/mcp/` (JSON schemas for all 10 MCP tools)
+  * `contracts/mcp/` (JSON schemas for all 10 MCP tools + examples + validate.py)
 * **`evidence/`**: Authoritative physical and host validation artifacts:
   * `evidence/benchmarks/stm32u585_benchmark_report.json` (Authoritative 50-run physical benchmark report)
   * `evidence/parity/host_parity_report.json` (500-sample, 4-stage host parity verification)
@@ -68,7 +67,7 @@
   * `tools/target/parse_map.py` (GCC linker map analyzer)
 
 #### Untracked Files
-* `AUDIT.md` (This audit document)
+* `docs/AUDIT.md` (This audit document — moved from repo root to `docs/` during cleanup)
 
 #### Gitignored Files (`.gitignore`)
 * `checkpoints/*.pt` (Local PyTorch weights)

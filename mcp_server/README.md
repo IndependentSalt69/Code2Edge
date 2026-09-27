@@ -108,13 +108,13 @@ All adapter logic stays inside `mcp_server/adapters/`.
 
 ## Schema validation
 
-Every tool validates its output against the matching schema in `contracts/` before returning.
+Every tool validates its output against the matching schema in `contracts/mcp/` before returning.
 A validation failure surfaces as a tool error, not a silent bad payload.
 
 Run the full contracts validator independently:
 
 ```bash
-python contracts/validate.py
+python contracts/mcp/validate.py
 ```
 
 ---

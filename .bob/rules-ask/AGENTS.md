@@ -1,16 +1,88 @@
-# Project Documentation Rules
+# AGENTS.md
 
 This file provides guidance to agents when working with code in this repository.
 
-## Status
+## Project Mission & Identity
 
-Documentation stubs exist in `docs/` but are empty templates:
-- `docs/problem.md` — Problem statement (unfilled)
-- `docs/architecture.md` — Architecture overview (unfilled)
-- `docs/feasibility.md` — Feasibility study (unfilled)
+**Code2Edge** — *Deployment with proof.*  
+A Bob-native workflow that traces an ML repository's complete inference pipeline, generates a constrained-device implementation, and proves correctness through stage-wise differential parity before and after real hardware deployment.
 
-These are planning documents, not authoritative references. Do not cite them as sources of truth until they are populated.
+- **Primary Workload:** Keyword Spotting using the frozen `tiny-kws` DS-CNN (119k params).
+- **Target Hardware:** **Arduino UNO Q — STM32U585 MCU Subsystem** (ARM Cortex-M33 @ 160 MHz, 2 MB Flash, 786 KB SRAM).
+- **Hardware Clarification Rule:** Code2Edge targets the **STM32U585** on the **Arduino UNO Q**. It does **NOT** target the Arduino UNO R4 (Renesas RA4M1). Any references to UNO R4 have been corrected.
 
-## Bob Configuration
+## Team Tracks & Responsibilities
 
-`.bob/README.md` describes `.bob/` as containing "configuration, prompts, or metadata related to Bob workspace operations." The `bob_sessions/` directory stores session data.
+- **Person A (Host ML & Edge Code Generation):** Owns reference ingestion, host parity harness (`src/inference/`, `src/parity/`), and C code generation for feature extraction and neural network (`src/pipeline/`).
+- **Person B (Embedded Firmware & Hardware Benchmarking):** Owns STM32U585 firmware integration (`src/firmware/`), hardware toolchain/build (`tools/target/`), dummy-model proof, on-device parity verification, and authoritative latency/memory benchmarking (`contracts/target/`).
+
+## Directory Layout
+
+```text
+Code2Edge/
+├── .github/
+│   └── workflows/
+│       └── ci.yml             # CI: host tests + contract validation on every push/PR
+├── reference/
+│   ├── tiny-kws/              # IMMUTABLE upstream reference workload (c097b35)
+│   ├── corpus/                # Small/fixed test corpus metadata
+│   └── golden/                # Frozen reference intermediate fixtures (S0–S6) [gitignored]
+├── src/
+│   ├── pipeline/              # Generated edge pipeline (C): feature_extraction, model_data
+│   ├── parity/                # Host parity harness (C++): preprocess, parity_runner
+│   ├── inference/             # Host reference inference runner & non-invasive hooks
+│   └── firmware/              # STM32U585 firmware integration & Arduino sketch
+├── mcp_server/                # Code2Edge MCP server (10 tools, adapters, mocks, tests)
+├── workflow/                  # Bob workflow state machine (gates, approvals, state)
+├── tools/
+│   ├── reference/             # Checkpoint fetcher, reference integrity checker, C codegen
+│   ├── target/                # Hardware benchmark, check, parity, map-parse, physical inference
+│   └── host_compat/           # Host-side C stdlib compatibility shims for DLL builds
+├── tests/
+│   ├── pipeline/              # Unit tests for generated C pipeline (preprocessing parity)
+│   ├── parity/                # Parity gate test suite (device parity)
+│   ├── mcp/                   # MCP server contract & integration tests
+│   ├── firmware/
+│   │   ├── benchmark_harness/ # Firmware benchmark sketch + audio fixture
+│   │   ├── router_bridge_smoke/ # RouterBridge RPC smoke test sketch
+│   │   └── hardware_test/     # Basic hardware bringup sketch
+│   ├── target/                # Host-side target tool unit tests
+│   └── integration/           # End-to-end integration tests
+├── contracts/
+│   ├── mcp/                   # MCP tool JSON schemas + examples + validate.py
+│   └── target/                # target-profile, benchmark-result, device-parity schemas
+├── docs/
+│   ├── internal/              # Internal planning docs (person-b-plan, etc.)
+│   └── *.md                   # Architecture, audit, integration log, hardware validation
+├── evidence/
+│   ├── parity/                # Host & device parity verification evidence + per-stage reports
+│   ├── benchmarks/            # Authoritative benchmark tables (predicted vs measured)
+│   ├── model/                 # Model artifact validation reports
+│   ├── mcp/                   # Real MCP tool response captures
+│   ├── runs/                  # Per-run workflow execution records
+│   │   ├── mock-rehearsal-2026-09-26/
+│   │   └── real-run-7d942761/
+│   └── screenshots/           # Hardware and UI capture evidence
+├── bob_sessions/              # Bob session tracking (member-1, member-2, person-c)
+├── submission/                # Final project submission bundle
+├── pyproject.toml             # Project metadata, unified deps, pytest config
+├── CONTRIBUTING.md            # Dev setup, test commands, branch/PR conventions
+└── checkpoints/               # Local model weights (gitignored except .gitkeep)
+```
+
+## Stack & Toolchain Decisions
+
+- **Host Python:** Python 3.10+ (PyTorch >= 2.6, torchaudio >= 2.6, numpy, soundfile, scikit-learn).
+- **Edge MCU Toolchain:** `arduino-cli` with `arduino:zephyr` core (version 1.0.0, board FQBN `arduino:zephyr:unoq`), utilizing `arm-zephyr-eabi-gcc`.
+- **Embedded Runtime:** TensorFlow Lite for Microcontrollers (TFLM) with CMSIS-NN kernel acceleration on ARM Cortex-M33.
+- **MPU ↔ MCU Bridge:** Internal UART on `/dev/tty*` with 8-byte framed binary packet protocol. Fallback: offline golden fixtures in Flash.
+
+## Key Gotchas & Architectural Rules
+
+1. **DO NOT MODIFY `reference/tiny-kws/`:** This directory is an immutable vendored snapshot. Any overrides, wrappers, or extensions must be authored in `src/`.
+2. **Strict Parity Gate Sequence:**
+   - **Tier 1 (Host Parity Gate):** Must pass all stage tolerances (S0–S6) before embedded compilation is permitted. Person B must NEVER bypass this gate.
+   - **Tier 2 (On-Device Parity Gate):** Validates execution on the physical STM32U585 against golden host tensors.
+3. **No Fabricated Benchmarks:** Never present estimated latency or memory as measured results. All reports must explicitly distinguish `ESTIMATED` vs `MEASURED`.
+4. **Zero Dynamic Allocation on MCU:** `malloc()` and `free()` are forbidden in inference loops. Tensor arena and feature buffers must be allocated statically in `.bss`.
+5. **Checkpoint & Dataset Safety:** Pretrained weights (`checkpoints/best.pt`) and local audio datasets (`SPEECH_COMMANDS_DATA_ROOT`) must never be committed to git.

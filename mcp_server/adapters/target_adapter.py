@@ -6,8 +6,8 @@ Integrates real target profile inspection (tools/target/check_target.py)
 and grounds memory limits against STM32U585 hardware contracts.
 
 Conforms to:
-  - contracts/check_target.schema.json
-  - contracts/benchmark_target.schema.json
+  - contracts/mcp/check_target.schema.json
+  - contracts/mcp/benchmark_target.schema.json
   - contracts/target/target-profile.json
 """
 from __future__ import annotations
@@ -204,6 +204,18 @@ def run_benchmark_target(
 
     warmup_count = 0 if n_inferences == 1 else 5
 
+    if n_inferences == 1:
+        smoke_dir = _REPO_ROOT / "evidence" / "runs" / "live-bob-smoke"
+        smoke_dir.mkdir(parents=True, exist_ok=True)
+        out_file = smoke_dir / f"{new_run_id('live-bob-smoke')}.json"
+    else:
+        out_file = (
+            _REPO_ROOT
+            / "evidence"
+            / "benchmarks"
+            / "stm32u585_benchmark_report.json"
+        )
+
     with redirect_stdout(sys.stderr):
         result = run_physical_benchmark(
             port="COM3",
@@ -215,10 +227,7 @@ def run_benchmark_target(
             fqbn="arduino:zephyr:unoq",
             tensor_arena_bytes=166560,
             feature_buffer_bytes=25856,
-            output_file=_REPO_ROOT
-            / "evidence"
-            / "benchmarks"
-            / "stm32u585_benchmark_report.json",
+            output_file=out_file,
             skip_compile=False,
         )
 

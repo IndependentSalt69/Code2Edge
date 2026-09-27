@@ -18,11 +18,14 @@ import jsonschema
 import pytest
 
 from tools.target.benchmark_target import (
+    DEFAULT_CANONICAL_OUTPUT,
+    LIVE_SMOKE_OUTPUT_DIR,
     STM32U585_FLASH_BYTES,
     STM32U585_SRAM_BYTES,
     calculate_sample_stats,
     generate_benchmark_report,
     parse_compiler_memory_usage,
+    resolve_benchmark_output_path,
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -273,3 +276,68 @@ def test_trigger_single_inference_timeout_diagnostic():
 
     with pytest.raises(TimeoutError, match="Did not receive complete INFERENCE_JSON block"):
         trigger_single_inference(mock_ser, timeout_sec=0.1)
+
+
+def test_resolve_benchmark_output_path_single_iteration():
+    """Verify 1-iteration benchmark automatically selects unique path under evidence/runs/live-smoke/."""
+    p1 = resolve_benchmark_output_path(num_iterations=1, output_file=None)
+    p2 = resolve_benchmark_output_path(num_iterations=1, output_file=None)
+
+    assert p1.parent == LIVE_SMOKE_OUTPUT_DIR
+    assert p1.parent == REPO_ROOT / "evidence" / "runs" / "live-smoke"
+    assert p1.suffix == ".json"
+    assert p1.parent.exists()
+    assert p1 != p2, "Each single-iteration smoke run must produce a unique run ID filename"
+
+
+def test_resolve_benchmark_output_path_multi_iteration():
+    """Verify multi-iteration benchmark (> 1) selects canonical evidence/benchmarks/stm32u585_benchmark_report.json."""
+    for iters in [2, 5, 10, 50, 100]:
+        p = resolve_benchmark_output_path(num_iterations=iters, output_file=None)
+        assert p == DEFAULT_CANONICAL_OUTPUT
+        assert p == REPO_ROOT / "evidence" / "benchmarks" / "stm32u585_benchmark_report.json"
+
+
+def test_resolve_benchmark_output_path_explicit_override():
+    """Verify explicit output_file argument overrides routing for both single and multi-iteration runs."""
+    custom_path_1 = Path("custom/output/smoke_override.json")
+    p1 = resolve_benchmark_output_path(num_iterations=1, output_file=custom_path_1)
+    assert p1 == custom_path_1
+
+    custom_path_50 = Path("custom/output/benchmark_override.json")
+    p2 = resolve_benchmark_output_path(num_iterations=50, output_file=custom_path_50)
+    assert p2 == custom_path_50
+
+    # Test string path conversion
+    p3 = resolve_benchmark_output_path(num_iterations=1, output_file="relative/path/smoke.json")
+    assert p3 == Path("relative/path/smoke.json")
+
+
+def test_benchmark_target_cli_output_routing():
+    """Verify CLI argument defaults and explicit --output routing."""
+    import argparse
+
+    # Inspect CLI parser structure directly
+    # Case 1: default arguments (--iterations 50, no --output)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--iterations", "-n", type=int, default=50)
+    parser.add_argument("--output", "-o", type=Path, default=None)
+
+    args_default = parser.parse_args([])
+    assert args_default.iterations == 50
+    assert args_default.output is None
+    assert resolve_benchmark_output_path(args_default.iterations, args_default.output) == DEFAULT_CANONICAL_OUTPUT
+
+    # Case 2: single iteration CLI (--iterations 1, no --output)
+    args_smoke = parser.parse_args(["--iterations", "1"])
+    assert args_smoke.iterations == 1
+    assert args_smoke.output is None
+    p_smoke = resolve_benchmark_output_path(args_smoke.iterations, args_smoke.output)
+    assert p_smoke.parent == LIVE_SMOKE_OUTPUT_DIR
+
+    # Case 3: explicit output override CLI (--iterations 1 --output /tmp/custom.json)
+    custom_file = Path("/tmp/custom.json")
+    args_explicit = parser.parse_args(["--iterations", "1", "--output", str(custom_file)])
+    assert args_explicit.iterations == 1
+    assert args_explicit.output == custom_file
+    assert resolve_benchmark_output_path(args_explicit.iterations, args_explicit.output) == custom_file

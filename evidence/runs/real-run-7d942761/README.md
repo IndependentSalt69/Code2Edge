@@ -8,8 +8,7 @@ Run `run-7d942761`, the first real Code2Edge deployment run: end-to-end
 Device parity and benchmark are mocked (`mock_scenario="pass"`) — no
 physical board was connected in this session. Both are clearly
 `"source": "mock"` in their JSON, never blended with the real host data.
-See `deploy/HARDWARE_VALIDATION_GUIDE.md` on the deploy branch for how to
-replace them with real hardware data.
+See `docs/HARDWARE_VALIDATION_GUIDE.md` for how to replace them with real hardware data.
 
 Deploy PR: https://github.com/IndependentSalt69/Code2Edge/pull/10
 Deploy branch: `deploy/kws-stm32u585-run-7d942761`

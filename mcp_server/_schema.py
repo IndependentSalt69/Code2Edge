@@ -15,12 +15,12 @@ from typing import Any
 import jsonschema
 from jsonschema import Draft202012Validator
 
-# Contracts directory: two levels up from this file (mcp_server/ → repo root → contracts/)
-_CONTRACTS_DIR = Path(__file__).resolve().parent.parent / "contracts"
+# MCP contracts directory: two levels up from this file (mcp_server/ → repo root → contracts/mcp/)
+_CONTRACTS_DIR = Path(__file__).resolve().parent.parent / "contracts" / "mcp"
 
 
 def _build_registry():
-    """Build a referencing.Registry from all contracts/*.schema.json files."""
+    """Build a referencing.Registry from all contracts/mcp/*.schema.json files."""
     from referencing import Registry, Resource
     from referencing.jsonschema import DRAFT202012
 

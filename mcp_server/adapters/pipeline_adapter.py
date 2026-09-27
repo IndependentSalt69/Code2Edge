@@ -10,7 +10,7 @@ reference/normalization.json, reference/corpus_manifest.json,
 reference/tiny-kws/src/model.py, reference/tiny-kws/src/common.py) as of
 2026-09-26 (Prompt 10A). See docs/interface-requests.md for the two gaps
 this surfaced: no exported quantized model, and the real 4-stage pipeline
-not matching contracts/inspect_pipeline.schema.json's 7-stage enum.
+not matching contracts/mcp/inspect_pipeline.schema.json's 7-stage enum.
 
 run_parity_test (gate="host") is wired to Person A's real 500-sample
 corpus-wide host parity report (evidence/parity/host_parity_report.json,
@@ -172,7 +172,7 @@ def run_inspect_pipeline(repo_path: str, manifest_path: str,
     resample stage (input is already 16 kHz) and no pre-emphasis stage (not
     implemented at all), and computes STFT + mel filterbank in one fused
     torchaudio.transforms.MelSpectrogram call rather than separate framing/
-    fft functions. contracts/inspect_pipeline.schema.json's stage name enum
+    fft functions. contracts/mcp/inspect_pipeline.schema.json's stage name enum
     (resample, pre_emphasis, framing, fft, mel, log, normalize) assumes all
     seven are separable; only four of them are here. The other three are
     omitted rather than emitted with a null name (the schema enum doesn't
@@ -266,7 +266,7 @@ def run_inspect_pipeline(repo_path: str, manifest_path: str,
     }
 
 
-# Real-report stage name -> contract stage name (contracts/run_parity_test.schema.json's
+# Real-report stage name -> contract stage name (contracts/mcp/run_parity_test.schema.json's
 # enum assumes 7 separable stages; the real pipeline only has these 4 -- same
 # mapping as inspect_pipeline, see docs/interface-requests.md). S0_raw_waveform
 # is the unprocessed input, not a transform stage, so it's excluded here too.

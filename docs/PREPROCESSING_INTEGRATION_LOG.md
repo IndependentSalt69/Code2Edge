@@ -140,7 +140,7 @@ Parity report saved to: [`evidence/parity/host_parity_report.json`](evidence/par
 9. **[`tests/pipeline/test_preprocessing_parity.py`](tests/pipeline/test_preprocessing_parity.py)** — Pytest test suite asserting stage-wise parity against ground truth.
 10. **[`evidence/parity/host_parity_report.json`](evidence/parity/host_parity_report.json)** — Machine-readable host parity report.
 11. **[`contracts/target/target-profile.json`](contracts/target/target-profile.json)** — Hardware profile with verified physical toolchain & RouterBridge metadata.
-12. **[`PREPROCESSING_INTEGRATION_LOG.md`](PREPROCESSING_INTEGRATION_LOG.md)** — This comprehensive log.
+12. **[`docs/PREPROCESSING_INTEGRATION_LOG.md`](PREPROCESSING_INTEGRATION_LOG.md)** — This comprehensive log (moved from repo root to `docs/` during cleanup).
 
 ---
 

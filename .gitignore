@@ -5,6 +5,7 @@ venv/
 .env.local
 .env.*.local
 .venv
+.export-venv/
 
 # Build outputs
 dist/
@@ -25,6 +26,7 @@ htmlcov/
 __pycache__/
 *.py[cod]
 *$py.class
+*.egg-info/
 
 # Data and models
 data/
@@ -35,9 +37,6 @@ checkpoints/*.pt
 reference/golden/
 reference/golden_smoke/
 reference/artifacts/test_cache_check/
-
-# Local model export environment
-.export-venv/
 
 # Local Bob generated artifacts
 .bob/artifacts/
