@@ -1,0 +1,50 @@
+<svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" font-family="Consolas, 'Courier New', monospace">
+  <defs>
+    <marker id="ga" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748B"/>
+    </marker>
+  </defs>
+  <rect width="1920" height="1080" fill="#0F172A"/>
+
+  <text x="960" y="130" text-anchor="middle" fill="#94A3B8" font-size="22" letter-spacing="2">CODE2EDGE</text>
+
+  <!-- GENERATE -->
+  <g>
+    <rect x="130" y="330" width="480" height="420" rx="16" fill="rgba(37,99,235,0.10)" stroke="#2563EB" stroke-width="3"/>
+    <circle cx="370" cy="450" r="60" fill="none" stroke="#2563EB" stroke-width="4"/>
+    <text x="370" y="466" text-anchor="middle" fill="#2563EB" font-size="52" font-weight="bold">&#123;&#125;</text>
+    <text x="370" y="600" text-anchor="middle" fill="#F8FAFC" font-size="40" font-weight="bold">GENERATE</text>
+    <text x="370" y="650" text-anchor="middle" fill="#94A3B8" font-size="17">C feature extractor +</text>
+    <text x="370" y="676" text-anchor="middle" fill="#94A3B8" font-size="17">int8 model, from the</text>
+    <text x="370" y="702" text-anchor="middle" fill="#94A3B8" font-size="17">frozen PyTorch reference</text>
+  </g>
+
+  <line x1="630" y1="540" x2="700" y2="540" stroke="#64748B" stroke-width="3" marker-end="url(#ga)"/>
+
+  <!-- DEPLOY -->
+  <g>
+    <rect x="720" y="330" width="480" height="420" rx="16" fill="rgba(217,153,6,0.10)" stroke="#D97706" stroke-width="3"/>
+    <circle cx="960" cy="450" r="60" fill="none" stroke="#D97706" stroke-width="4"/>
+    <path d="M 935 470 L 960 425 L 985 470 L 968 470 L 968 480 L 952 480 L 952 470 Z" fill="#D97706"/>
+    <text x="960" y="600" text-anchor="middle" fill="#F8FAFC" font-size="40" font-weight="bold">DEPLOY</text>
+    <text x="960" y="650" text-anchor="middle" fill="#94A3B8" font-size="17">Real git branch + PR</text>
+    <text x="960" y="676" text-anchor="middle" fill="#94A3B8" font-size="17">onto the STM32U585</text>
+    <text x="960" y="702" text-anchor="middle" fill="#94A3B8" font-size="17">(Arduino UNO Q)</text>
+  </g>
+
+  <line x1="1220" y1="540" x2="1290" y2="540" stroke="#64748B" stroke-width="3" marker-end="url(#ga)"/>
+
+  <!-- PROVE -->
+  <g>
+    <rect x="1310" y="330" width="480" height="420" rx="16" fill="rgba(5,150,105,0.10)" stroke="#059669" stroke-width="3"/>
+    <circle cx="1550" cy="450" r="60" fill="none" stroke="#059669" stroke-width="4"/>
+    <path d="M 1520 452 L 1542 474 L 1584 428" fill="none" stroke="#059669" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="1550" y="600" text-anchor="middle" fill="#F8FAFC" font-size="40" font-weight="bold">PROVE</text>
+    <text x="1550" y="650" text-anchor="middle" fill="#94A3B8" font-size="17">2500 / 2500 stage-wise</text>
+    <text x="1550" y="676" text-anchor="middle" fill="#94A3B8" font-size="17">parity checks, real hardware</text>
+    <text x="1550" y="702" text-anchor="middle" fill="#94A3B8" font-size="17">nothing faked</text>
+  </g>
+
+  <text x="960" y="970" text-anchor="middle" fill="#F8FAFC" font-size="54" font-weight="bold">Code2Edge</text>
+  <text x="960" y="1015" text-anchor="middle" fill="#94A3B8" font-size="26" font-style="italic">Deployment with proof.</text>
+</svg>

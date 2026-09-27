@@ -1,0 +1,98 @@
+<svg viewBox="0 0 1600 1500" xmlns="http://www.w3.org/2000/svg" font-family="Consolas, 'Courier New', monospace">
+  <defs>
+    <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563EB"/>
+    </marker>
+    <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#D97706"/>
+    </marker>
+    <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#DC2626"/>
+    </marker>
+  </defs>
+  <rect width="1600" height="1500" fill="#0F172A"/>
+  <text x="800" y="55" text-anchor="middle" fill="#F8FAFC" font-size="34" font-weight="bold">Bob Workflow — workflow/WORKFLOW.md</text>
+  <text x="800" y="85" text-anchor="middle" fill="#94A3B8" font-size="17">one spec, executed by Bob (or an equivalent MCP-driven agent) end to end</text>
+
+  <!-- spine helper -->
+  <!-- 1 start_run -->
+  <rect x="600" y="120" width="400" height="60" rx="30" fill="rgba(37,99,235,0.14)" stroke="#2563EB" stroke-width="2"/>
+  <text x="800" y="157" text-anchor="middle" fill="#F8FAFC" font-size="17" font-weight="bold">start_run_tool</text>
+  <line x1="800" y1="180" x2="800" y2="213" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- 2 analysis (3 parallel) -->
+  <rect x="330" y="216" width="940" height="90" rx="10" fill="rgba(37,99,235,0.08)" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="800" y="238" text-anchor="middle" fill="#94A3B8" font-size="13">analysis (parallel)</text>
+  <rect x="350" y="246" width="280" height="46" rx="8" fill="#111C33" stroke="#2563EB"/>
+  <text x="490" y="274" text-anchor="middle" fill="#F8FAFC" font-size="15">profile_model_tool</text>
+  <rect x="660" y="246" width="280" height="46" rx="8" fill="#111C33" stroke="#2563EB"/>
+  <text x="800" y="274" text-anchor="middle" fill="#F8FAFC" font-size="15">inspect_pipeline_tool</text>
+  <rect x="970" y="246" width="280" height="46" rx="8" fill="#111C33" stroke="#2563EB"/>
+  <text x="1110" y="274" text-anchor="middle" fill="#F8FAFC" font-size="15">check_target_tool</text>
+  <line x1="800" y1="306" x2="800" y2="339" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- 3 Edge Readiness Report -->
+  <rect x="550" y="342" width="500" height="60" rx="8" fill="rgba(37,99,235,0.14)" stroke="#2563EB" stroke-width="2"/>
+  <text x="800" y="379" text-anchor="middle" fill="#F8FAFC" font-size="17" font-weight="bold">Edge Readiness Report</text>
+  <line x1="800" y1="402" x2="800" y2="435" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- 4 Human approval -->
+  <polygon points="800,438 970,498 800,558 630,498" fill="rgba(217,153,6,0.16)" stroke="#D97706" stroke-width="2.5"/>
+  <text x="800" y="493" text-anchor="middle" fill="#F8FAFC" font-size="16" font-weight="bold">HUMAN</text>
+  <text x="800" y="513" text-anchor="middle" fill="#F8FAFC" font-size="16" font-weight="bold">APPROVAL</text>
+  <text x="1000" y="502" fill="#DC2626" font-size="14">REJECT → stop</text>
+  <line x1="970" y1="498" x2="1080" y2="498" stroke="#DC2626" stroke-width="2" marker-end="url(#a3)"/>
+  <text x="815" y="580" fill="#059669" font-size="14">APPROVE</text>
+  <line x1="800" y1="558" x2="800" y2="595" stroke="#059669" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- 5 generation -->
+  <rect x="550" y="598" width="500" height="70" rx="8" fill="rgba(37,99,235,0.14)" stroke="#2563EB" stroke-width="2"/>
+  <text x="800" y="628" text-anchor="middle" fill="#F8FAFC" font-size="16" font-weight="bold">Generation</text>
+  <text x="800" y="650" text-anchor="middle" fill="#94A3B8" font-size="13">copy verified pipeline into isolated git worktree</text>
+  <line x1="800" y1="668" x2="800" y2="701" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- 6 host parity gate with loop -->
+  <rect x="500" y="704" width="600" height="110" rx="10" fill="rgba(5,150,105,0.14)" stroke="#059669" stroke-width="2.5"/>
+  <text x="800" y="736" text-anchor="middle" fill="#059669" font-size="17" font-weight="bold">HOST PARITY GATE</text>
+  <text x="800" y="758" text-anchor="middle" fill="#94A3B8" font-size="13">run_parity_test_tool(gate=&quot;host&quot;) → gate_step_tool</text>
+  <text x="800" y="778" text-anchor="middle" fill="#94A3B8" font-size="13">PASS → continue · FAIL → repair (attempt &lt; 3)</text>
+  <path d="M 500 744 C 420 744 420 800 500 800" fill="none" stroke="#D97706" stroke-width="2" marker-end="url(#a2)"/>
+  <text x="360" y="778" text-anchor="middle" fill="#D97706" font-size="13" font-weight="bold">repair</text>
+  <text x="360" y="794" text-anchor="middle" fill="#D97706" font-size="12">(cap: 3)</text>
+  <path d="M 1100 744 C 1220 744 1220 830 1120 855" fill="none" stroke="#DC2626" stroke-width="2" marker-end="url(#a3)"/>
+  <text x="1250" y="800" fill="#DC2626" font-size="13" font-weight="bold">escalate</text>
+  <text x="1250" y="816" fill="#DC2626" font-size="12">(3 fails) → human</text>
+  <line x1="800" y1="814" x2="800" y2="847" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- 7 MCU build -->
+  <rect x="550" y="850" width="500" height="60" rx="8" fill="rgba(217,153,6,0.10)" stroke="#D97706" stroke-width="2"/>
+  <text x="800" y="887" text-anchor="middle" fill="#F8FAFC" font-size="16" font-weight="bold">MCU Build (Person B tooling, read-only)</text>
+  <line x1="800" y1="910" x2="800" y2="943" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- 8 device parity gate with loop -->
+  <rect x="500" y="946" width="600" height="110" rx="10" fill="rgba(5,150,105,0.14)" stroke="#059669" stroke-width="2.5"/>
+  <text x="800" y="978" text-anchor="middle" fill="#059669" font-size="17" font-weight="bold">DEVICE PARITY GATE</text>
+  <text x="800" y="1000" text-anchor="middle" fill="#94A3B8" font-size="13">run_parity_test_tool(gate=&quot;device&quot;) → gate_step_tool</text>
+  <text x="800" y="1020" text-anchor="middle" fill="#94A3B8" font-size="13">same repair (≤3) / escalate logic — shared code, not duplicated</text>
+  <path d="M 500 986 C 420 986 420 1042 500 1042" fill="none" stroke="#D97706" stroke-width="2" marker-end="url(#a2)"/>
+  <text x="360" y="1020" text-anchor="middle" fill="#D97706" font-size="13" font-weight="bold">repair</text>
+  <text x="360" y="1036" text-anchor="middle" fill="#D97706" font-size="12">(cap: 3)</text>
+  <path d="M 1100 986 C 1220 986 1220 1072 1120 1097" fill="none" stroke="#DC2626" stroke-width="2" marker-end="url(#a3)"/>
+  <text x="1250" y="1042" fill="#DC2626" font-size="13" font-weight="bold">escalate</text>
+  <text x="1250" y="1058" fill="#DC2626" font-size="12">(3 fails) → human</text>
+  <line x1="800" y1="1056" x2="800" y2="1089" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- 9 benchmark -->
+  <rect x="550" y="1092" width="500" height="70" rx="8" fill="rgba(37,99,235,0.14)" stroke="#2563EB" stroke-width="2"/>
+  <text x="800" y="1122" text-anchor="middle" fill="#F8FAFC" font-size="16" font-weight="bold">benchmark_target_tool</text>
+  <text x="800" y="1144" text-anchor="middle" fill="#94A3B8" font-size="13">predicted-vs-measured table</text>
+  <line x1="800" y1="1162" x2="800" y2="1195" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- 10 PR -->
+  <rect x="500" y="1198" width="600" height="80" rx="10" fill="rgba(37,99,235,0.18)" stroke="#2563EB" stroke-width="2.5"/>
+  <text x="800" y="1232" text-anchor="middle" fill="#F8FAFC" font-size="18" font-weight="bold">git commit → push → pull request</text>
+  <text x="800" y="1256" text-anchor="middle" fill="#94A3B8" font-size="13">deploy/&lt;model&gt;-&lt;target&gt;-&lt;run_id&gt; onto main</text>
+
+  <text x="800" y="1340" text-anchor="middle" fill="#64748B" font-size="15" font-style="italic">Retry cap and escalation are enforced in workflow/gates.py, not left to agent judgement</text>
+  <text x="800" y="1400" text-anchor="middle" fill="#F8FAFC" font-size="20" font-weight="bold">Code2Edge — Deployment with proof.</text>
+</svg>
