@@ -194,13 +194,43 @@ def test_run_benchmark_target_missing_logits_leaves_predictions_empty(monkeypatc
     assert any("no measured_logits" in w for w in out["benchmark"]["warnings"])
 
 
+def test_run_benchmark_target_output_routing_single_vs_multi(monkeypatch):
+    """Verify n_inferences=1 routes to live-bob-smoke directory and n_inferences>1 routes to canonical report."""
+    recorded_kwargs = []
+
+    def mock_runner(**kwargs):
+        recorded_kwargs.append(kwargs)
+        return _fake_physical_result()
+
+    monkeypatch.setattr(target_adapter, "run_physical_benchmark", mock_runner)
+
+    # 1. Single inference
+    target_adapter.run_benchmark_target(
+        model_file="src/pipeline/model_data.c", n_inferences=1, target_id="STM32U585",
+    )
+    assert len(recorded_kwargs) == 1
+    assert recorded_kwargs[0]["num_iterations"] == 1
+    assert recorded_kwargs[0]["warmup_iterations"] == 0
+    assert recorded_kwargs[0]["output_file"].parent == _REPO_ROOT / "evidence" / "runs" / "live-bob-smoke"
+    assert recorded_kwargs[0]["output_file"].suffix == ".json"
+
+    # 2. Multi inference
+    target_adapter.run_benchmark_target(
+        model_file="src/pipeline/model_data.c", n_inferences=50, target_id="STM32U585",
+    )
+    assert len(recorded_kwargs) == 2
+    assert recorded_kwargs[1]["num_iterations"] == 50
+    assert recorded_kwargs[1]["warmup_iterations"] == 5
+    assert recorded_kwargs[1]["output_file"] == _REPO_ROOT / "evidence" / "benchmarks" / "stm32u585_benchmark_report.json"
+
+
 @pytest.mark.asyncio
 async def test_mcp_benchmark_target_real_mode_reports_pending_artifact(monkeypatch):
     """Verify real-mode benchmark_target safely reports pending artifact rather than fabricating."""
     monkeypatch.setenv("CODE2EDGE_BENCHMARK_TARGET_MODE", "real")
 
     out = await benchmark_target.run(
-        model_file="checkpoints/best.pt",
+        model_file="models/nonexistent_model.tflite",
         n_inferences=50,
         target_id="STM32U585",
     )
@@ -208,4 +238,4 @@ async def test_mcp_benchmark_target_real_mode_reports_pending_artifact(monkeypat
     assert out["source"] == "real"
     assert out["status"] == "ERROR"
     assert "not found" in out["error_message"]
-    assert "checkpoints" in out["error_message"] or "best.pt" in out["error_message"]
+    assert "nonexistent_model" in out["error_message"]

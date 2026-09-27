@@ -32,8 +32,21 @@ from typing import Any, Dict, List, Optional, Tuple
 import serial
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+try:
+    from mcp_server._ids import new_run_id
+except ImportError:
+    import uuid
+
+    def new_run_id(prefix: str = "run") -> str:
+        return f"{prefix}-{uuid.uuid4().hex[:8]}"
+
 TARGET_PROFILE_PATH = REPO_ROOT / "contracts" / "target" / "target-profile.json"
-DEFAULT_OUTPUT = REPO_ROOT / "evidence" / "benchmarks" / "stm32u585_benchmark_report.json"
+DEFAULT_CANONICAL_OUTPUT = REPO_ROOT / "evidence" / "benchmarks" / "stm32u585_benchmark_report.json"
+DEFAULT_OUTPUT = DEFAULT_CANONICAL_OUTPUT
+LIVE_SMOKE_OUTPUT_DIR = REPO_ROOT / "evidence" / "runs" / "live-smoke"
 DEFAULT_SKETCH = REPO_ROOT / "tests" / "firmware" / "benchmark_harness"
 
 # Hardware target constants
@@ -465,6 +478,27 @@ def generate_benchmark_report(
     return report
 
 
+def resolve_benchmark_output_path(
+    num_iterations: int = 50,
+    output_file: Optional[Path | str] = None,
+) -> Path:
+    """
+    Resolves destination path for benchmark report JSON.
+
+    Routing rules:
+      - Explicit output_file argument takes absolute precedence.
+      - If output_file is None:
+          - num_iterations == 1 -> evidence/runs/live-smoke/<unique-run-id>.json
+          - num_iterations > 1  -> evidence/benchmarks/stm32u585_benchmark_report.json
+    """
+    if output_file is not None:
+        return Path(output_file)
+    if num_iterations == 1:
+        LIVE_SMOKE_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+        return LIVE_SMOKE_OUTPUT_DIR / f"{new_run_id('live-smoke')}.json"
+    return DEFAULT_CANONICAL_OUTPUT
+
+
 def run_physical_benchmark(
     port: str = "COM3",
     baud_rate: int = 115200,
@@ -475,12 +509,16 @@ def run_physical_benchmark(
     fqbn: str = "arduino:zephyr:unoq",
     tensor_arena_bytes: int = DEFAULT_TENSOR_ARENA_BYTES,
     feature_buffer_bytes: int = DEFAULT_FEATURE_BUFFER_BYTES,
-    output_file: Optional[Path] = DEFAULT_OUTPUT,
+    output_file: Optional[Path | str] = None,
     skip_compile: bool = False,
 ) -> Dict[str, Any]:
     """
     Executes authoritative physical hardware benchmark suite on STM32U585 MCU.
     """
+    resolved_output = resolve_benchmark_output_path(
+        num_iterations=num_iterations,
+        output_file=output_file,
+    )
     # --------------------------------------------------------------------------
     # 1. Compile firmware & extract application-partition Flash / SRAM
     # --------------------------------------------------------------------------
@@ -641,11 +679,11 @@ def run_physical_benchmark(
     # --------------------------------------------------------------------------
     # 8. Save report JSON
     # --------------------------------------------------------------------------
-    if output_file:
-        output_file.parent.mkdir(parents=True, exist_ok=True)
-        with open(output_file, "w", encoding="utf-8") as f:
+    if resolved_output:
+        resolved_output.parent.mkdir(parents=True, exist_ok=True)
+        with open(resolved_output, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2)
-        print(f"\n[Code2Edge] Benchmark report written to {output_file}")
+        print(f"\n[Code2Edge] Benchmark report written to {resolved_output}")
 
     # --------------------------------------------------------------------------
     # 9. Print human-readable summary
@@ -741,8 +779,8 @@ def main() -> int:
     parser.add_argument(
         "--output", "-o",
         type=Path,
-        default=DEFAULT_OUTPUT,
-        help=f"Path for benchmark report JSON (default: {DEFAULT_OUTPUT})",
+        default=None,
+        help="Path for benchmark report JSON (default: canonical report for iterations > 1, live-smoke run for iterations == 1)",
     )
     parser.add_argument(
         "--skip-compile",

@@ -321,33 +321,35 @@ def test_run_benchmark_target_adapter_invocation_and_redirection(capsys):
         return mock_benchmark_report
 
     with mock.patch("mcp_server.adapters.target_adapter.run_physical_benchmark", side_effect=fake_physical_runner) as mock_runner:
-        # 1. Single inference (n_inferences=1) -> warmup_iterations=0
+        # 1. Single inference (n_inferences=1) -> warmup_iterations=0, live-bob-smoke evidence path
         result_single = run_benchmark_target(
             model_file="src/pipeline/model_data.c",
             n_inferences=1,
             target_id="STM32U585",
         )
 
-        mock_runner.assert_called_with(
-            port="COM3",
-            baud_rate=115200,
-            num_iterations=1,
-            warmup_iterations=0,
-            timeout_per_inference=40.0,
-            sketch_path=REPO_ROOT / "tests" / "firmware" / "benchmark_harness",
-            fqbn="arduino:zephyr:unoq",
-            tensor_arena_bytes=166560,
-            feature_buffer_bytes=25856,
-            output_file=REPO_ROOT / "evidence" / "benchmarks" / "stm32u585_benchmark_report.json",
-            skip_compile=False,
-        )
+        assert mock_runner.call_count == 1
+        call_single_kwargs = mock_runner.call_args[1]
+        assert call_single_kwargs["port"] == "COM3"
+        assert call_single_kwargs["baud_rate"] == 115200
+        assert call_single_kwargs["num_iterations"] == 1
+        assert call_single_kwargs["warmup_iterations"] == 0
+        assert call_single_kwargs["timeout_per_inference"] == 40.0
+        assert call_single_kwargs["sketch_path"] == REPO_ROOT / "tests" / "firmware" / "benchmark_harness"
+        assert call_single_kwargs["fqbn"] == "arduino:zephyr:unoq"
+        assert call_single_kwargs["tensor_arena_bytes"] == 166560
+        assert call_single_kwargs["feature_buffer_bytes"] == 25856
+        assert call_single_kwargs["skip_compile"] is False
+        assert call_single_kwargs["output_file"].parent == REPO_ROOT / "evidence" / "runs" / "live-bob-smoke"
+        assert call_single_kwargs["output_file"].suffix == ".json"
+
         assert result_single["tool"] == "benchmark_target"
         assert result_single["source"] == "real"
         assert result_single["benchmark"]["n_inferences"] == 1
 
         mock_runner.reset_mock()
 
-        # 2. Multi-inference (n_inferences > 1) -> warmup_iterations=5
+        # 2. Multi-inference (n_inferences > 1) -> warmup_iterations=5, canonical evidence path
         result_multi = run_benchmark_target(
             model_file="src/pipeline/model_data.c",
             n_inferences=10,
