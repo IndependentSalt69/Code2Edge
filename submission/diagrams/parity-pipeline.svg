@@ -1,89 +1,83 @@
-<svg viewBox="0 0 1740 800" xmlns="http://www.w3.org/2000/svg" font-family="Consolas, 'Courier New', monospace">
+<svg viewBox="0 0 2560 1440" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
   <defs>
-    <marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#2563EB"/>
+    <marker id="arB2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#185CEB"/>
     </marker>
   </defs>
-  <rect width="1740" height="800" fill="#0F172A"/>
-  <text x="850" y="55" text-anchor="middle" fill="#F8FAFC" font-size="32" font-weight="bold">Stage-Wise Differential Parity</text>
-  <text x="850" y="85" text-anchor="middle" fill="#94A3B8" font-size="16">every tensor compared between the PyTorch reference and the generated C — not just final predictions</text>
+  <rect width="2560" height="1440" fill="#F4F4F4"/>
 
-  <!-- 7 nodes -->
-  <g font-size="16">
-    <!-- node template positions -->
-    <!-- x centers roughly 130,370,610,850,1090,1330,1570 with width 200 -->
-    <g id="n1">
-      <rect x="70" y="260" width="200" height="120" rx="10" fill="rgba(37,99,235,0.10)" stroke="#2563EB" stroke-width="2"/>
-      <text x="170" y="310" text-anchor="middle" fill="#F8FAFC">Raw PCM</text>
-      <text x="170" y="332" text-anchor="middle" fill="#F8FAFC">16 kHz</text>
-      <text x="170" y="360" text-anchor="middle" fill="#64748B" font-size="12">(16000,)</text>
-    </g>
-    <line x1="270" y1="320" x2="308" y2="320" stroke="#2563EB" stroke-width="2" marker-end="url(#pa)"/>
+  <text x="1280" y="220" text-anchor="middle" fill="#185CEB" font-family="Consolas, 'Courier New', monospace" font-weight="bold" font-size="30" letter-spacing="5">INSIDE THE 4 MEASURED STAGES</text>
+  <text x="1280" y="290" text-anchor="middle" fill="#121212" font-weight="bold" font-size="72" letter-spacing="-1">Every tensor, compared.</text>
+  <text x="1280" y="338" text-anchor="middle" fill="#505050" font-size="32">Not just final predictions — the whole signal chain, stage by stage.</text>
 
-    <g id="n2">
-      <rect x="310" y="260" width="200" height="120" rx="10" fill="rgba(37,99,235,0.10)" stroke="#2563EB" stroke-width="2"/>
-      <text x="410" y="310" text-anchor="middle" fill="#F8FAFC">STFT power</text>
-      <text x="410" y="332" text-anchor="middle" fill="#F8FAFC">spectrum</text>
-      <text x="410" y="360" text-anchor="middle" fill="#64748B" font-size="12">(1,201,101)</text>
-      <circle cx="495" cy="272" r="17" fill="#059669"/>
-      <text x="495" y="278" text-anchor="middle" fill="rgb(28,28,28)" font-weight="bold">&#10003;</text>
-    </g>
-    <line x1="510" y1="320" x2="548" y2="320" stroke="#2563EB" stroke-width="2" marker-end="url(#pa)"/>
+  <!-- 7 nodes, width 300 each + gap 30 = 330*7-30=2280, start x=140 -->
+  <g font-size="24">
+    <!-- n1 -->
+    <rect x="140" y="480" width="300" height="220" rx="16" fill="#FFFFFF" stroke="#E2E2E2" stroke-width="2"/>
+    <text x="290" y="570" text-anchor="middle" fill="#121212" font-weight="bold">Raw PCM</text>
+    <text x="290" y="602" text-anchor="middle" fill="#121212" font-weight="bold">16 kHz</text>
+    <text x="290" y="650" text-anchor="middle" fill="#9a9a9a" font-family="Consolas, 'Courier New', monospace" font-size="18">(16000,)</text>
+    <line x1="440" y1="590" x2="466" y2="590" stroke="#185CEB" stroke-width="4" marker-end="url(#arB2)"/>
 
-    <g id="n3">
-      <rect x="550" y="260" width="200" height="120" rx="10" fill="rgba(37,99,235,0.10)" stroke="#2563EB" stroke-width="2"/>
-      <text x="650" y="310" text-anchor="middle" fill="#F8FAFC">Mel</text>
-      <text x="650" y="332" text-anchor="middle" fill="#F8FAFC">filterbank</text>
-      <text x="650" y="360" text-anchor="middle" fill="#64748B" font-size="12">(1,64,101)</text>
-      <circle cx="735" cy="272" r="17" fill="#059669"/>
-      <text x="735" y="278" text-anchor="middle" fill="rgb(28,28,28)" font-weight="bold">&#10003;</text>
-    </g>
-    <line x1="750" y1="320" x2="788" y2="320" stroke="#2563EB" stroke-width="2" marker-end="url(#pa)"/>
+    <!-- n2 -->
+    <rect x="470" y="480" width="300" height="220" rx="16" fill="#FFFFFF" stroke="#E2E2E2" stroke-width="2"/>
+    <circle cx="745" cy="460" r="26" fill="#178038"/>
+    <path d="M733 460 l9 9 l16 -18" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="620" y="570" text-anchor="middle" fill="#121212" font-weight="bold">STFT power</text>
+    <text x="620" y="602" text-anchor="middle" fill="#121212" font-weight="bold">spectrum</text>
+    <text x="620" y="650" text-anchor="middle" fill="#9a9a9a" font-family="Consolas, 'Courier New', monospace" font-size="18">(1,201,101)</text>
+    <line x1="770" y1="590" x2="796" y2="590" stroke="#185CEB" stroke-width="4" marker-end="url(#arB2)"/>
 
-    <g id="n4">
-      <rect x="790" y="260" width="200" height="120" rx="10" fill="rgba(37,99,235,0.10)" stroke="#2563EB" stroke-width="2"/>
-      <text x="890" y="310" text-anchor="middle" fill="#F8FAFC">Log</text>
-      <text x="890" y="332" text-anchor="middle" fill="#F8FAFC">compression</text>
-      <text x="890" y="360" text-anchor="middle" fill="#64748B" font-size="12">(1,1,64,101)</text>
-      <circle cx="975" cy="272" r="17" fill="#059669"/>
-      <text x="975" y="278" text-anchor="middle" fill="rgb(28,28,28)" font-weight="bold">&#10003;</text>
-    </g>
-    <line x1="990" y1="320" x2="1028" y2="320" stroke="#2563EB" stroke-width="2" marker-end="url(#pa)"/>
+    <!-- n3 -->
+    <rect x="800" y="480" width="300" height="220" rx="16" fill="#FFFFFF" stroke="#E2E2E2" stroke-width="2"/>
+    <circle cx="1075" cy="460" r="26" fill="#178038"/>
+    <path d="M1063 460 l9 9 l16 -18" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="950" y="570" text-anchor="middle" fill="#121212" font-weight="bold">Mel</text>
+    <text x="950" y="602" text-anchor="middle" fill="#121212" font-weight="bold">filterbank</text>
+    <text x="950" y="650" text-anchor="middle" fill="#9a9a9a" font-family="Consolas, 'Courier New', monospace" font-size="18">(1,64,101)</text>
+    <line x1="1100" y1="590" x2="1126" y2="590" stroke="#185CEB" stroke-width="4" marker-end="url(#arB2)"/>
 
-    <g id="n5">
-      <rect x="1030" y="260" width="200" height="120" rx="10" fill="rgba(37,99,235,0.10)" stroke="#2563EB" stroke-width="2"/>
-      <text x="1130" y="310" text-anchor="middle" fill="#F8FAFC">Normalize</text>
-      <text x="1130" y="360" text-anchor="middle" fill="#64748B" font-size="12">(1,1,64,101)</text>
-      <circle cx="1215" cy="272" r="17" fill="#059669"/>
-      <text x="1215" y="278" text-anchor="middle" fill="rgb(28,28,28)" font-weight="bold">&#10003;</text>
-    </g>
-    <line x1="1230" y1="320" x2="1268" y2="320" stroke="#2563EB" stroke-width="2" marker-end="url(#pa)"/>
+    <!-- n4 -->
+    <rect x="1130" y="480" width="300" height="220" rx="16" fill="#FFFFFF" stroke="#E2E2E2" stroke-width="2"/>
+    <circle cx="1405" cy="460" r="26" fill="#178038"/>
+    <path d="M1393 460 l9 9 l16 -18" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="1280" y="570" text-anchor="middle" fill="#121212" font-weight="bold">Log</text>
+    <text x="1280" y="602" text-anchor="middle" fill="#121212" font-weight="bold">compression</text>
+    <text x="1280" y="650" text-anchor="middle" fill="#9a9a9a" font-family="Consolas, 'Courier New', monospace" font-size="18">(1,1,64,101)</text>
+    <line x1="1430" y1="590" x2="1456" y2="590" stroke="#185CEB" stroke-width="4" marker-end="url(#arB2)"/>
 
-    <g id="n6">
-      <rect x="1270" y="260" width="200" height="120" rx="10" fill="rgba(5,150,105,0.10)" stroke="#059669" stroke-width="2"/>
-      <text x="1370" y="310" text-anchor="middle" fill="#F8FAFC">DS-CNN</text>
-      <text x="1370" y="332" text-anchor="middle" fill="#F8FAFC">forward pass</text>
-      <text x="1370" y="360" text-anchor="middle" fill="#64748B" font-size="12">(1,12) logits</text>
-    </g>
-    <line x1="1470" y1="320" x2="1508" y2="320" stroke="#2563EB" stroke-width="2" marker-end="url(#pa)"/>
+    <!-- n5 -->
+    <rect x="1460" y="480" width="300" height="220" rx="16" fill="#FFFFFF" stroke="#E2E2E2" stroke-width="2"/>
+    <circle cx="1735" cy="460" r="26" fill="#178038"/>
+    <path d="M1723 460 l9 9 l16 -18" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="1610" y="600" text-anchor="middle" fill="#121212" font-weight="bold">Normalize</text>
+    <text x="1610" y="650" text-anchor="middle" fill="#9a9a9a" font-family="Consolas, 'Courier New', monospace" font-size="18">(1,1,64,101)</text>
+    <line x1="1760" y1="590" x2="1786" y2="590" stroke="#185CEB" stroke-width="4" marker-end="url(#arB2)"/>
 
-    <g id="n7">
-      <rect x="1510" y="260" width="190" height="120" rx="10" fill="rgba(5,150,105,0.10)" stroke="#059669" stroke-width="2"/>
-      <text x="1605" y="310" text-anchor="middle" fill="#F8FAFC">Predicted</text>
-      <text x="1605" y="332" text-anchor="middle" fill="#F8FAFC">class</text>
-      <text x="1605" y="360" text-anchor="middle" fill="#64748B" font-size="12">argmax</text>
-    </g>
+    <!-- n6 -->
+    <rect x="1790" y="480" width="300" height="220" rx="16" fill="#F6FBF7" stroke="#178038" stroke-width="2.5"/>
+    <text x="1940" y="570" text-anchor="middle" fill="#121212" font-weight="bold">DS-CNN</text>
+    <text x="1940" y="602" text-anchor="middle" fill="#121212" font-weight="bold">forward pass</text>
+    <text x="1940" y="650" text-anchor="middle" fill="#9a9a9a" font-family="Consolas, 'Courier New', monospace" font-size="18">(1,12) logits</text>
+    <line x1="2090" y1="590" x2="2116" y2="590" stroke="#185CEB" stroke-width="4" marker-end="url(#arB2)"/>
+
+    <!-- n7 -->
+    <rect x="2120" y="480" width="300" height="220" rx="16" fill="#F6FBF7" stroke="#178038" stroke-width="2.5"/>
+    <text x="2270" y="590" text-anchor="middle" fill="#121212" font-weight="bold">Predicted</text>
+    <text x="2270" y="622" text-anchor="middle" fill="#121212" font-weight="bold">class</text>
+    <text x="2270" y="655" text-anchor="middle" fill="#9a9a9a" font-family="Consolas, 'Courier New', monospace" font-size="18">argmax</text>
   </g>
 
-  <!-- host / device coverage bars -->
-  <rect x="310" y="440" width="920" height="46" rx="8" fill="rgba(5,150,105,0.14)" stroke="#059669" stroke-width="2"/>
-  <text x="770" y="470" text-anchor="middle" fill="#059669" font-size="16" font-weight="bold">HOST — 500 samples × 4 stages = 2500 / 2500 PASS (real)</text>
+  <!-- stats -->
+  <rect x="640" y="880" width="560" height="220" rx="16" fill="#FFFFFF" style="filter:none;"/>
+  <rect x="640" y="880" width="560" height="10" fill="#178038"/>
+  <text x="920" y="1005" text-anchor="middle" fill="#178038" font-weight="800" font-size="68">2500/2500</text>
+  <text x="920" y="1055" text-anchor="middle" fill="#6b6b6b" font-family="Consolas, 'Courier New', monospace" font-size="22">HOST — 500 samples × 4 stages, real</text>
 
-  <rect x="1270" y="440" width="430" height="46" rx="8" fill="rgba(217,153,6,0.14)" stroke="#D97706" stroke-width="2"/>
-  <text x="1485" y="470" text-anchor="middle" fill="#D97706" font-size="14" font-weight="bold">DEVICE — 1 sample verified (real, thin)</text>
+  <rect x="1360" y="880" width="560" height="220" rx="16" fill="#FFFFFF"/>
+  <rect x="1360" y="880" width="560" height="10" fill="#185CEB"/>
+  <text x="1640" y="1005" text-anchor="middle" fill="#185CEB" font-weight="800" font-size="68">1/1</text>
+  <text x="1640" y="1055" text-anchor="middle" fill="#6b6b6b" font-family="Consolas, 'Courier New', monospace" font-size="22">DEVICE — single fixture, real (thin)</text>
 
-  <text x="850" y="560" text-anchor="middle" fill="#94A3B8" font-size="15">On divergence: report the first FAILing stage + a deterministic diagnosis hint</text>
-  <text x="850" y="586" text-anchor="middle" fill="#94A3B8" font-size="14" font-style="italic">e.g. shape mismatch at framing → check hop length; constant offset after log → check epsilon</text>
-
-  <text x="850" y="680" text-anchor="middle" fill="#F8FAFC" font-size="20" font-weight="bold">Code2Edge — Deployment with proof.</text>
+  <text x="1280" y="1300" text-anchor="middle" fill="#185CEB" font-family="Consolas, 'Courier New', monospace" font-weight="bold" font-size="24" letter-spacing="4">CODE2EDGE</text>
 </svg>

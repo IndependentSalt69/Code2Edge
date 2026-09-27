@@ -1,50 +1,38 @@
-<svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" font-family="Consolas, 'Courier New', monospace">
-  <defs>
-    <marker id="ga" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#64748B"/>
-    </marker>
-  </defs>
-  <rect width="1920" height="1080" fill="#0F172A"/>
+<svg viewBox="0 0 2560 1440" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="2560" height="1440" fill="#161616"/>
 
-  <text x="960" y="130" text-anchor="middle" fill="#94A3B8" font-size="22" letter-spacing="2">CODE2EDGE</text>
+  <text x="1280" y="220" text-anchor="middle" fill="#185CEB" font-family="Consolas, 'Courier New', monospace" font-weight="bold" font-size="30" letter-spacing="5">THE THREE-STEP PROOF</text>
 
-  <!-- GENERATE -->
+  <!-- 3 cards, width 620 gap 60, total 3*620+2*60=1980, start x=290 -->
   <g>
-    <rect x="130" y="330" width="480" height="420" rx="16" fill="rgba(37,99,235,0.10)" stroke="#2563EB" stroke-width="3"/>
-    <circle cx="370" cy="450" r="60" fill="none" stroke="#2563EB" stroke-width="4"/>
-    <text x="370" y="466" text-anchor="middle" fill="#2563EB" font-size="52" font-weight="bold">&#123;&#125;</text>
-    <text x="370" y="600" text-anchor="middle" fill="#F8FAFC" font-size="40" font-weight="bold">GENERATE</text>
-    <text x="370" y="650" text-anchor="middle" fill="#94A3B8" font-size="17">C feature extractor +</text>
-    <text x="370" y="676" text-anchor="middle" fill="#94A3B8" font-size="17">int8 model, from the</text>
-    <text x="370" y="702" text-anchor="middle" fill="#94A3B8" font-size="17">frozen PyTorch reference</text>
+    <rect x="290" y="360" width="620" height="640" rx="20" fill="#1F1F1F"/>
+    <rect x="290" y="360" width="8" height="640" fill="#185CEB"/>
+    <circle cx="470" cy="500" r="60" fill="none" stroke="#185CEB" stroke-width="4"/>
+    <path d="M450 480 l-20 20 l20 20 M490 480 l20 20 l-20 20" fill="none" stroke="#185CEB" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="360" y="640" fill="#FFFFFF" font-weight="900" font-size="60" letter-spacing="-1">GENERATE</text>
+    <text x="360" y="700" fill="#A7A7A7" font-size="27">C feature extractor + int8 model,</text>
+    <text x="360" y="736" fill="#A7A7A7" font-size="27">from the frozen PyTorch reference.</text>
   </g>
 
-  <line x1="630" y1="540" x2="700" y2="540" stroke="#64748B" stroke-width="3" marker-end="url(#ga)"/>
-
-  <!-- DEPLOY -->
   <g>
-    <rect x="720" y="330" width="480" height="420" rx="16" fill="rgba(217,153,6,0.10)" stroke="#D97706" stroke-width="3"/>
-    <circle cx="960" cy="450" r="60" fill="none" stroke="#D97706" stroke-width="4"/>
-    <path d="M 935 470 L 960 425 L 985 470 L 968 470 L 968 480 L 952 480 L 952 470 Z" fill="#D97706"/>
-    <text x="960" y="600" text-anchor="middle" fill="#F8FAFC" font-size="40" font-weight="bold">DEPLOY</text>
-    <text x="960" y="650" text-anchor="middle" fill="#94A3B8" font-size="17">Real git branch + PR</text>
-    <text x="960" y="676" text-anchor="middle" fill="#94A3B8" font-size="17">onto the STM32U585</text>
-    <text x="960" y="702" text-anchor="middle" fill="#94A3B8" font-size="17">(Arduino UNO Q)</text>
+    <rect x="970" y="360" width="620" height="640" rx="20" fill="#1F1F1F"/>
+    <rect x="970" y="360" width="8" height="640" fill="#E29A3D"/>
+    <circle cx="1150" cy="500" r="60" fill="none" stroke="#E29A3D" stroke-width="4"/>
+    <path d="M1150 535 v-70 M1120 495 l30 -30 l30 30" fill="none" stroke="#E29A3D" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="1040" y="640" fill="#FFFFFF" font-weight="900" font-size="60" letter-spacing="-1">DEPLOY</text>
+    <text x="1040" y="700" fill="#A7A7A7" font-size="27">Real git branch + pull request</text>
+    <text x="1040" y="736" fill="#A7A7A7" font-size="27">onto the STM32U585.</text>
   </g>
 
-  <line x1="1220" y1="540" x2="1290" y2="540" stroke="#64748B" stroke-width="3" marker-end="url(#ga)"/>
-
-  <!-- PROVE -->
   <g>
-    <rect x="1310" y="330" width="480" height="420" rx="16" fill="rgba(5,150,105,0.10)" stroke="#059669" stroke-width="3"/>
-    <circle cx="1550" cy="450" r="60" fill="none" stroke="#059669" stroke-width="4"/>
-    <path d="M 1520 452 L 1542 474 L 1584 428" fill="none" stroke="#059669" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-    <text x="1550" y="600" text-anchor="middle" fill="#F8FAFC" font-size="40" font-weight="bold">PROVE</text>
-    <text x="1550" y="650" text-anchor="middle" fill="#94A3B8" font-size="17">2500 / 2500 stage-wise</text>
-    <text x="1550" y="676" text-anchor="middle" fill="#94A3B8" font-size="17">parity checks, real hardware</text>
-    <text x="1550" y="702" text-anchor="middle" fill="#94A3B8" font-size="17">nothing faked</text>
+    <rect x="1650" y="360" width="620" height="640" rx="20" fill="#1F1F1F"/>
+    <rect x="1650" y="360" width="8" height="640" fill="#178038"/>
+    <circle cx="1830" cy="500" r="60" fill="none" stroke="#178038" stroke-width="4"/>
+    <path d="M1800 500 l20 20 l40 -45" fill="none" stroke="#178038" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="1720" y="640" fill="#FFFFFF" font-weight="900" font-size="60" letter-spacing="-1">PROVE</text>
+    <text x="1720" y="700" fill="#A7A7A7" font-size="27">2500/2500 stage-wise parity,</text>
+    <text x="1720" y="736" fill="#A7A7A7" font-size="27">real hardware. Nothing faked.</text>
   </g>
 
-  <text x="960" y="970" text-anchor="middle" fill="#F8FAFC" font-size="54" font-weight="bold">Code2Edge</text>
-  <text x="960" y="1015" text-anchor="middle" fill="#94A3B8" font-size="26" font-style="italic">Deployment with proof.</text>
+  <text x="1280" y="1230" text-anchor="middle" fill="#185CEB" font-family="Consolas, 'Courier New', monospace" font-weight="bold" font-size="26" letter-spacing="4">CODE2EDGE</text>
 </svg>

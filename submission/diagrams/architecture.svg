@@ -1,64 +1,56 @@
-<svg viewBox="0 0 1600 1000" xmlns="http://www.w3.org/2000/svg" font-family="Consolas, 'Courier New', monospace">
+<svg viewBox="0 0 2560 1440" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#2563EB"/>
+    <marker id="arB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#185CEB"/>
     </marker>
   </defs>
-  <rect width="1600" height="1000" fill="#0F172A"/>
+  <rect width="2560" height="1440" fill="#F4F4F4"/>
 
-  <text x="800" y="55" text-anchor="middle" fill="#F8FAFC" font-size="34" font-weight="bold">Code2Edge — System Architecture</text>
-  <text x="800" y="85" text-anchor="middle" fill="#94A3B8" font-size="18">reference workload → verified generation → hardware gates → Bob orchestration</text>
+  <text x="1280" y="150" text-anchor="middle" fill="#185CEB" font-family="Consolas, 'Courier New', monospace" font-weight="bold" font-size="30" letter-spacing="5">SYSTEM ARCHITECTURE</text>
+  <text x="1280" y="215" text-anchor="middle" fill="#121212" font-weight="bold" font-size="72" letter-spacing="-1">Three tiers, one proof chain.</text>
+  <text x="1280" y="262" text-anchor="middle" fill="#505050" font-size="32">contracts/ (JSON Schema) binds every arrow below — shared, validated on every call.</text>
 
-  <!-- Tier 1: Reference -->
-  <rect x="470" y="120" width="660" height="90" rx="10" fill="rgba(37,99,235,0.10)" stroke="#2563EB" stroke-width="2"/>
-  <text x="800" y="152" text-anchor="middle" fill="#F8FAFC" font-size="20" font-weight="bold">Reference Layer</text>
-  <text x="800" y="178" text-anchor="middle" fill="#94A3B8" font-size="15">reference/tiny-kws/ — frozen upstream DS-CNN, 119,372 params, 96.65% accuracy</text>
-  <text x="1150" y="152" fill="#64748B" font-size="14">immutable</text>
+  <!-- rows: x from 570 to 2340 (width 1770), tags at x 230-560 -->
+  <!-- Reference Layer -->
+  <rect x="570" y="330" width="1770" height="110" rx="16" fill="#FFFFFF" stroke="#E2E2E2" stroke-width="2"/>
+  <text x="610" y="378" fill="#121212" font-weight="bold" font-size="34">Reference Layer</text>
+  <text x="610" y="414" fill="#6b6b6b" font-family="Consolas, 'Courier New', monospace" font-size="22">reference/tiny-kws/ — frozen DS-CNN, 119,372 params, 96.65% accuracy</text>
+  <line x1="1455" y1="440" x2="1455" y2="478" stroke="#185CEB" stroke-width="4" marker-end="url(#arB)"/>
 
-  <line x1="800" y1="210" x2="800" y2="245" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow)"/>
-
-  <!-- Tier 2: Host generation + parity (Person A) -->
-  <rect x="270" y="248" width="1060" height="100" rx="10" fill="rgba(37,99,235,0.10)" stroke="#2563EB" stroke-width="2"/>
-  <text x="800" y="280" text-anchor="middle" fill="#F8FAFC" font-size="20" font-weight="bold">Host Generation &amp; Parity</text>
-  <text x="800" y="306" text-anchor="middle" fill="#94A3B8" font-size="15">src/pipeline/feature_extraction.c + model_data.c (int8, 168.2 KB)</text>
-  <text x="800" y="328" text-anchor="middle" fill="#94A3B8" font-size="15">tools/run_host_parity.py — 500-sample corpus vs. frozen reference tensors</text>
-  <text x="60" y="285" fill="#60A5FA" font-size="15" font-weight="bold">Person A</text>
-  <text x="60" y="305" fill="#64748B" font-size="13">pipeline + parity</text>
-
-  <line x1="800" y1="348" x2="800" y2="383" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Host generation (Person A) -->
+  <text x="530" y="522" text-anchor="end" fill="#185CEB" font-family="Consolas, 'Courier New', monospace" font-weight="bold" font-size="24">PERSON A</text>
+  <text x="530" y="550" text-anchor="end" fill="#8a8a8a" font-size="20">pipeline + parity</text>
+  <rect x="570" y="482" width="1770" height="110" rx="16" fill="#FFFFFF" stroke="#E2E2E2" stroke-width="2"/>
+  <text x="610" y="530" fill="#121212" font-weight="bold" font-size="34">Host Generation &amp; Parity</text>
+  <text x="610" y="566" fill="#6b6b6b" font-family="Consolas, 'Courier New', monospace" font-size="22">feature_extraction.c + model_data.c (int8, 168.2 KB) · run_host_parity.py</text>
+  <line x1="1455" y1="592" x2="1455" y2="630" stroke="#185CEB" stroke-width="4" marker-end="url(#arB)"/>
 
   <!-- Gate 1 -->
-  <rect x="530" y="386" width="540" height="66" rx="8" fill="rgba(5,150,105,0.14)" stroke="#059669" stroke-width="2.5"/>
-  <text x="800" y="415" text-anchor="middle" fill="#059669" font-size="18" font-weight="bold">TIER 1 — HOST PARITY GATE</text>
-  <text x="800" y="438" text-anchor="middle" fill="#94A3B8" font-size="13">blocks MCU compilation unless every stage is within tolerance</text>
+  <rect x="570" y="634" width="1770" height="94" rx="14" fill="#F0FBF4" stroke="#178038" stroke-width="3"/>
+  <text x="1455" y="678" text-anchor="middle" fill="#178038" font-weight="bold" font-size="30">TIER 1 — HOST PARITY GATE</text>
+  <text x="1455" y="710" text-anchor="middle" fill="#4c8f63" font-size="20">blocks MCU compilation unless every stage is within tolerance</text>
+  <line x1="1455" y1="728" x2="1455" y2="766" stroke="#185CEB" stroke-width="4" marker-end="url(#arB)"/>
 
-  <line x1="800" y1="452" x2="800" y2="487" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow)"/>
-
-  <!-- Tier 3: Firmware (Person B) -->
-  <rect x="270" y="490" width="1060" height="100" rx="10" fill="rgba(217,153,6,0.10)" stroke="#D97706" stroke-width="2"/>
-  <text x="800" y="522" text-anchor="middle" fill="#F8FAFC" font-size="20" font-weight="bold">Firmware &amp; Target Tooling</text>
-  <text x="800" y="548" text-anchor="middle" fill="#94A3B8" font-size="15">src/firmware/ — Arduino/Zephyr app on STM32U585 (Cortex-M33, 160 MHz)</text>
-  <text x="800" y="570" text-anchor="middle" fill="#94A3B8" font-size="15">tools/target/ — check_target, benchmark_target, run_device_parity</text>
-  <text x="60" y="527" fill="#F59E0B" font-size="15" font-weight="bold">Person B</text>
-  <text x="60" y="547" fill="#64748B" font-size="13">hardware + embedded</text>
-
-  <line x1="800" y1="590" x2="800" y2="625" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Firmware (Person B) -->
+  <text x="530" y="810" text-anchor="end" fill="#185CEB" font-family="Consolas, 'Courier New', monospace" font-weight="bold" font-size="24">PERSON B</text>
+  <text x="530" y="838" text-anchor="end" fill="#8a8a8a" font-size="20">hardware + embedded</text>
+  <rect x="570" y="770" width="1770" height="110" rx="16" fill="#FFFFFF" stroke="#E2E2E2" stroke-width="2"/>
+  <text x="610" y="818" fill="#121212" font-weight="bold" font-size="34">Firmware &amp; Target Tooling</text>
+  <text x="610" y="854" fill="#6b6b6b" font-family="Consolas, 'Courier New', monospace" font-size="22">Arduino/Zephyr on STM32U585 · check_target · benchmark_target · device parity</text>
+  <line x1="1455" y1="880" x2="1455" y2="918" stroke="#185CEB" stroke-width="4" marker-end="url(#arB)"/>
 
   <!-- Gate 2 -->
-  <rect x="530" y="628" width="540" height="66" rx="8" fill="rgba(5,150,105,0.14)" stroke="#059669" stroke-width="2.5"/>
-  <text x="800" y="657" text-anchor="middle" fill="#059669" font-size="18" font-weight="bold">TIER 2 — DEVICE PARITY GATE</text>
-  <text x="800" y="680" text-anchor="middle" fill="#94A3B8" font-size="13">compares physical silicon execution to golden host tensors</text>
+  <rect x="570" y="922" width="1770" height="94" rx="14" fill="#F0FBF4" stroke="#178038" stroke-width="3"/>
+  <text x="1455" y="966" text-anchor="middle" fill="#178038" font-weight="bold" font-size="30">TIER 2 — DEVICE PARITY GATE</text>
+  <text x="1455" y="998" text-anchor="middle" fill="#4c8f63" font-size="20">compares physical silicon execution to golden host tensors</text>
+  <line x1="1455" y1="1016" x2="1455" y2="1054" stroke="#185CEB" stroke-width="4" marker-end="url(#arB)"/>
 
-  <line x1="800" y1="694" x2="800" y2="729" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Bob orchestration (Person C) -->
+  <text x="530" y="1098" text-anchor="end" fill="#185CEB" font-family="Consolas, 'Courier New', monospace" font-weight="bold" font-size="24">PERSON C</text>
+  <text x="530" y="1126" text-anchor="end" fill="#8a8a8a" font-size="20">Bob, MCP, integration</text>
+  <rect x="570" y="1058" width="1770" height="110" rx="16" fill="#FFFFFF" stroke="#185CEB" stroke-width="2.5"/>
+  <text x="610" y="1106" fill="#121212" font-weight="bold" font-size="34">Bob Orchestration</text>
+  <text x="610" y="1142" fill="#6b6b6b" font-family="Consolas, 'Courier New', monospace" font-size="22">mcp_server/ — 10 MCP tools · workflow/ — retry-capped gates + human approval</text>
 
-  <!-- Tier 4: Bob orchestration (Person C) -->
-  <rect x="270" y="732" width="1060" height="110" rx="10" fill="rgba(37,99,235,0.16)" stroke="#2563EB" stroke-width="2.5"/>
-  <text x="800" y="764" text-anchor="middle" fill="#F8FAFC" font-size="20" font-weight="bold">Bob Orchestration</text>
-  <text x="800" y="790" text-anchor="middle" fill="#94A3B8" font-size="15">mcp_server/ — 10 MCP tools · workflow/ — retry-capped gates + human approval</text>
-  <text x="800" y="812" text-anchor="middle" fill="#94A3B8" font-size="15">analysis → readiness report → approval → generate → gates → benchmark → PR</text>
-  <text x="60" y="769" fill="#60A5FA" font-size="15" font-weight="bold">Person C</text>
-  <text x="60" y="789" fill="#64748B" font-size="13">Bob, MCP, integration</text>
-
-  <text x="800" y="900" text-anchor="middle" fill="#64748B" font-size="15" font-style="italic">contracts/ (JSON Schema) binds every arrow above — shared, additively versioned, validated on every call</text>
-  <text x="800" y="960" text-anchor="middle" fill="#F8FAFC" font-size="20" font-weight="bold">Code2Edge — Deployment with proof.</text>
+  <text x="1280" y="1280" text-anchor="middle" fill="#185CEB" font-family="Consolas, 'Courier New', monospace" font-weight="bold" font-size="24" letter-spacing="4">CODE2EDGE</text>
 </svg>

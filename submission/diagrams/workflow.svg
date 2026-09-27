@@ -1,98 +1,52 @@
-<svg viewBox="0 0 1600 1500" xmlns="http://www.w3.org/2000/svg" font-family="Consolas, 'Courier New', monospace">
-  <defs>
-    <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#2563EB"/>
-    </marker>
-    <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#D97706"/>
-    </marker>
-    <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#DC2626"/>
-    </marker>
-  </defs>
-  <rect width="1600" height="1500" fill="#0F172A"/>
-  <text x="800" y="55" text-anchor="middle" fill="#F8FAFC" font-size="34" font-weight="bold">Bob Workflow — workflow/WORKFLOW.md</text>
-  <text x="800" y="85" text-anchor="middle" fill="#94A3B8" font-size="17">one spec, executed by Bob (or an equivalent MCP-driven agent) end to end</text>
+<svg viewBox="0 0 2560 1440" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="2560" height="1440" fill="#F4F4F4"/>
 
-  <!-- spine helper -->
-  <!-- 1 start_run -->
-  <rect x="600" y="120" width="400" height="60" rx="30" fill="rgba(37,99,235,0.14)" stroke="#2563EB" stroke-width="2"/>
-  <text x="800" y="157" text-anchor="middle" fill="#F8FAFC" font-size="17" font-weight="bold">start_run_tool</text>
-  <line x1="800" y1="180" x2="800" y2="213" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+  <text x="1280" y="220" text-anchor="middle" fill="#185CEB" font-family="Consolas, 'Courier New', monospace" font-weight="bold" font-size="30" letter-spacing="5">RETRY-CAPPED VERIFICATION</text>
+  <text x="1280" y="290" text-anchor="middle" fill="#121212" font-weight="bold" font-size="72" letter-spacing="-1">Repair up to 3x. Then escalate.</text>
+  <text x="1280" y="338" text-anchor="middle" fill="#505050" font-size="32">Never left to agent judgement — enforced in workflow/gates.py.</text>
 
-  <!-- 2 analysis (3 parallel) -->
-  <rect x="330" y="216" width="940" height="90" rx="10" fill="rgba(37,99,235,0.08)" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="4 3"/>
-  <text x="800" y="238" text-anchor="middle" fill="#94A3B8" font-size="13">analysis (parallel)</text>
-  <rect x="350" y="246" width="280" height="46" rx="8" fill="#111C33" stroke="#2563EB"/>
-  <text x="490" y="274" text-anchor="middle" fill="#F8FAFC" font-size="15">profile_model_tool</text>
-  <rect x="660" y="246" width="280" height="46" rx="8" fill="#111C33" stroke="#2563EB"/>
-  <text x="800" y="274" text-anchor="middle" fill="#F8FAFC" font-size="15">inspect_pipeline_tool</text>
-  <rect x="970" y="246" width="280" height="46" rx="8" fill="#111C33" stroke="#2563EB"/>
-  <text x="1110" y="274" text-anchor="middle" fill="#F8FAFC" font-size="15">check_target_tool</text>
-  <line x1="800" y1="306" x2="800" y2="339" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+  <!-- 6 dots evenly spaced, centers x: 260,672,1084,1496,1908,2320 (width covers ~2560, margins ~ (2560-6*node)/... use simple even spacing) -->
+  <!-- connecting line -->
+  <line x1="330" y1="640" x2="2230" y2="640" stroke="#D6D6D6" stroke-width="5"/>
 
-  <!-- 3 Edge Readiness Report -->
-  <rect x="550" y="342" width="500" height="60" rx="8" fill="rgba(37,99,235,0.14)" stroke="#2563EB" stroke-width="2"/>
-  <text x="800" y="379" text-anchor="middle" fill="#F8FAFC" font-size="17" font-weight="bold">Edge Readiness Report</text>
-  <line x1="800" y1="402" x2="800" y2="435" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+  <!-- 1 Generate -->
+  <circle cx="330" cy="640" r="80" fill="#121212"/>
+  <path d="M300 610 h50 v20 h-15 v40 h-20 v-40 h-15 z" fill="none"/>
+  <path d="M310 605 L350 605 L350 675 L310 675 Z M310 605 L335 605 L335 625 L355 625" fill="none" stroke="white" stroke-width="4" stroke-linejoin="round"/>
+  <text x="330" y="770" text-anchor="middle" fill="#121212" font-weight="bold" font-size="36">Generate</text>
 
-  <!-- 4 Human approval -->
-  <polygon points="800,438 970,498 800,558 630,498" fill="rgba(217,153,6,0.16)" stroke="#D97706" stroke-width="2.5"/>
-  <text x="800" y="493" text-anchor="middle" fill="#F8FAFC" font-size="16" font-weight="bold">HUMAN</text>
-  <text x="800" y="513" text-anchor="middle" fill="#F8FAFC" font-size="16" font-weight="bold">APPROVAL</text>
-  <text x="1000" y="502" fill="#DC2626" font-size="14">REJECT → stop</text>
-  <line x1="970" y1="498" x2="1080" y2="498" stroke="#DC2626" stroke-width="2" marker-end="url(#a3)"/>
-  <text x="815" y="580" fill="#059669" font-size="14">APPROVE</text>
-  <line x1="800" y1="558" x2="800" y2="595" stroke="#059669" stroke-width="2" marker-end="url(#a1)"/>
+  <!-- 2 Host Gate -->
+  <circle cx="710" cy="640" r="80" fill="#185CEB"/>
+  <path d="M675 640 l25 25 l55 -55" fill="none" stroke="white" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="710" y="770" text-anchor="middle" fill="#185CEB" font-weight="bold" font-size="36">Host Gate</text>
+  <rect x="620" y="800" width="180" height="56" rx="28" fill="#FDF0DC" stroke="#E29A3D" stroke-width="2"/>
+  <text x="710" y="836" text-anchor="middle" fill="#A8620A" font-family="Consolas, 'Courier New', monospace" font-weight="bold" font-size="24">repair ≤ 3</text>
 
-  <!-- 5 generation -->
-  <rect x="550" y="598" width="500" height="70" rx="8" fill="rgba(37,99,235,0.14)" stroke="#2563EB" stroke-width="2"/>
-  <text x="800" y="628" text-anchor="middle" fill="#F8FAFC" font-size="16" font-weight="bold">Generation</text>
-  <text x="800" y="650" text-anchor="middle" fill="#94A3B8" font-size="13">copy verified pipeline into isolated git worktree</text>
-  <line x1="800" y1="668" x2="800" y2="701" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+  <!-- 3 MCU Build -->
+  <circle cx="1090" cy="640" r="80" fill="#121212"/>
+  <rect x="1055" y="605" width="70" height="70" rx="6" fill="none" stroke="white" stroke-width="5"/>
+  <rect x="1073" y="623" width="34" height="34" fill="none" stroke="white" stroke-width="4"/>
+  <text x="1090" y="770" text-anchor="middle" fill="#121212" font-weight="bold" font-size="36">MCU Build</text>
 
-  <!-- 6 host parity gate with loop -->
-  <rect x="500" y="704" width="600" height="110" rx="10" fill="rgba(5,150,105,0.14)" stroke="#059669" stroke-width="2.5"/>
-  <text x="800" y="736" text-anchor="middle" fill="#059669" font-size="17" font-weight="bold">HOST PARITY GATE</text>
-  <text x="800" y="758" text-anchor="middle" fill="#94A3B8" font-size="13">run_parity_test_tool(gate=&quot;host&quot;) → gate_step_tool</text>
-  <text x="800" y="778" text-anchor="middle" fill="#94A3B8" font-size="13">PASS → continue · FAIL → repair (attempt &lt; 3)</text>
-  <path d="M 500 744 C 420 744 420 800 500 800" fill="none" stroke="#D97706" stroke-width="2" marker-end="url(#a2)"/>
-  <text x="360" y="778" text-anchor="middle" fill="#D97706" font-size="13" font-weight="bold">repair</text>
-  <text x="360" y="794" text-anchor="middle" fill="#D97706" font-size="12">(cap: 3)</text>
-  <path d="M 1100 744 C 1220 744 1220 830 1120 855" fill="none" stroke="#DC2626" stroke-width="2" marker-end="url(#a3)"/>
-  <text x="1250" y="800" fill="#DC2626" font-size="13" font-weight="bold">escalate</text>
-  <text x="1250" y="816" fill="#DC2626" font-size="12">(3 fails) → human</text>
-  <line x1="800" y1="814" x2="800" y2="847" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+  <!-- 4 Device Gate -->
+  <circle cx="1470" cy="640" r="80" fill="#185CEB"/>
+  <path d="M1435 640 l25 25 l55 -55" fill="none" stroke="white" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1470" y="770" text-anchor="middle" fill="#185CEB" font-weight="bold" font-size="36">Device Gate</text>
+  <rect x="1380" y="800" width="180" height="56" rx="28" fill="#FDF0DC" stroke="#E29A3D" stroke-width="2"/>
+  <text x="1470" y="836" text-anchor="middle" fill="#A8620A" font-family="Consolas, 'Courier New', monospace" font-weight="bold" font-size="24">repair ≤ 3</text>
 
-  <!-- 7 MCU build -->
-  <rect x="550" y="850" width="500" height="60" rx="8" fill="rgba(217,153,6,0.10)" stroke="#D97706" stroke-width="2"/>
-  <text x="800" y="887" text-anchor="middle" fill="#F8FAFC" font-size="16" font-weight="bold">MCU Build (Person B tooling, read-only)</text>
-  <line x1="800" y1="910" x2="800" y2="943" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+  <!-- 5 Benchmark -->
+  <circle cx="1850" cy="640" r="80" fill="#121212"/>
+  <circle cx="1850" cy="640" r="34" fill="none" stroke="white" stroke-width="5"/>
+  <path d="M1850 618 v22 l16 16" fill="none" stroke="white" stroke-width="5" stroke-linecap="round"/>
+  <text x="1850" y="770" text-anchor="middle" fill="#121212" font-weight="bold" font-size="36">Benchmark</text>
 
-  <!-- 8 device parity gate with loop -->
-  <rect x="500" y="946" width="600" height="110" rx="10" fill="rgba(5,150,105,0.14)" stroke="#059669" stroke-width="2.5"/>
-  <text x="800" y="978" text-anchor="middle" fill="#059669" font-size="17" font-weight="bold">DEVICE PARITY GATE</text>
-  <text x="800" y="1000" text-anchor="middle" fill="#94A3B8" font-size="13">run_parity_test_tool(gate=&quot;device&quot;) → gate_step_tool</text>
-  <text x="800" y="1020" text-anchor="middle" fill="#94A3B8" font-size="13">same repair (≤3) / escalate logic — shared code, not duplicated</text>
-  <path d="M 500 986 C 420 986 420 1042 500 1042" fill="none" stroke="#D97706" stroke-width="2" marker-end="url(#a2)"/>
-  <text x="360" y="1020" text-anchor="middle" fill="#D97706" font-size="13" font-weight="bold">repair</text>
-  <text x="360" y="1036" text-anchor="middle" fill="#D97706" font-size="12">(cap: 3)</text>
-  <path d="M 1100 986 C 1220 986 1220 1072 1120 1097" fill="none" stroke="#DC2626" stroke-width="2" marker-end="url(#a3)"/>
-  <text x="1250" y="1042" fill="#DC2626" font-size="13" font-weight="bold">escalate</text>
-  <text x="1250" y="1058" fill="#DC2626" font-size="12">(3 fails) → human</text>
-  <line x1="800" y1="1056" x2="800" y2="1089" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+  <!-- 6 git PR -->
+  <circle cx="2230" cy="640" r="80" fill="#121212"/>
+  <path d="M2200 610 l50 30 l-50 30 z" fill="white"/>
+  <text x="2230" y="770" text-anchor="middle" fill="#121212" font-weight="bold" font-size="36">git PR</text>
 
-  <!-- 9 benchmark -->
-  <rect x="550" y="1092" width="500" height="70" rx="8" fill="rgba(37,99,235,0.14)" stroke="#2563EB" stroke-width="2"/>
-  <text x="800" y="1122" text-anchor="middle" fill="#F8FAFC" font-size="16" font-weight="bold">benchmark_target_tool</text>
-  <text x="800" y="1144" text-anchor="middle" fill="#94A3B8" font-size="13">predicted-vs-measured table</text>
-  <line x1="800" y1="1162" x2="800" y2="1195" stroke="#2563EB" stroke-width="2" marker-end="url(#a1)"/>
+  <text x="1280" y="960" text-anchor="middle" fill="#8a8a8a" font-family="Consolas, 'Courier New', monospace" font-size="26">both gates: PASS → continue  ·  FAIL + attempt &lt; 3 → repair  ·  <tspan fill="#C62827" font-weight="bold">3 fails → escalate to human</tspan></text>
 
-  <!-- 10 PR -->
-  <rect x="500" y="1198" width="600" height="80" rx="10" fill="rgba(37,99,235,0.18)" stroke="#2563EB" stroke-width="2.5"/>
-  <text x="800" y="1232" text-anchor="middle" fill="#F8FAFC" font-size="18" font-weight="bold">git commit → push → pull request</text>
-  <text x="800" y="1256" text-anchor="middle" fill="#94A3B8" font-size="13">deploy/&lt;model&gt;-&lt;target&gt;-&lt;run_id&gt; onto main</text>
-
-  <text x="800" y="1340" text-anchor="middle" fill="#64748B" font-size="15" font-style="italic">Retry cap and escalation are enforced in workflow/gates.py, not left to agent judgement</text>
-  <text x="800" y="1400" text-anchor="middle" fill="#F8FAFC" font-size="20" font-weight="bold">Code2Edge — Deployment with proof.</text>
+  <text x="1280" y="1280" text-anchor="middle" fill="#185CEB" font-family="Consolas, 'Courier New', monospace" font-weight="bold" font-size="24" letter-spacing="4">CODE2EDGE</text>
 </svg>
