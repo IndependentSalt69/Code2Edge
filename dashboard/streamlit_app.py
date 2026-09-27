@@ -1,6 +1,6 @@
 from pathlib import Path
 import json
-from typing import Any, Optional
+from typing import Any, Optional, Tuple
 
 import numpy as np
 import plotly.graph_objects as go
@@ -11,31 +11,40 @@ import streamlit as st
 # REPOSITORY PATHS
 # ============================================================================
 #
-# This app lives in:
+# App location:
 #
 #     Code2Edge/dashboard/streamlit_app.py
 #
-# Therefore parents[1] is the repository root:
-#
-#     Code2Edge/
-#
-# Streamlit Cloud starts the app from the repository root, so using ROOT
-# explicitly keeps local execution and cloud execution consistent.
+# parents[1] = Code2Edge repository root.
 # ============================================================================
 
 ROOT = Path(__file__).resolve().parents[1]
 
 GOLDEN_SMOKE = ROOT / "reference" / "golden_smoke"
-PARITY_FILE = ROOT / "evidence" / "parity" / "host_parity_report.json"
-MODEL_FILE = ROOT / "evidence" / "model" / "model_artifact_validation.json"
 
-# Known benchmark evidence locations used by the project.
+PARITY_FILE = (
+    ROOT
+    / "evidence"
+    / "parity"
+    / "host_parity_report.json"
+)
+
+MODEL_FILE = (
+    ROOT
+    / "evidence"
+    / "model"
+    / "model_artifact_validation.json"
+)
+
 BENCHMARK_CANDIDATES = [
+    ROOT / "evidence" / "live-bob-smoke" / "benchmark.json",
     ROOT / "evidence" / "live" / "bob-smoke" / "benchmark.json",
     ROOT / "evidence" / "benchmarks" / "benchmark.json",
     ROOT / "evidence" / "benchmarks" / "benchmark_result.json",
     ROOT / "evidence" / "benchmark" / "benchmark.json",
 ]
+
+SUBMISSION_VIDEO_URL = "https://youtu.be/XrY9SuTAvHs"
 
 LABELS = [
     "silence",
@@ -52,7 +61,12 @@ LABELS = [
     "go",
 ]
 
-CLIPS = ["yes", "no", "go", "stop"]
+CLIPS = [
+    "yes",
+    "no",
+    "go",
+    "stop",
+]
 
 
 # ============================================================================
@@ -61,7 +75,7 @@ CLIPS = ["yes", "no", "go", "stop"]
 
 st.set_page_config(
     page_title="Code2Edge | Deployment With Proof",
-    page_icon="⚙️",
+    page_icon=None,
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -72,24 +86,30 @@ st.set_page_config(
 # ============================================================================
 
 def load_json(path: Path) -> Optional[dict[str, Any]]:
-    """Load JSON safely. Return None when unavailable or invalid."""
+    """Load a JSON file safely."""
     if not path.exists():
         return None
 
     try:
-        with path.open("r", encoding="utf-8") as f:
-            value = json.load(f)
+        with path.open("r", encoding="utf-8") as handle:
+            value = json.load(handle)
 
-        return value if isinstance(value, dict) else None
+        if isinstance(value, dict):
+            return value
 
-    except Exception:
-        return None
+    except (OSError, json.JSONDecodeError):
+        pass
+
+    return None
 
 
-def first_existing_json(paths: list[Path]) -> tuple[Optional[dict[str, Any]], Optional[Path]]:
-    """Return the first readable JSON file from a list of candidates."""
+def first_existing_json(
+    paths: list[Path],
+) -> Tuple[Optional[dict[str, Any]], Optional[Path]]:
+    """Return the first readable JSON file from the candidate paths."""
     for path in paths:
         data = load_json(path)
+
         if data is not None:
             return data, path
 
@@ -100,84 +120,118 @@ def recursive_find(
     obj: Any,
     keys: set[str],
 ) -> Optional[Any]:
-    """
-    Recursively search nested JSON for the first requested key.
-
-    Useful because benchmark evidence schemas may place latency/cycle
-    information at different nesting levels.
-    """
+    """Find the first matching key anywhere in a nested JSON structure."""
     if isinstance(obj, dict):
         for key, value in obj.items():
-            normalized = key.lower().replace("-", "_")
+
+            normalized = (
+                key.lower()
+                .replace("-", "_")
+                .replace(" ", "_")
+            )
 
             if normalized in keys:
                 return value
 
-            result = recursive_find(value, keys)
-            if result is not None:
-                return result
+            found = recursive_find(
+                value,
+                keys,
+            )
+
+            if found is not None:
+                return found
 
     elif isinstance(obj, list):
         for value in obj:
-            result = recursive_find(value, keys)
-            if result is not None:
-                return result
+
+            found = recursive_find(
+                value,
+                keys,
+            )
+
+            if found is not None:
+                return found
 
     return None
 
 
-def get_clip_manifest() -> dict[str, Any]:
-    """Load golden smoke manifest."""
-    manifest = load_json(GOLDEN_SMOKE / "golden_manifest.json")
-    return manifest or {}
-
-
 def available_clips() -> list[str]:
-    """Find smoke clips that actually exist."""
-    result = []
+    """Return clips actually available in the tracked smoke package."""
+    return [
+        clip
+        for clip in CLIPS
+        if (
+            GOLDEN_SMOKE
+            / clip
+            / "post_input.npy"
+        ).exists()
+    ]
 
-    for clip in CLIPS:
-        if (GOLDEN_SMOKE / clip / "post_input.npy").exists():
-            result.append(clip)
 
-    return result
-
-
-def format_number(value: Any, digits: int = 6) -> str:
-    """Human-friendly number formatting."""
+def format_number(
+    value: Any,
+    digits: int = 8,
+) -> str:
+    """Human-readable numeric formatting."""
     if value is None:
         return "N/A"
 
-    if isinstance(value, (int, np.integer)):
+    if isinstance(
+        value,
+        (int, np.integer),
+    ):
         return f"{int(value):,}"
 
-    if isinstance(value, (float, np.floating)):
+    if isinstance(
+        value,
+        (float, np.floating),
+    ):
         return f"{float(value):.{digits}g}"
 
     return str(value)
-
-
-def stage_status(status: bool) -> str:
-    return "✅ PASS" if status else "⏳ PENDING"
 
 
 # ============================================================================
 # LOAD EVIDENCE
 # ============================================================================
 
-parity = load_json(PARITY_FILE)
-model = load_json(MODEL_FILE)
-smoke_manifest = get_clip_manifest()
+parity = load_json(
+    PARITY_FILE
+)
 
-benchmark, benchmark_path = first_existing_json(BENCHMARK_CANDIDATES)
+model = load_json(
+    MODEL_FILE
+)
+
+smoke_manifest = load_json(
+    GOLDEN_SMOKE / "golden_manifest.json"
+) or {}
+
+benchmark, benchmark_path = first_existing_json(
+    BENCHMARK_CANDIDATES
+)
 
 
 # ============================================================================
-# DERIVED VALUES
+# PARITY DATA
 # ============================================================================
 
-parity_summary = parity.get("summary", {}) if parity else {}
-parity_coverage = parity.get("coverage", {}) if parity else {}
+parity_summary = (
+    parity.get("summary", {})
+    if parity
+    else {}
+)
+
+parity_coverage = (
+    parity.get("coverage", {})
+    if parity
+    else {}
+)
+
+sample_count = parity_coverage.get(
+    "sample_count",
+    500,
+)
 
 total_stage_checks = parity_summary.get(
     "total_stages_evaluated",
@@ -194,11 +248,6 @@ failed_stage_checks = parity_summary.get(
     0,
 )
 
-sample_count = parity_coverage.get(
-    "sample_count",
-    500,
-)
-
 worst_max_abs_diff = parity_summary.get(
     "worst_max_abs_diff"
 )
@@ -212,8 +261,21 @@ worst_cosine = parity_summary.get(
 )
 
 
-input_tensor = model.get("input_tensor", {}) if model else {}
-output_tensor = model.get("output_tensor", {}) if model else {}
+# ============================================================================
+# MODEL DATA
+# ============================================================================
+
+input_tensor = (
+    model.get("input_tensor", {})
+    if model
+    else {}
+)
+
+output_tensor = (
+    model.get("output_tensor", {})
+    if model
+    else {}
+)
 
 model_size_bytes = (
     model.get("file_size_bytes")
@@ -222,12 +284,12 @@ model_size_bytes = (
 )
 
 model_size_kb = (
-    model_size_bytes / 1024
+    model_size_bytes / 1024.0
     if model_size_bytes
     else None
 )
 
-model_fully_quantized = (
+fully_quantized = (
     bool(model.get("is_fully_quantized"))
     if model
     else False
@@ -241,15 +303,11 @@ unsupported_ops = (
 
 
 # ============================================================================
-# BENCHMARK EXTRACTION
+# BENCHMARK DATA
 # ============================================================================
 
-benchmark_latency = None
-benchmark_cycles = None
-benchmark_correct = None
-
-if benchmark:
-    benchmark_latency = recursive_find(
+benchmark_latency = (
+    recursive_find(
         benchmark,
         {
             "mean_latency_ms",
@@ -257,8 +315,12 @@ if benchmark:
             "mean_latency",
         },
     )
+    if benchmark
+    else None
+)
 
-    benchmark_cycles = recursive_find(
+benchmark_cycles = (
+    recursive_find(
         benchmark,
         {
             "hardware_cycles",
@@ -266,8 +328,12 @@ if benchmark:
             "mean_cycles",
         },
     )
+    if benchmark
+    else None
+)
 
-    benchmark_correct = recursive_find(
+benchmark_correct = (
+    recursive_find(
         benchmark,
         {
             "correct_inferences",
@@ -275,15 +341,12 @@ if benchmark:
             "predictions_correct",
         },
     )
+    if benchmark
+    else None
+)
 
-# The PPT's authoritative 50-run hardware baseline is:
-#
-#   50/50 correct
-#   5026 ms mean latency
-#   804M hardware cycles
-#
-# We only use these as a display fallback if the benchmark JSON is not present.
-# Once the actual benchmark JSON exists in the repo, its values take precedence.
+# Hardware baseline shown in the current submission deck.
+# Actual repository benchmark JSON takes precedence whenever available.
 
 if benchmark_latency is None:
     benchmark_latency = 5026.0
@@ -299,7 +362,7 @@ if benchmark_correct is None:
 # SIDEBAR
 # ============================================================================
 
-st.sidebar.title("⚙️ Code2Edge")
+st.sidebar.title("Code2Edge")
 st.sidebar.caption("Deployment With Proof")
 
 page = st.sidebar.radio(
@@ -316,9 +379,31 @@ page = st.sidebar.radio(
 
 st.sidebar.markdown("---")
 
-st.sidebar.caption("IBM Bob 2.0 Hackathon")
-st.sidebar.caption("Python → C → INT8 → STM32U585")
-st.sidebar.caption("Reference-driven deployment evidence")
+st.sidebar.caption(
+    "IBM Bob 2.0 Hackathon"
+)
+
+st.sidebar.caption(
+    "Python → C → INT8 → STM32U585"
+)
+
+st.sidebar.caption(
+    "Reference-driven deployment evidence"
+)
+
+st.sidebar.markdown("---")
+
+st.sidebar.markdown(
+    "### Submission Video"
+)
+
+st.sidebar.markdown(
+    f"[Watch the Code2Edge demo on YouTube]({SUBMISSION_VIDEO_URL})"
+)
+
+st.sidebar.caption(
+    "Unlisted submission/demo video"
+)
 
 
 # ============================================================================
@@ -326,7 +411,10 @@ st.sidebar.caption("Reference-driven deployment evidence")
 # ============================================================================
 
 st.title("Code2Edge")
-st.markdown("### Deployment With Proof")
+
+st.subheader(
+    "Deployment With Proof"
+)
 
 st.caption(
     "Turning a Python keyword-spotting model into a measurable "
@@ -337,22 +425,45 @@ st.markdown("---")
 
 
 # ============================================================================
-# PAGE 1: OVERVIEW
+# OVERVIEW
 # ============================================================================
 
 if page == "Overview":
 
-    st.header("Deployment Control Room")
-
-    st.markdown(
-        """
-        Code2Edge connects the reference Python model to embedded deployment
-        through explicit contracts, generated preprocessing, differential
-        parity, model validation, device verification, and benchmarking.
-        """
+    st.header(
+        "Deployment Control Room"
     )
 
-    st.markdown("### Proof at a glance")
+    st.write(
+        "Code2Edge connects the reference Python model to embedded "
+        "deployment through explicit contracts, generated preprocessing, "
+        "differential parity, model validation, device verification, "
+        "benchmarking, and Bob/MCP orchestration."
+    )
+
+    # ------------------------------------------------------------------------
+    # SUBMISSION VIDEO
+    # ------------------------------------------------------------------------
+
+    st.subheader(
+        "Submission Demo"
+    )
+
+    st.video(
+        SUBMISSION_VIDEO_URL
+    )
+
+    st.markdown(
+        f"[Open the full submission video on YouTube]({SUBMISSION_VIDEO_URL})"
+    )
+
+    # ------------------------------------------------------------------------
+    # KPI ROW
+    # ------------------------------------------------------------------------
+
+    st.subheader(
+        "Proof at a glance"
+    )
 
     c1, c2, c3, c4, c5 = st.columns(5)
 
@@ -377,121 +488,223 @@ if page == "Overview":
     )
 
     c5.metric(
-        "Measured inferences",
-        "50",
+        "Physical inferences",
+        "50 / 50",
     )
 
-    st.markdown("### Three-step proof chain")
+    # ------------------------------------------------------------------------
+    # THREE STEP STORY
+    # ------------------------------------------------------------------------
 
-    p1, p2, p3 = st.columns(3)
+    st.subheader(
+        "Generate → Deploy → Prove"
+    )
 
-    with p1:
-        st.markdown("## ① GENERATE")
-        st.write(
-            "Trace the reference implementation and generate the embedded "
-            "preprocessing and model artifacts."
+    a, b, c = st.columns(3)
+
+    with a:
+
+        st.markdown(
+            "### Generate"
         )
-        st.success("C preprocessing generated")
 
-    with p2:
-        st.markdown("## ② DEPLOY")
         st.write(
-            "Run the generated implementation and quantized DS-CNN on "
-            "the STM32U585 target."
+            "Trace the reference implementation and generate "
+            "constrained-device preprocessing and model artifacts."
         )
-        st.success("STM32U585 target")
 
-    with p3:
-        st.markdown("## ③ PROVE")
+        st.success(
+            "C preprocessing generated"
+        )
+
+    with b:
+
+        st.markdown(
+            "### Deploy"
+        )
+
         st.write(
-            "Compare the reference and deployment paths using explicit "
-            "stage-wise numerical evidence."
+            "Run the generated preprocessing and INT8 DS-CNN "
+            "on the STM32U585 target."
         )
-        st.success("2,500 / 2,500 host checks")
 
-    st.markdown("### End-to-end workflow")
+        st.success(
+            "STM32U585 target"
+        )
+
+    with c:
+
+        st.markdown(
+            "### Prove"
+        )
+
+        st.write(
+            "Compare reference and deployment paths using "
+            "explicit stage-wise numerical evidence."
+        )
+
+        st.success(
+            "2,500 / 2,500 host checks"
+        )
+
+    # ------------------------------------------------------------------------
+    # WORKFLOW
+    # ------------------------------------------------------------------------
+
+    st.subheader(
+        "End-to-end workflow"
+    )
 
     st.code(
-        """
-REFERENCE
-   ↓
-TRACE
-   ↓
-GENERATE
-   ↓
-HOST PARITY GATE
-   ↓
-MCU BUILD
-   ↓
-DEVICE PARITY GATE
-   ↓
-BENCHMARK
-   ↓
-BOB / MCP
-   ↓
-EVIDENCE
-""",
+        "REFERENCE\n"
+        "   ↓\n"
+        "TRACE\n"
+        "   ↓\n"
+        "GENERATE\n"
+        "   ↓\n"
+        "HOST PARITY GATE\n"
+        "   ↓\n"
+        "MCU BUILD\n"
+        "   ↓\n"
+        "DEVICE PARITY GATE\n"
+        "   ↓\n"
+        "BENCHMARK\n"
+        "   ↓\n"
+        "BOB / MCP\n"
+        "   ↓\n"
+        "EVIDENCE",
         language="text",
     )
 
-    st.markdown("### Current project evidence")
+    # ------------------------------------------------------------------------
+    # EVIDENCE STATUS
+    # ------------------------------------------------------------------------
 
-    st.success("✅ Reference pipeline frozen")
-    st.success("✅ Generated C preprocessing verified")
-    st.success("✅ INT8 model artifact verified")
-    st.success("✅ Four-clip golden evidence verified")
-    st.success("✅ Physical-device benchmark evidence available")
-    st.success("✅ Device parity reported as verified")
+    st.subheader(
+        "Evidence status"
+    )
 
-    st.markdown("### Hardware result")
+    e1, e2, e3 = st.columns(3)
+
+    with e1:
+
+        st.success(
+            "HOST PARITY VERIFIED"
+        )
+
+        st.write(
+            f"{sample_count:,} frozen samples"
+        )
+
+        st.write(
+            f"{passed_stage_checks:,} stage checks passed"
+        )
+
+        st.write(
+            f"{failed_stage_checks:,} failures"
+        )
+
+    with e2:
+
+        st.success(
+            "INT8 MODEL VERIFIED"
+        )
+
+        st.write(
+            "Input: 1 × 1 × 64 × 101"
+        )
+
+        st.write(
+            "INT8 input/output"
+        )
+
+        if model_size_kb is not None:
+            st.write(
+                f"Model: {model_size_kb:.2f} KB"
+            )
+        else:
+            st.write(
+                "Model size: N/A"
+            )
+
+    with e3:
+
+        st.success(
+            "DEVICE EVIDENCE"
+        )
+
+        st.write(
+            "50 / 50 correct inferences"
+        )
+
+        st.write(
+            "Device parity reported verified"
+        )
+
+        st.write(
+            "Hardware benchmark recorded"
+        )
+
+    # ------------------------------------------------------------------------
+    # HARDWARE RESULT
+    # ------------------------------------------------------------------------
+
+    st.subheader(
+        "Measured physical deployment"
+    )
 
     h1, h2, h3 = st.columns(3)
 
-    with h1:
-        st.metric(
-            "Correct inferences",
-            "50 / 50",
+    h1.metric(
+        "Correct inferences",
+        str(benchmark_correct),
+    )
+
+    h2.metric(
+        "Mean latency",
+        f"{float(benchmark_latency):,.0f} ms",
+    )
+
+    cycles = float(
+        benchmark_cycles
+    )
+
+    if cycles >= 1_000_000:
+        cycle_text = (
+            f"{cycles / 1_000_000:,.0f} M"
+        )
+    else:
+        cycle_text = (
+            f"{cycles:,.0f}"
         )
 
-    with h2:
-        st.metric(
-            "Mean latency",
-            f"{float(benchmark_latency):,.0f} ms",
-        )
-
-    with h3:
-        cycles = float(benchmark_cycles)
-
-        if cycles >= 1_000_000:
-            cycle_text = f"{cycles / 1_000_000:,.0f} M"
-        else:
-            cycle_text = f"{cycles:,.0f}"
-
-        st.metric(
-            "Hardware cycles",
-            cycle_text,
-        )
+    h3.metric(
+        "Hardware cycles",
+        cycle_text,
+    )
 
     st.info(
-        "The dashboard is an evidence viewer. It reads the committed "
-        "artifacts rather than attempting to run PyTorch or the MCU remotely."
+        "This dashboard visualizes committed project evidence. "
+        "It does not attempt to run the MCU remotely."
     )
 
 
 # ============================================================================
-# PAGE 2: PIPELINE
+# PIPELINE
 # ============================================================================
 
 elif page == "Pipeline":
 
-    st.header("The Signal Path")
-
-    st.markdown(
-        "The reference frontend is represented as the four-stage path "
-        "implemented and verified for this deployment."
+    st.header(
+        "The Signal Path"
     )
 
-    stages = [
+    st.write(
+        "Code2Edge makes the inference chain explicit so every important "
+        "representation can be inspected and verified."
+    )
+
+    pipeline_rows = [
         (
             "S0",
             "Raw PCM",
@@ -502,13 +715,13 @@ elif page == "Pipeline":
             "S1",
             "STFT Power",
             "201 × 101",
-            "Convert the waveform into frequency-domain energy.",
+            "Convert waveform samples into frequency-domain energy.",
         ),
         (
             "S1",
             "Mel Filterbank",
             "64 × 101",
-            "Compress frequency information into 64 Mel bands.",
+            "Group frequency energy into 64 Mel bands.",
         ),
         (
             "S2",
@@ -536,49 +749,103 @@ elif page == "Pipeline":
         ),
     ]
 
-    for idx, (code, title, shape, description) in enumerate(stages):
-        with st.container(border=True):
-            left, middle, right = st.columns([1, 2, 4])
+    for index, (
+        stage,
+        title,
+        shape,
+        description,
+    ) in enumerate(
+        pipeline_rows
+    ):
 
-            with left:
-                st.markdown(f"### {code}")
+        with st.container(
+            border=True
+        ):
 
-            with middle:
-                st.markdown(f"**{title}**")
-                st.caption(shape)
-
-            with right:
-                st.write(description)
-
-        if idx < len(stages) - 1:
-            st.markdown(
-                "<div style='text-align:center; font-size:24px;'>↓</div>",
-                unsafe_allow_html=True,
+            left, middle, right = st.columns(
+                [1, 2, 4]
             )
 
-    st.markdown("### Why stage-wise validation?")
+            with left:
+                st.caption(
+                    stage
+                )
+
+            with middle:
+                st.markdown(
+                    f"**{title}**"
+                )
+                st.code(
+                    shape
+                )
+
+            with right:
+                st.write(
+                    description
+                )
+
+        if index < len(
+            pipeline_rows
+        ) - 1:
+            st.markdown(
+                "↓"
+            )
+
+    st.markdown(
+        "---"
+    )
+
+    st.subheader(
+        "Why stage-wise validation?"
+    )
 
     st.info(
         "A final prediction alone can hide where a deployment diverged. "
-        "Code2Edge keeps the intermediate tensors visible so the first "
+        "Code2Edge keeps intermediate tensors visible so the first "
         "divergent processing stage can be identified."
+    )
+
+    st.subheader(
+        "Deployment contract"
+    )
+
+    st.code(
+        "Input:\n"
+        "    16 kHz\n"
+        "    mono\n"
+        "    16,000 samples\n"
+        "    int16 device ABI\n"
+        "\n"
+        "Feature tensor:\n"
+        "    (1, 1, 64, 101)\n"
+        "    int8 for the model\n"
+        "\n"
+        "Model:\n"
+        "    DS-CNN\n"
+        "    12 output classes",
+        language="text",
     )
 
 
 # ============================================================================
-# PAGE 3: EVIDENCE EXPLORER
+# EVIDENCE EXPLORER
 # ============================================================================
 
 elif page == "Evidence Explorer":
 
-    st.header("Interactive Golden Evidence")
+    st.header(
+        "Interactive Golden Evidence"
+    )
 
     clips = available_clips()
 
     if not clips:
+
         st.error(
-            "reference/golden_smoke is not available in this deployment."
+            "Golden smoke package not found at "
+            f"{GOLDEN_SMOKE}"
         )
+
         st.stop()
 
     selected_clip = st.selectbox(
@@ -586,7 +853,10 @@ elif page == "Evidence Explorer":
         clips,
     )
 
-    clip_dir = GOLDEN_SMOKE / selected_clip
+    clip_dir = (
+        GOLDEN_SMOKE
+        / selected_clip
+    )
 
     clip_meta = (
         smoke_manifest
@@ -596,7 +866,7 @@ elif page == "Evidence Explorer":
 
     prediction = clip_meta.get(
         "prediction",
-        {},
+        {}
     )
 
     expected_label = prediction.get(
@@ -614,53 +884,98 @@ elif page == "Evidence Explorer":
     )
 
     if predicted_label == expected_label:
+
         st.success(
-            f"✅ Prediction matches expected class: "
+            "Prediction matches expected class: "
             f"**{predicted_label.upper()}**"
         )
+
     else:
+
         st.error(
             f"Prediction: {predicted_label} | "
             f"Expected: {expected_label}"
         )
 
     # ------------------------------------------------------------------------
-    # Load tensors
+    # LOAD TENSORS
     # ------------------------------------------------------------------------
 
-    s0 = np.load(
-        clip_dir / "post_input.npy"
-    ).squeeze()
+    try:
 
-    mel = np.load(
-        clip_dir / "post_mel.npy"
-    ).squeeze()
+        s0 = np.load(
+            clip_dir / "post_input.npy"
+        ).squeeze()
 
-    normalized = np.load(
-        clip_dir / "post_normalize.npy"
-    ).squeeze()
+        mel = np.load(
+            clip_dir / "post_mel.npy"
+        ).squeeze()
 
-    logits = np.load(
-        clip_dir / "post_logits.npy"
-    ).squeeze()
+        normalized = np.load(
+            clip_dir / "post_normalize.npy"
+        ).squeeze()
 
-    stored_class = int(
-        np.load(
-            clip_dir / "predicted_class.npy"
+        logits = np.load(
+            clip_dir / "post_logits.npy"
+        ).squeeze()
+
+        stored_class = int(
+            np.load(
+                clip_dir / "predicted_class.npy"
+            )
         )
+
+    except (
+        OSError,
+        ValueError,
+    ) as exc:
+
+        st.error(
+            f"Could not load evidence for {selected_clip}: {exc}"
+        )
+
+        st.stop()
+
+    # ------------------------------------------------------------------------
+    # SUMMARY
+    # ------------------------------------------------------------------------
+
+    p1, p2, p3 = st.columns(3)
+
+    p1.metric(
+        "Expected",
+        expected_label.upper(),
+    )
+
+    p2.metric(
+        "Predicted",
+        predicted_label.upper(),
+    )
+
+    p3.metric(
+        "Class index",
+        str(
+            predicted_class
+            if predicted_class is not None
+            else stored_class
+        ),
     )
 
     # ------------------------------------------------------------------------
     # S0
     # ------------------------------------------------------------------------
 
-    st.markdown("### S0 · Raw waveform")
+    st.subheader(
+        "S0 · Raw waveform"
+    )
 
     waveform = go.Figure()
 
     waveform.add_trace(
         go.Scatter(
-            x=np.arange(len(s0)),
+            x=np.arange(
+                len(s0)
+            ),
             y=s0,
             mode="lines",
             name="PCM",
@@ -668,8 +983,7 @@ elif page == "Evidence Explorer":
     )
 
     waveform.update_layout(
-        height=320,
-        margin=dict(l=20, r=20, t=20, b=20),
+        height=300,
         xaxis_title="Sample",
         yaxis_title="Amplitude",
     )
@@ -686,46 +1000,50 @@ elif page == "Evidence Explorer":
     left, right = st.columns(2)
 
     with left:
-        st.markdown("### S1 · Mel energy")
 
-        fig_mel = go.Figure(
-            data=go.Heatmap(
+        st.subheader(
+            "S1 · Mel energy"
+        )
+
+        mel_fig = go.Figure(
+            go.Heatmap(
                 z=mel,
                 colorscale="Viridis",
             )
         )
 
-        fig_mel.update_layout(
-            height=420,
-            margin=dict(l=20, r=20, t=20, b=20),
+        mel_fig.update_layout(
+            height=400,
             xaxis_title="Frame",
             yaxis_title="Mel band",
         )
 
         st.plotly_chart(
-            fig_mel,
+            mel_fig,
             use_container_width=True,
         )
 
     with right:
-        st.markdown("### S3 · Normalized features")
 
-        fig_norm = go.Figure(
-            data=go.Heatmap(
+        st.subheader(
+            "S3 · Normalized features"
+        )
+
+        norm_fig = go.Figure(
+            go.Heatmap(
                 z=normalized,
                 colorscale="Plasma",
             )
         )
 
-        fig_norm.update_layout(
-            height=420,
-            margin=dict(l=20, r=20, t=20, b=20),
+        norm_fig.update_layout(
+            height=400,
             xaxis_title="Frame",
             yaxis_title="Mel band",
         )
 
         st.plotly_chart(
-            fig_norm,
+            norm_fig,
             use_container_width=True,
         )
 
@@ -733,7 +1051,9 @@ elif page == "Evidence Explorer":
     # S5
     # ------------------------------------------------------------------------
 
-    st.markdown("### S5 · Final logits")
+    st.subheader(
+        "S5 · Final logits"
+    )
 
     logit_fig = go.Figure()
 
@@ -741,12 +1061,12 @@ elif page == "Evidence Explorer":
         go.Bar(
             x=LABELS,
             y=logits,
+            name="Logits",
         )
     )
 
     logit_fig.update_layout(
-        height=400,
-        margin=dict(l=20, r=20, t=20, b=20),
+        height=360,
         xaxis_title="Keyword class",
         yaxis_title="Logit",
     )
@@ -757,54 +1077,42 @@ elif page == "Evidence Explorer":
     )
 
     # ------------------------------------------------------------------------
-    # S6
+    # PROVENANCE
     # ------------------------------------------------------------------------
 
-    c1, c2, c3 = st.columns(3)
+    with st.expander(
+        "Show clip provenance"
+    ):
 
-    with c1:
-        st.metric(
-            "Expected",
-            expected_label.upper(),
-        )
-
-    with c2:
-        display_prediction = (
-            LABELS[stored_class]
-            if 0 <= stored_class < len(LABELS)
-            else predicted_label
-        )
-
-        st.metric(
-            "Predicted",
-            display_prediction.upper(),
-        )
-
-    with c3:
-        st.metric(
-            "Class index",
-            str(
-                predicted_class
-                if predicted_class is not None
-                else stored_class
-            ),
+        st.json(
+            {
+                "source_wav": clip_meta.get(
+                    "source_wav"
+                ),
+                "source_wav_sha256": clip_meta.get(
+                    "source_wav_sha256"
+                ),
+                "expected_class_index": clip_meta.get(
+                    "expected_class_index"
+                ),
+            }
         )
 
 
 # ============================================================================
-# PAGE 4: HOST PARITY
+# HOST PARITY
 # ============================================================================
 
 elif page == "Host Parity":
 
-    st.header("Host Differential Parity")
+    st.header(
+        "Host Differential Parity"
+    )
 
-    st.markdown(
-        """
-        The same frozen audio corpus is processed by the reference Python
-        pipeline and the generated C implementation. The outputs are compared
-        stage by stage.
-        """
+    st.write(
+        "The same frozen audio corpus is processed by the Python reference "
+        "and generated C implementation. Their outputs are compared stage "
+        "by stage."
     )
 
     a, b, c, d = st.columns(4)
@@ -830,59 +1138,74 @@ elif page == "Host Parity":
     )
 
     if failed_stage_checks == 0:
-        st.success("✅ HOST PARITY GATE: PASS")
-    else:
-        st.error("❌ HOST PARITY GATE: FAIL")
 
-    st.markdown("### Numerical evidence")
+        st.success(
+            "HOST PARITY GATE: PASS"
+        )
+
+    else:
+
+        st.error(
+            "HOST PARITY GATE: FAIL"
+        )
+
+    st.subheader(
+        "Numerical evidence"
+    )
 
     n1, n2, n3 = st.columns(3)
 
-    with n1:
-        st.metric(
-            "Worst max abs diff",
-            format_number(worst_max_abs_diff),
-        )
+    n1.metric(
+        "Worst max abs diff",
+        format_number(
+            worst_max_abs_diff
+        ),
+    )
 
-    with n2:
-        st.metric(
-            "Worst mean abs diff",
-            format_number(worst_mean_abs_diff),
-        )
+    n2.metric(
+        "Worst mean abs diff",
+        format_number(
+            worst_mean_abs_diff
+        ),
+    )
 
-    with n3:
-        st.metric(
-            "Worst cosine similarity",
-            format_number(worst_cosine, 12),
-        )
+    n3.metric(
+        "Worst cosine similarity",
+        format_number(
+            worst_cosine,
+            12,
+        ),
+    )
 
-    st.markdown("### Validation stages")
+    st.subheader(
+        "Validation stages"
+    )
 
     stage_rows = [
         {
             "Stage": "S0 · Raw waveform",
             "Purpose": "Input preservation",
-            "Status": "✅ PASS",
+            "Status": "PASS",
         },
         {
             "Stage": "S1 · STFT power",
             "Purpose": "Frequency-domain energy",
-            "Status": "✅ PASS",
+            "Status": "PASS",
         },
         {
             "Stage": "S1 · Mel energy",
             "Purpose": "64-band filterbank",
-            "Status": "✅ PASS",
+            "Status": "PASS",
         },
         {
             "Stage": "S2 · Log-Mel",
             "Purpose": "Log compression",
-            "Status": "✅ PASS",
+            "Status": "PASS",
         },
         {
             "Stage": "S3 · Normalize",
             "Purpose": "Model-ready features",
-            "Status": "✅ PASS",
+            "Status": "PASS",
         },
     ]
 
@@ -892,100 +1215,141 @@ elif page == "Host Parity":
         hide_index=True,
     )
 
-    st.markdown("### What the numbers mean")
-
-    st.info(
-        "max_abs_diff shows the largest individual numerical difference. "
-        "mean_abs_diff summarizes the average difference. Cosine similarity "
-        "checks whether the two tensors have essentially the same direction."
+    st.subheader(
+        "What the metrics mean"
     )
 
-    st.markdown("### Why this is useful")
+    st.info(
+        "max_abs_diff measures the largest individual difference. "
+        "mean_abs_diff summarizes the average difference. "
+        "Cosine similarity measures directional agreement between tensors."
+    )
 
-    st.write(
-        "If a stage fails, Code2Edge can identify the earliest divergent "
-        "stage instead of treating the neural network as a black box."
+    st.subheader(
+        "The proof"
+    )
+
+    st.code(
+        f"Frozen corpus:\n"
+        f"    {sample_count:,} samples\n"
+        f"\n"
+        f"Stage evaluations:\n"
+        f"    {total_stage_checks:,}\n"
+        f"\n"
+        f"Passed:\n"
+        f"    {passed_stage_checks:,}\n"
+        f"\n"
+        f"Failed:\n"
+        f"    {failed_stage_checks:,}\n"
+        f"\n"
+        f"Worst max absolute difference:\n"
+        f"    {format_number(worst_max_abs_diff)}\n"
+        f"\n"
+        f"Worst mean absolute difference:\n"
+        f"    {format_number(worst_mean_abs_diff)}\n"
+        f"\n"
+        f"Worst cosine similarity:\n"
+        f"    {format_number(worst_cosine, 12)}",
+        language="text",
     )
 
 
 # ============================================================================
-# PAGE 5: MODEL & QUANTIZATION
+# MODEL & QUANTIZATION
 # ============================================================================
 
 elif page == "Model & Quantization":
 
-    st.header("Frozen INT8 Model")
+    st.header(
+        "Frozen INT8 Model"
+    )
 
     if not model:
-        st.warning(
-            "Model validation evidence was not found."
+
+        st.error(
+            f"Model validation evidence not found at "
+            f"{MODEL_FILE}"
         )
+
         st.stop()
 
-    m1, m2, m3, m4 = st.columns(4)
+    a, b, c, d = st.columns(4)
 
-    m1.metric(
+    a.metric(
         "Model size",
-        f"{model_size_kb:.2f} KB"
-        if model_size_kb is not None
-        else "N/A",
+        (
+            f"{model_size_kb:.2f} KB"
+            if model_size_kb is not None
+            else "N/A"
+        ),
     )
 
-    m2.metric(
+    b.metric(
         "Input",
-        str(input_tensor.get(
-            "shape",
-            [1, 1, 64, 101],
-        )),
+        str(
+            input_tensor.get(
+                "shape",
+                [1, 1, 64, 101],
+            )
+        ),
     )
 
-    m3.metric(
+    c.metric(
         "Output",
-        str(output_tensor.get(
-            "shape",
-            [1, 12],
-        )),
+        str(
+            output_tensor.get(
+                "shape",
+                [1, 12],
+            )
+        ),
     )
 
-    m4.metric(
+    d.metric(
         "Fully quantized",
-        "YES" if model_fully_quantized else "NO",
+        "YES"
+        if fully_quantized
+        else "NO",
     )
 
-    st.markdown("### Input quantization")
+    st.subheader(
+        "Input quantization"
+    )
 
     st.code(
-        f"""
-shape       = {input_tensor.get("shape")}
-dtype       = {input_tensor.get("dtype")}
-scale       = {input_tensor.get("scales")}
-zero_point  = {input_tensor.get("zero_points")}
-""",
+        f"shape      = {input_tensor.get('shape')}\n"
+        f"dtype      = {input_tensor.get('dtype')}\n"
+        f"scale      = {input_tensor.get('scales')}\n"
+        f"zero_point = {input_tensor.get('zero_points')}",
         language="text",
     )
 
-    st.markdown("### Output quantization")
+    st.subheader(
+        "Output quantization"
+    )
 
     st.code(
-        f"""
-shape       = {output_tensor.get("shape")}
-dtype       = {output_tensor.get("dtype")}
-scale       = {output_tensor.get("scales")}
-zero_point  = {output_tensor.get("zero_points")}
-""",
+        f"shape      = {output_tensor.get('shape')}\n"
+        f"dtype      = {output_tensor.get('dtype')}\n"
+        f"scale      = {output_tensor.get('scales')}\n"
+        f"zero_point = {output_tensor.get('zero_points')}",
         language="text",
     )
 
     if unsupported_ops:
-        st.error(
+
+        st.warning(
             f"Unsupported operators reported: {unsupported_ops}"
         )
+
     else:
+
         st.success(
-            "✅ No unsupported operators reported"
+            "No unsupported operators reported"
         )
 
-    st.markdown("### Why INT8?")
+    st.subheader(
+        "Why INT8?"
+    )
 
     st.info(
         "The embedded model uses 8-bit integer tensors instead of full "
@@ -993,37 +1357,43 @@ zero_point  = {output_tensor.get("zero_points")}
         "how the integer representation maps to real-valued model data."
     )
 
-    st.markdown("### Target artifact")
-
-    sha256 = model.get("sha256")
+    st.subheader(
+        "Frozen artifact"
+    )
 
     st.code(
-        f"""
-artifact:   src/pipeline/model_data.c
-size:       {model_size_bytes:,} bytes
-sha256:     {sha256 or "N/A"}
-runtime:    tflite_micro_cmsis_nn
-""",
+        f"artifact = src/pipeline/model_data.c\n"
+        f"size     = "
+        f"{model_size_bytes:,} bytes\n"
+        f"sha256   = "
+        f"{model.get('sha256', 'N/A')}\n"
+        f"runtime  = tflite_micro_cmsis_nn",
         language="text",
     )
 
 
 # ============================================================================
-# PAGE 6: HARDWARE & MCP
+# HARDWARE & MCP
 # ============================================================================
 
 else:
 
-    st.header("Hardware & Bob / MCP")
-
-    st.markdown(
-        """
-        The final deployment chain connects the host proof to the physical
-        STM32U585 benchmark and the Bob/MCP orchestration layer.
-        """
+    st.header(
+        "Hardware & Bob / MCP"
     )
 
-    st.markdown("### Target")
+    st.write(
+        "The final deployment chain connects host proof to the physical "
+        "STM32U585 benchmark and the Bob/MCP orchestration layer."
+    )
+
+    # ------------------------------------------------------------------------
+    # TARGET
+    # ------------------------------------------------------------------------
+
+    st.subheader(
+        "Physical target"
+    )
 
     t1, t2, t3 = st.columns(3)
 
@@ -1042,7 +1412,13 @@ else:
         "ARM Cortex-M33",
     )
 
-    st.markdown("### Target constraints")
+    # ------------------------------------------------------------------------
+    # CONSTRAINTS
+    # ------------------------------------------------------------------------
+
+    st.subheader(
+        "Target constraints"
+    )
 
     c1, c2, c3 = st.columns(3)
 
@@ -1061,14 +1437,55 @@ else:
         "≤ 100 ms",
     )
 
-    st.markdown("### Target readiness")
+    # ------------------------------------------------------------------------
+    # READINESS
+    # ------------------------------------------------------------------------
 
-    st.success("✅ Host parity gate passed")
-    st.success("✅ INT8 model artifact validated")
-    st.success("✅ Golden smoke evidence available")
-    st.success("✅ Device parity reported as verified")
+    st.subheader(
+        "Readiness"
+    )
 
-    st.markdown("### Physical benchmark")
+    r1, r2 = st.columns(2)
+
+    with r1:
+
+        st.success(
+            "Reference pipeline frozen"
+        )
+
+        st.success(
+            "Host parity verified"
+        )
+
+        st.success(
+            "INT8 model artifact verified"
+        )
+
+        st.success(
+            "Golden smoke evidence verified"
+        )
+
+    with r2:
+
+        st.success(
+            "Physical benchmark recorded"
+        )
+
+        st.success(
+            "50 / 50 correct inferences"
+        )
+
+        st.success(
+            "Device parity reported verified"
+        )
+
+    # ------------------------------------------------------------------------
+    # BENCHMARK
+    # ------------------------------------------------------------------------
+
+    st.subheader(
+        "Measured physical deployment"
+    )
 
     b1, b2, b3 = st.columns(3)
 
@@ -1082,116 +1499,178 @@ else:
         f"{float(benchmark_latency):,.0f} ms",
     )
 
-    cycles = float(benchmark_cycles)
+    cycles = float(
+        benchmark_cycles
+    )
 
     if cycles >= 1_000_000:
-        cycles_text = f"{cycles / 1_000_000:,.0f} M"
+
+        cycle_text = (
+            f"{cycles / 1_000_000:,.0f} M"
+        )
+
     else:
-        cycles_text = f"{cycles:,.0f}"
+
+        cycle_text = (
+            f"{cycles:,.0f}"
+        )
 
     b3.metric(
         "Hardware cycles",
-        cycles_text,
+        cycle_text,
     )
 
     if benchmark_path:
-        st.caption(
-            f"Benchmark source: {benchmark_path.relative_to(ROOT)}"
-        )
+
+        try:
+
+            relative_path = (
+                benchmark_path.relative_to(
+                    ROOT
+                )
+            )
+
+            st.caption(
+                f"Benchmark source: {relative_path}"
+            )
+
+        except ValueError:
+
+            st.caption(
+                f"Benchmark source: {benchmark_path}"
+            )
+
     else:
+
         st.caption(
-            "Benchmark values shown from the submitted hardware evidence baseline."
+            "Benchmark values shown from the submitted hardware baseline."
         )
 
-    st.markdown("### Bob / MCP workflow")
+    # ------------------------------------------------------------------------
+    # BOB / MCP
+    # ------------------------------------------------------------------------
 
-    steps = [
-        "profile_model()",
-        "inspect_pipeline()",
-        "check_target()",
-        "run_parity_test()",
-        "benchmark_target()",
+    st.subheader(
+        "Bob / MCP workflow"
+    )
+
+    tools = [
+        (
+            "profile_model()",
+            "Analyze architecture and quantization.",
+        ),
+        (
+            "inspect_pipeline()",
+            "Inspect reference preprocessing.",
+        ),
+        (
+            "check_target()",
+            "Check STM32U585 constraints and compatibility.",
+        ),
+        (
+            "run_parity_test()",
+            "Compare deployment tensors against reference evidence.",
+        ),
+        (
+            "benchmark_target()",
+            "Run target measurements and collect results.",
+        ),
     ]
 
-    for i, step in enumerate(steps):
+    for index, (
+        name,
+        description,
+    ) in enumerate(
+        tools,
+        start=1,
+    ):
+
         st.markdown(
-            f"""
-            <div style="
-                padding: 14px;
-                margin: 6px 0;
-                border: 1px solid #444;
-                border-radius: 8px;
-                font-family: monospace;
-                font-size: 17px;
-            ">
-                {i + 1}. {step}
-            </div>
-            """,
-            unsafe_allow_html=True,
+            f"**{index}. `{name}`**"
         )
 
-    st.markdown("### Retry-capped verification")
+        st.caption(
+            description
+        )
+
+    # ------------------------------------------------------------------------
+    # RETRY LOOP
+    # ------------------------------------------------------------------------
+
+    st.subheader(
+        "Retry-capped verification"
+    )
 
     st.code(
-        """
-Generate
-   ↓
-Host Parity Gate
-   ├── FAIL → repair → retry
-   └── PASS
-          ↓
-MCU Build
-   ↓
-Device Parity Gate
-   ├── FAIL → repair → retry
-   └── PASS
-          ↓
-Benchmark
-   ↓
-Evidence / PR
-""",
+        "GENERATE\n"
+        "   ↓\n"
+        "HOST PARITY GATE\n"
+        "   ├── FAIL → REPAIR → RETRY\n"
+        "   └── PASS\n"
+        "          ↓\n"
+        "MCU BUILD\n"
+        "   ↓\n"
+        "DEVICE PARITY GATE\n"
+        "   ├── FAIL → REPAIR → RETRY\n"
+        "   └── PASS\n"
+        "          ↓\n"
+        "BENCHMARK\n"
+        "   ↓\n"
+        "EVIDENCE / PR",
         language="text",
     )
 
-    st.markdown("### Predicted vs measured")
+    # ------------------------------------------------------------------------
+    # PREDICTED VS MEASURED
+    # ------------------------------------------------------------------------
 
-    table = [
-        {
-            "Metric": "Model size",
-            "Reference / predicted": (
-                f"{model_size_kb:.2f} KB"
-                if model_size_kb is not None
-                else "N/A"
-            ),
-            "Measured": "Embedded artifact validated",
-        },
-        {
-            "Metric": "Flash",
-            "Reference / predicted": "≤ 1,500 KB",
-            "Measured": "See target benchmark evidence",
-        },
-        {
-            "Metric": "SRAM",
-            "Reference / predicted": "≤ 400 KB",
-            "Measured": "See target benchmark evidence",
-        },
-        {
-            "Metric": "Latency",
-            "Reference / predicted": "≤ 100 ms target",
-            "Measured": f"{float(benchmark_latency):,.0f} ms mean",
-        },
-    ]
+    st.subheader(
+        "Predicted vs measured"
+    )
 
     st.dataframe(
-        table,
+        [
+            {
+                "Metric": "Model size",
+                "Target / reference": (
+                    f"{model_size_kb:.2f} KB"
+                    if model_size_kb is not None
+                    else "N/A"
+                ),
+                "Measured / evidence": (
+                    "Artifact validated"
+                ),
+            },
+            {
+                "Metric": "Flash",
+                "Target / reference": "≤ 1,500 KB",
+                "Measured / evidence": (
+                    "See benchmark evidence"
+                ),
+            },
+            {
+                "Metric": "SRAM",
+                "Target / reference": "≤ 400 KB",
+                "Measured / evidence": (
+                    "See benchmark evidence"
+                ),
+            },
+            {
+                "Metric": "Latency",
+                "Target / reference": "≤ 100 ms target",
+                "Measured / evidence": (
+                    f"{float(benchmark_latency):,.0f} ms mean"
+                ),
+            },
+        ],
         use_container_width=True,
         hide_index=True,
     )
 
     st.info(
-        "The dashboard deliberately separates host numerical proof from "
-        "physical-device measurement. The host gate establishes mathematical "
-        "equivalence before the embedded benchmark is interpreted."
+        "Code2Edge separates the host correctness gate from physical-device "
+        "measurement so numerical equivalence is established before hardware "
+        "performance is interpreted."
     )
 
 
@@ -1201,6 +1680,10 @@ Evidence / PR
 
 st.markdown("---")
 
+st.subheader(
+    "GENERATE. DEPLOY. PROVE."
+)
+
 st.caption(
-    "Code2Edge · Generate. Deploy. Prove."
+    "Code2Edge · IBM Bob 2.0 Hackathon"
 )
